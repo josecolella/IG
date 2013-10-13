@@ -96,7 +96,23 @@ glEnd();
 
 void draw_objects()
 {
-    std::vector<float> v = {{-0.5,-0.5,0.5},{0.5,-0.5,0.5},{0.5,0.5,0.5},{-0.5,0.5,0.5},{-0.5,-0.5,-0.5},{0.5,-0.5,-0.5},{0.5,0.5,-0.5},{-0.5,0.5,-0.5}};
+    std::vector<float> v;
+    v.push_back(-0.5); v.push_back(-0.5); v.push_back(0.5);
+    v.push_back(0.5); v.push_back(-0.5); v.push_back(0.5);
+    v.push_back(0.5); v.push_back(0.5); v.push_back(0.5);
+
+    v.push_back(-0.5);v.push_back(0.5);v.push_back(0.5);
+    v.push_back(-0.5);v.push_back(-0.5);v.push_back(-0.5);
+    v.push_back(0.5); v.push_back(-0.5); v.push_back(-0.5);
+    
+    v.push_back(0.5); v.push_back(0.5); v.push_back(-0.5);
+    v.push_back(-0.5);v.push_back(0.5);v.push_back(-0.5);
+   
+
+
+
+
+
     draw_vertices(v);
 
  //   draw_cube();
