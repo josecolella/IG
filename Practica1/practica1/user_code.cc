@@ -32,5 +32,14 @@ void draw_cube()
 
 void draw_vertices(vector<float> &Vertices)
 {
+
+    glColor3f(0,1,0);
+    glPointSize(4);
+
+    glBegin(GL_POINTS);
+    for (unsigned i=0;i<Vertices.size();i++){
+        glVertex3fv((GLfloat *) &Vertices[i]);
+        }
+    glEnd();
 }
 
