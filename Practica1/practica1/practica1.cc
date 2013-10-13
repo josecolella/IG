@@ -96,26 +96,24 @@ glEnd();
 
 void draw_objects()
 {
-    std::vector<float> v;
-    v.push_back(-0.5); v.push_back(-0.5); v.push_back(0.5);
-    v.push_back(0.5); v.push_back(-0.5); v.push_back(0.5);
-    v.push_back(0.5); v.push_back(0.5); v.push_back(0.5);
+    //Prueba del Primer Ejercicios
+    // std::vector<float> v;
 
-    v.push_back(-0.5);v.push_back(0.5);v.push_back(0.5);
-    v.push_back(-0.5);v.push_back(-0.5);v.push_back(-0.5);
-    v.push_back(0.5); v.push_back(-0.5); v.push_back(-0.5);
-    
-    v.push_back(0.5); v.push_back(0.5); v.push_back(-0.5);
-    v.push_back(-0.5);v.push_back(0.5);v.push_back(-0.5);
-   
+    // v.push_back(-0.5); v.push_back(-0.5); v.push_back(0.5);
+    // v.push_back(0.5); v.push_back(-0.5); v.push_back(0.5);
+    // v.push_back(0.5); v.push_back(0.5); v.push_back(0.5);
 
+    // v.push_back(-0.5);v.push_back(0.5);v.push_back(0.5);
+    // v.push_back(-0.5);v.push_back(-0.5);v.push_back(-0.5);
+    // v.push_back(0.5); v.push_back(-0.5); v.push_back(-0.5);
 
-
+    // v.push_back(0.5); v.push_back(0.5); v.push_back(-0.5);
+    // v.push_back(-0.5);v.push_back(0.5);v.push_back(-0.5);
 
 
-    draw_vertices(v);
+    // draw_vertices(v);
 
- //   draw_cube();
+   draw_cube();
 }
 
 
