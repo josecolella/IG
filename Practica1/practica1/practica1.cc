@@ -11,9 +11,26 @@
 #include <GL/glut.h>
 #include <ctype.h>
 #include "user_code.h"
+#include "vertex.h"
+#include "file_ply_stl.h"
 
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
+
+//Variable global que termina que figura se pinta
+char forma = 'C';
+
+struct MallaTVT
+{
+  //Vector de vectores de flotantes que representan
+  //los vertuces
+  vector< _vertex3f > Vertices;
+  //Vector de vectores de enteros que representa
+  //las caras
+  vector< _vertex3ui > caras;
+};
+
+struct MallaTVT mallaTVT;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -33,7 +50,7 @@ int UI_window_pos_x=50,UI_window_pos_y=50,UI_window_width=500,UI_window_height=5
 void clear_window()
 {
 
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 
@@ -44,12 +61,12 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 void change_projection()
 {
 
-glMatrixMode(GL_PROJECTION);
-glLoadIdentity();
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
 
 // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
 //  Front_plane>0  Back_plane>PlanoDelantero)
-glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+  glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
 }
 
 //**************************************************************************
@@ -60,11 +77,11 @@ void change_observer()
 {
 
 // posicion del observador
-glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
-glTranslatef(0,0,-Observer_distance);
-glRotatef(Observer_angle_x,1,0,0);
-glRotatef(Observer_angle_y,0,1,0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef(0,0,-Observer_distance);
+  glRotatef(Observer_angle_x,1,0,0);
+  glRotatef(Observer_angle_y,0,1,0);
 }
 
 //**************************************************************************
@@ -73,20 +90,20 @@ glRotatef(Observer_angle_y,0,1,0);
 
 void draw_axis()
 {
-glBegin(GL_LINES);
+  glBegin(GL_LINES);
 // eje X, color rojo
-glColor3f(1,0,0);
-glVertex3f(-AXIS_SIZE,0,0);
-glVertex3f(AXIS_SIZE,0,0);
+  glColor3f(1,0,0);
+  glVertex3f(-AXIS_SIZE,0,0);
+  glVertex3f(AXIS_SIZE,0,0);
 // eje Y, color verde
-glColor3f(0,1,0);
-glVertex3f(0,-AXIS_SIZE,0);
-glVertex3f(0,AXIS_SIZE,0);
+  glColor3f(0,1,0);
+  glVertex3f(0,-AXIS_SIZE,0);
+  glVertex3f(0,AXIS_SIZE,0);
 // eje Z, color azul
-glColor3f(0,0,1);
-glVertex3f(0,0,-AXIS_SIZE);
-glVertex3f(0,0,AXIS_SIZE);
-glEnd();
+  glColor3f(0,0,1);
+  glVertex3f(0,0,-AXIS_SIZE);
+  glVertex3f(0,0,AXIS_SIZE);
+  glEnd();
 }
 
 
@@ -96,24 +113,28 @@ glEnd();
 
 void draw_objects()
 {
-    //Prueba del Primer Ejercicios
-    // std::vector<float> v;
+  switch(forma){
+    case 'C':
+    draw_cube();
+    break;
+    case 'P':
+    draw_vertices(mallaTVT.Vertices, mallaTVT.caras);
+    break;
+    case 'A':
+    draw_lines(mallaTVT.Vertices, mallaTVT.caras);
+    break;
+    case 'S':
+    draw_solid(mallaTVT.Vertices, mallaTVT.caras);
+    break;
+    case 'G':
+    draw_changedColor(mallaTVT.Vertices, mallaTVT.caras);
+    break;
+    default:
+    draw_cube();
+    break;
 
-    // v.push_back(-0.5); v.push_back(-0.5); v.push_back(0.5);
-    // v.push_back(0.5); v.push_back(-0.5); v.push_back(0.5);
-    // v.push_back(0.5); v.push_back(0.5); v.push_back(0.5);
+  }
 
-    // v.push_back(-0.5);v.push_back(0.5);v.push_back(0.5);
-    // v.push_back(-0.5);v.push_back(-0.5);v.push_back(-0.5);
-    // v.push_back(0.5); v.push_back(-0.5); v.push_back(-0.5);
-
-    // v.push_back(0.5); v.push_back(0.5); v.push_back(-0.5);
-    // v.push_back(-0.5);v.push_back(0.5);v.push_back(-0.5);
-
-
-    // draw_vertices(v);
-
-   draw_cube();
 }
 
 
@@ -125,11 +146,11 @@ void draw_objects()
 void draw_scene(void)
 {
 
-clear_window();
-change_observer();
-draw_axis();
-draw_objects();
-glutSwapBuffers();
+  clear_window();
+  change_observer();
+  draw_axis();
+  draw_objects();
+  glutSwapBuffers();
 }
 
 
@@ -144,9 +165,9 @@ glutSwapBuffers();
 
 void change_window_size(int Ancho1,int Alto1)
 {
-change_projection();
-glViewport(0,0,Ancho1,Alto1);
-glutPostRedisplay();
+  change_projection();
+  glViewport(0,0,Ancho1,Alto1);
+  glutPostRedisplay();
 }
 
 
@@ -162,9 +183,20 @@ glutPostRedisplay();
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
 
-if (toupper(Tecla1)=='Q') exit(0);
-}
 
+  switch (toupper(Tecla1)) {
+    case 'Q': exit(0); break;
+    case 27: exit(0); break;
+    case '1': forma = 'C'; break;
+    case '2': forma = 'P'; break;
+    case '3': forma = 'A'; break;
+    case '4': forma = 'S'; break;
+    case '5': forma = 'G'; break;
+    default: glutPostRedisplay(); break;
+
+  }
+  glutPostRedisplay();
+}
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla especial
 //
@@ -178,15 +210,15 @@ if (toupper(Tecla1)=='Q') exit(0);
 void special_keys(int Tecla1,int x,int y)
 {
 
-switch (Tecla1){
-	case GLUT_KEY_LEFT:Observer_angle_y--;break;
-	case GLUT_KEY_RIGHT:Observer_angle_y++;break;
-	case GLUT_KEY_UP:Observer_angle_x--;break;
-	case GLUT_KEY_DOWN:Observer_angle_x++;break;
-	case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
-	case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
-	}
-glutPostRedisplay();
+  switch (Tecla1){
+   case GLUT_KEY_LEFT:Observer_angle_y--;break;
+   case GLUT_KEY_RIGHT:Observer_angle_y++;break;
+   case GLUT_KEY_UP:Observer_angle_x--;break;
+   case GLUT_KEY_DOWN:Observer_angle_x++;break;
+   case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
+   case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+ }
+ glutPostRedisplay();
 }
 
 
@@ -195,27 +227,51 @@ glutPostRedisplay();
 // Funcion de incializacion
 //***************************************************************************
 
-void initialize(void)
+void initialize(const char * file)
 {
 // se inicalizan la ventana y los planos de corte
-Window_width=.5;
-Window_height=.5;
-Front_plane=1;
-Back_plane=1000;
+  Window_width=.5;
+  Window_height=.5;
+  Front_plane=1;
+  Back_plane=1000;
 
 // se inicia la posicion del observador, en el eje z
-Observer_distance=3*Front_plane;
-Observer_angle_x=0;
-Observer_angle_y=0;
+  Observer_distance=3*Front_plane;
+  Observer_angle_x=0;
+  Observer_angle_y=0;
 
 // se indica cual sera el color para limpiar la ventana	(r,v,a,al)
 // blanco=(1,1,1,1) rojo=(1,0,0,1), ...
-glClearColor(1,1,1,1);
+  glClearColor(1,1,1,1);
 
 // se habilita el z-bufer
-glEnable(GL_DEPTH_TEST);
-change_projection();
-glViewport(0,0,UI_window_width,UI_window_height);
+  glEnable(GL_DEPTH_TEST);
+  change_projection();
+  glViewport(0,0,UI_window_width,UI_window_height);
+
+  std::vector<float> vertices_ply;
+  std::vector<int> caras_ply;
+
+
+  ply::read(file, vertices_ply, caras_ply);
+
+  for (int i = 0; i < vertices_ply.size(); i +=3)
+  {
+    _vertex3f tmp;
+    tmp.x = vertices_ply[i];
+    tmp.y = vertices_ply[i+1];
+    tmp.z = vertices_ply[i+2];
+    mallaTVT.Vertices.push_back(tmp);
+  }
+  for (int i = 0; i < caras_ply.size(); i += 3)
+  {
+    _vertex3ui tmp;
+    tmp._0 = caras_ply[i];
+    tmp._1 = caras_ply[i+1];
+    tmp._2 = caras_ply[i+2];
+    mallaTVT.caras.push_back(tmp);
+  }
+
 }
 
 
@@ -229,7 +285,7 @@ glViewport(0,0,UI_window_width,UI_window_height);
 int main(int argc, char **argv)
 {
     // se llama a la inicialización de glut
-    glutInit(&argc, argv);
+  glutInit(&argc, argv);
 
     // se indica las caracteristicas que se desean para la visualización con OpenGL
     // Las posibilidades son:
@@ -240,31 +296,37 @@ int main(int argc, char **argv)
     // GLUT_RGBA -> memoria de imagen con componentes rojo, verde, azul y alfa para cada pixel
     // GLUT_DEPTH -> memoria de profundidad o z-bufer
     // GLUT_STENCIL -> memoria de estarcido
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
     // posicion de la esquina inferior izquierdad de la ventana
-    glutInitWindowPosition(UI_window_pos_x,UI_window_pos_y);
+  glutInitWindowPosition(UI_window_pos_x,UI_window_pos_y);
 
     // tamaño de la ventana (ancho y alto)
-    glutInitWindowSize(UI_window_width,UI_window_height);
+  glutInitWindowSize(UI_window_width,UI_window_height);
 
     // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
     // al bucle de eventos)
-    glutCreateWindow("Práctica 1");
+  glutCreateWindow("Práctica 1");
 
     // asignación de la funcion llamada "dibujar" al evento de dibujo
-    glutDisplayFunc(draw_scene);
+  glutDisplayFunc(draw_scene);
     // asignación de la funcion llamada "cambiar_tamanio_ventana" al evento correspondiente
-    glutReshapeFunc(change_window_size);
+  glutReshapeFunc(change_window_size);
     // asignación de la funcion llamada "tecla_normal" al evento correspondiente
-    glutKeyboardFunc(normal_keys);
+  glutKeyboardFunc(normal_keys);
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
-    glutSpecialFunc(special_keys);
+  glutSpecialFunc(special_keys);
 
-    // funcion de inicialización
-    initialize();
+  // funcion de inicialización
+  // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
+  // Si el usuario no mete ningun nombre se pone el ply del coche "big_dodge"
+  if(argc != 2)
+    initialize("big_dodge");
+  else
+    //Si mete el nombre se abre ese
+    initialize(argv[1]);
 
     // inicio del bucle de eventos
-    glutMainLoop();
-    return 0;
+  glutMainLoop();
+  return 0;
 }

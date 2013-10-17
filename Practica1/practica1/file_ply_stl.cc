@@ -1,7 +1,7 @@
 // *********************************************************************
 // **
 // ** Función ply::read (declaraciones)
-// ** 
+// **
 // ** Carlos Ureña - 2012- 2013
 // **
 // ** This program is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 #include "file_ply_stl.h"
 
 
-namespace ply 
+namespace ply
 {
 
 using namespace std ;
@@ -44,36 +44,36 @@ using namespace std ;
 void abrir_archivo() ;
 void leer_cabecera() ;
 void error( const char *msg_error ) ;
-void leer_vertices( vector<float> & vertices ) ;
-void leer_caras( vector<int> & caras ) ;
+int leer_vertices( vector<float> & vertices ) ;
+int leer_caras( vector<int> & caras ) ;
 
 //**********************************************************************
 // variables usadas por todas las funciones:
 
 
-const streamsize 
+const streamsize
       tam_buffer = streamsize(10)*streamsize(1024) ;
-char 
+char
       buffer[unsigned(tam_buffer)];
-string 
+string
       token,
       nombre_archivo ;
-long long int 
-      num_vertices = 0, 
+long long int
+      num_vertices = 0,
       num_caras   = 0 ;
 unsigned
       state    = 0; // 0 antes de leer 'element vertex' (o 'element face'), 1 antes de leer 'element face', 2 después
-bool 
+bool
       en_cabecera = true ;
-ifstream  
+ifstream
       src ;
-      
+
 //**********************************************************************
 // funcion principal de lectura
 
 void read
-(  const char *    nombre_archivo_se, 
-   vector<float> & vertices, 
+(  const char *    nombre_archivo_se,
+   vector<float> & vertices,
    vector<int> &   caras
 )
 {
@@ -81,70 +81,73 @@ void read
    // http://graphics.im.ntu.edu.tw/~robin/courses/cg03/model/
    // http://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
    // univ stanford ?
-   
+
    nombre_archivo = nombre_archivo_se ;
    nombre_archivo += ".ply" ;
-   
+
    abrir_archivo() ;
    leer_cabecera() ;
    leer_vertices(vertices) ;
-   leer_caras(caras) ;   
-   
+   leer_caras(caras) ;
+
    cout << "archivo ply leido." << endl << flush ;
 }
 
 
 //**********************************************************************
 
-void leer_vertices( vector<float> & vertices )
+int leer_vertices( vector<float> & vertices )
 {
    // leer vértices:
-      
+
    vertices.resize( num_vertices*3 );
 
    cout << "  leyendo " << num_vertices << " vértices ...." << endl << flush ;
-     
+
    for( long long iv = 0 ; iv < num_vertices ; iv++ )
    {
-      if ( src.eof() ) 
+      if ( src.eof() )
          error("fin de archivo prematuro en la lista de vértices");
 
       double x,y,z ;
 
       src >> x >> y >> z ;
       //cout << "vertex #" << iv << " readed: (" << x << "," << y << "," << z << ")" << endl ;
-      
+
       src.getline(buffer,tam_buffer); // ignore more properties, so far ...
-      
+
       // add new vertex
       long long base = iv*3 ;
       vertices[base+0] = x ;
       vertices[base+1] = y ;
-      vertices[base+2] = z ; 
+      vertices[base+2] = z ;
+
    }
-   cout << "  fin de la lista de vértices" << endl << flush ;   
+   cout << "  fin de la lista de vértices" << endl << flush ;
+
+   return num_vertices;
 }
 
 //**********************************************************************
 
-void leer_caras(  vector<int> & caras )
+int leer_caras(  vector<int> & caras )
 {
    cout << "  leyendo " << num_caras << " caras ...." << endl << flush ;
-   
+
    caras.resize( num_caras*3 );
-   
+
    for( long long ifa = 0 ; ifa < num_caras ; ifa++ )
    {
-      if ( src.eof() ) 
+      if ( src.eof() )
          error("fin de archivo prematuro en la lista de caras");
 
       unsigned nv ;
       src >> nv ;
       //cout << "reading face #" << ifa << " with " << nv << " vertexes: " ;
-      
+
       if ( nv != 3 )
          error("encontrada una cara con un número de vértices distinto de 3");
-         
+
       long long iv0, iv1, iv2 ;
 
       src >> iv0 >> iv1 >> iv2 ;
@@ -152,15 +155,17 @@ void leer_caras(  vector<int> & caras )
 
       if ( iv0 >= num_vertices || iv1 >= num_vertices || iv2 >= num_vertices )
          error("encontrado algún índice de vértice igual o superior al número de vértices");
-         
+
       src.getline(buffer,tam_buffer); // ignore more properties, so far ...
-      
-      long long base = ifa*3 ; 
+
+      long long base = ifa*3 ;
       caras[base+0] = iv0 ;
       caras[base+1] = iv1 ;
       caras[base+2] = iv2 ;
    }
    cout << "  fin de la lista de caras." << endl ;
+
+   return num_caras;
 }
 
 //**********************************************************************
@@ -168,10 +173,10 @@ void leer_caras(  vector<int> & caras )
 void leer_cabecera()
 {
    // leer cabecera:
-   
+
    while( en_cabecera )
    {
-      if ( src.eof() ) 
+      if ( src.eof() )
          error("fin de archivo prematuro antes de end_header");
 
      src >> token ;
@@ -222,11 +227,11 @@ void leer_cabecera()
 
    if ( num_vertices == 0 || num_caras == 0 )
       error("no se ha encontrado el número de vértices o caras, o bien alguno de los dos es 0.");
-      
+
    if ( num_vertices > numeric_limits<unsigned>::max() )
       error("el número de vértices es superior al valor 'int' más grande posible.");
-      
-   
+
+
    if ( num_caras > numeric_limits<unsigned>::max() )
       error("el número de caras es superior al valor 'int' más grande posible.");
 }
@@ -239,13 +244,13 @@ void abrir_archivo()
    using namespace std ;
 
    src.open( nombre_archivo.c_str() ) ; // abrir (¿en modo lectura?)
-      
-   if ( ! src.is_open() ) 
+
+   if ( ! src.is_open() )
    {
-      string msg = string("no puedo abrir el archivo '") + nombre_archivo + "' para lectura." ; 
+      string msg = string("no puedo abrir el archivo '") + nombre_archivo + "' para lectura." ;
       error(msg.c_str());
    }
-    
+
    src >> token ;
 
    if ( token != "ply" )
@@ -262,10 +267,10 @@ void abrir_archivo()
 void error( const char *msg_error )
 {
    using namespace std ;
-   cout << "error leyendo archivo ply: " << msg_error << endl 
+   cout << "error leyendo archivo ply: " << msg_error << endl
         << "programa terminado." << endl
-        << flush ; 
-        
+        << flush ;
+
    exit(1);
 }
 
