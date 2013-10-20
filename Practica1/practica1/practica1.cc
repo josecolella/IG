@@ -18,25 +18,10 @@
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
-//Variable global que termina que figura se pinta/
-//char forma = 'C';
-
+//Variable global que dibuja y termina como se dibuja la figura/
 
 MallaTVT mallaTVT;
 
-/*
-struct MallaTVT
-{
-  //Vector de vectores de flotantes que representan
-  //los vertuces
-  vector< _vertex3f > Vertices;
-  //Vector de vectores de enteros que representa
-  //las caras
-  vector< _vertex3ui > caras;
-};
-*/
-
-//struct MallaTVT mallaTVT;
 
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -122,6 +107,7 @@ void draw_objects()
   if(mallaTVT.getModel() == 1)
     draw_cube();
   else
+    //La clase gestiona el dibujo
     mallaTVT.draw();
 
 }
@@ -172,7 +158,7 @@ void change_window_size(int Ancho1,int Alto1)
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
 
-
+  //En base a la tecla tocada, se determina que se dibuja y como
   switch (toupper(Tecla1)) {
     case 'Q': exit(0); break;
     case 27: exit(0); break;
@@ -238,31 +224,9 @@ void initialize(const char * file)
   change_projection();
   glViewport(0,0,UI_window_width,UI_window_height);
 
-   mallaTVT.initializeVerticesAndFaces(file);
-/*
-  std::vector<float> vertices_ply;
-  std::vector<int> caras_ply;
+  //Inicializamos la mallaTVT con el fichero
+  mallaTVT.initializeVerticesAndFaces(file);
 
-
-  ply::read(file, vertices_ply, caras_ply);
-
-  for (int i = 0; i < vertices_ply.size(); i +=3)
-  {
-    _vertex3f tmp;
-    tmp.x = vertices_ply[i];
-    tmp.y = vertices_ply[i+1];
-    tmp.z = vertices_ply[i+2];
-    mallaTVT.Vertices.push_back(tmp);
-  }
-  for (int i = 0; i < caras_ply.size(); i += 3)
-  {
-    _vertex3ui tmp;
-    tmp._0 = caras_ply[i];
-    tmp._1 = caras_ply[i+1];
-    tmp._2 = caras_ply[i+2];
-    mallaTVT.caras.push_back(tmp);
-  }
-*/
 }
 
 
