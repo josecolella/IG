@@ -176,11 +176,11 @@ void normal_keys(unsigned char Tecla1,int x,int y)
   switch (toupper(Tecla1)) {
     case 'Q': exit(0); break;
     case 27: exit(0); break;
-    case '1': mallaTVT.setModel(1); break;
-    case '2': mallaTVT.setModel(2); break;
-    case '3': mallaTVT.setModel(3); break;
-    case '4': mallaTVT.setModel(4); break;
-    case '5': mallaTVT.setModel(5); break;
+    case '1': mallaTVT.changeModel(1); break;
+    case '2': mallaTVT.changeModel(2); break;
+    case '3': mallaTVT.changeModel(3); break;
+    case '4': mallaTVT.changeModel(4); break;
+    case '5': mallaTVT.changeModel(5); break;
     default: glutPostRedisplay(); break;
 
   }

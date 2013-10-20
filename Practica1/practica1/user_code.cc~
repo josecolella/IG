@@ -35,7 +35,7 @@ void draw_cube()
 //**************************************************************************
 // Funcion para dibujar vertices
 //***************************************************************************
-/*
+
 void draw_vertices(vector< _vertex3f > &Vertices, vector<_vertex3ui> caras)
 {
 
@@ -111,4 +111,3 @@ void draw_changedColor(vector< _vertex3f >&Vertices, vector< _vertex3ui> caras) 
     }
     glEnd();
 }
-*/

@@ -27,7 +27,7 @@ default : $(TARGETS)
 
 # regla de ejecucion
 #
-$(TARGETS) : user_code.o practica1.o file_ply_stl.o MallaTVT.o
+$(TARGETS) : user_code.o practica1.o file_ply_stl.o mallaTVT.o
 	$(CC) -o $@ $(CXXFLAGS) user_code.o practica1.o file_ply_stl.o MallaTVT.o $(LDFLAGS)
 #
 #
