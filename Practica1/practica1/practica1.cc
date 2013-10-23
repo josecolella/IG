@@ -10,10 +10,12 @@
 #include "stdio.h"
 #include <GL/glut.h>
 #include <ctype.h>
+#include <iostream> //Para cerr
 #include "user_code.h"
 #include "vertex.h"
 #include "file_ply_stl.h"
 #include "MallaTVT.h"
+
 
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
@@ -276,12 +278,12 @@ int main(int argc, char **argv)
   // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
   // Si el usuario no mete ningun nombre se pone el ply del coche "big_dodge"
   if(argc != 2)
-    initialize("big_dodge");
-  else
+    std::cerr << "Error: Numero invalido de argumentos.\nError:./practica1 [nombreDelFicheroPlySinExtension]" << std::endl;
+  else {
     //Si mete el nombre se abre ese
     initialize(argv[1]);
-
     // inicio del bucle de eventos
-  glutMainLoop();
+    glutMainLoop();
+  }
   return 0;
 }
