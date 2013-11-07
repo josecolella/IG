@@ -2,13 +2,13 @@
 #
 # nombre del fichero ejecutable
 #
-TARGETS= practica1
+TARGETS= practica
 
 # banderas para el compilador (C y C++). Se indican los directorios donde se puenden
 # encontrar ficheros para incluir mediante la opcion -I
 # la opcion -g sirve para permitir la depuración
 #
-CFLAGS=    -g -DXWINDOWS -DSHM -I/usr/include -I.
+CFLAGS=    -g -DXWINDOWS -DSHM -I/usr/include -I. 
 CXXFLAGS=  -g -DXWINDOWS -DSHM -I/usr/include -I.
 
 # banderas pra el enlazador
@@ -27,8 +27,8 @@ default : $(TARGETS)
 
 # regla de ejecucion
 #
-$(TARGETS) : user_code.o practica1.o file_ply_stl.o MallaTVT.o
-	$(CC) -o $@ $(CXXFLAGS) user_code.o practica1.o file_ply_stl.o MallaTVT.o $(LDFLAGS)
+$(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o
+	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o $(LDFLAGS)
 #
 #
 clean:

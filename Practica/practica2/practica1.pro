@@ -3,7 +3,7 @@ HEADERS = \
   
 SOURCES = \
   user_code.cc \
-  practica1.cc
+  practica.cc
 
 LIBS += -L/casa/dmartin/codigo/funciontecas/freeglut/lib \
     -lglut

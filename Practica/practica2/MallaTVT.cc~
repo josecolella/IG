@@ -61,7 +61,7 @@ void MallaTVT :: initialize(const char * filename)
 
 for(int j=0;j<Vertices.size();j++){
 	
-	if(j%(numInitialVertices -1) && j != 0){
+	if(j%(numInitalVertices -1) && j != 0){
 		   _vertex3ui tmp;
 	  	   tmp._0 = j;
 		   tmp._1 = j+1;
