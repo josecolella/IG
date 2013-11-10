@@ -106,9 +106,9 @@ void draw_axis()
 
 void draw_objects()
 {
-  if(mallaTVT.getModel() == 1)
-    draw_cube();
-  else
+  // if(mallaTVT.getModel() == 1)
+  //   draw_cube();
+  // else
     //La clase gestiona el dibujo
     mallaTVT.draw();
 
@@ -164,7 +164,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
   switch (toupper(Tecla1)) {
     case 'Q': exit(0); break;
     case 27: exit(0); break;
-    case '1': mallaTVT.setModel(1); break;
+    case '1': mallaTVT.setModel(2); break;
     case '2': mallaTVT.setModel(2); break;
     case '3': mallaTVT.setModel(3); break;
     case '4': mallaTVT.setModel(4); break;
