@@ -11,9 +11,9 @@ class MallaTVT {
 
 	private:
         int model;
-	int numInitialVertices;
+	      int numInitialVertices;
         //Los vertices del modelo ply
-	vector<float> vertices_ply;
+	      vector<float> vertices_ply;
         //Las caras del modelo ply
         vector<int> caras_ply;
         //Vector de vertices de flotantes que representan
@@ -22,9 +22,9 @@ class MallaTVT {
         //Vector de vertices de enteros que representa
         //las caras
         vector< _vertex3ui > caras;
-	//Vector de vertices de normales
-	vector< _vertex3f > normal_vertices;
-	//Vector de caras de normales
+      	//Vector de vertices de normales
+      	vector< _vertex3f > normal_vertices;
+      	//Vector de caras de normales
         vector< _vertex3ui > normal_caras;
     public:
         MallaTVT();
@@ -32,7 +32,7 @@ class MallaTVT {
         void setModel(int model);
         void draw();
         int getModel() const;
-	int getInitialVerticesNum() const;
+	      int getInitialVerticesNum() const;
 
 };
 
