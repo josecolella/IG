@@ -143,7 +143,7 @@ void MallaTVT :: initialize(const char * filename)
        _vertex3f tmp1,tmp2;
        tmp1 = Vertices[caras[i]._1] - Vertices[caras[i]._0];
        tmp2 = Vertices[caras[i]._2] - Vertices[caras[i]._0];
-       this->normal_caras.push_back((tmp1.crossproduct(tmp2)).normalize());
+       normal_caras.push_back((tmp1.cross_product(tmp2)).normalize());
  }
 
  //Limpiamos el vector de la basura que puede contener
@@ -156,13 +156,13 @@ void MallaTVT :: initialize(const char * filename)
  for(int i=0;i<this->normal_caras.size();i++)
  {
   //Para calcular el normal de vertices de cada normal de cara
-   this->normal_vertices[caras[i]._0]] += this->normal_caras[i];
-   this->normal_vertices[caras[i]._1]] += this->normal_caras[i];
-   this->normal_vertices[caras[i]._2]] += this->normal_caras[i];
+   this->normal_vertices[caras[i]._0] += this->normal_caras[i];
+   this->normal_vertices[caras[i]._1] += this->normal_caras[i];
+   this->normal_vertices[caras[i]._2] += this->normal_caras[i];
 
  }
 
- for(int i=0;i<this->normal_vertices;i++)
+ for(int i=0;i<this->normal_vertices.size();i++)
  {
     this->normal_vertices[i].normalize();
  }

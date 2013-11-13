@@ -25,7 +25,7 @@ class MallaTVT {
       	//Vector de vertices de normales
       	vector< _vertex3f > normal_vertices;
       	//Vector de caras de normales
-        vector< _vertex3ui > normal_caras;
+        vector< _vertex3f > normal_caras;
     public:
         MallaTVT();
         void initialize(const char * filename);
