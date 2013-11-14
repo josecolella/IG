@@ -10,10 +10,16 @@ using namespace std;
 class MallaTVT {
 
 	private:
+        //Sombreado plano para caras
+    //        glShadeModel(GL_FLAT).
+
+        //glColor3f(|n.y|,|n.y|, |n.y|)
+        //normal de caras.
+        //min(0, normal del componente y)
         int model;
-	      int numInitialVertices;
+	    int numInitialVertices;
         //Los vertices del modelo ply
-	      vector<float> vertices_ply;
+	    vector<float> vertices_ply;
         //Las caras del modelo ply
         vector<int> caras_ply;
         //Vector de vertices de flotantes que representan

@@ -164,11 +164,11 @@ void normal_keys(unsigned char Tecla1,int x,int y)
   switch (toupper(Tecla1)) {
     case 'Q': exit(0); break;
     case 27: exit(0); break;
-    case '1': mallaTVT.setModel(2); break;
+    case '1': mallaTVT.setModel(1); break;
     case '2': mallaTVT.setModel(2); break;
     case '3': mallaTVT.setModel(3); break;
     case '4': mallaTVT.setModel(4); break;
-    case '5': mallaTVT.setModel(5); break;
+   // case '5': mallaTVT.setModel(5); break;
     default: glutPostRedisplay(); break;
 
   }
@@ -263,7 +263,7 @@ int main(int argc, char **argv)
 
     // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
     // al bucle de eventos)
-  glutCreateWindow("Práctica 1");
+  glutCreateWindow("Practica 2");
 
     // asignación de la funcion llamada "dibujar" al evento de dibujo
   glutDisplayFunc(draw_scene);

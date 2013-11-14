@@ -19,8 +19,8 @@ MallaTVT :: MallaTVT()
      }
 
 
-void MallaTVT :: initialize(const char * filename)
-{
+     void MallaTVT :: initialize(const char * filename)
+     {
 
       ply::read(filename, vertices_ply, caras_ply);
       for (int i = 0; i < vertices_ply.size(); i +=3)
@@ -106,31 +106,41 @@ void MallaTVT :: initialize(const char * filename)
    tmp.z = 0;
    this->Vertices.push_back(tmp);
 
+
+
+
    _vertex3ui tmp2;
-//Tapa inferior para el ultimo vertice y el primero
-   tmp2._0 = Vertices.size()-numInitialVertices-2;
-   tmp2._1 = Vertices.size()-2;
-   tmp2._2 = 0;
-   caras.push_back(tmp2);
 
-//Crear las caras para el punto el inferior
-   for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
-    _vertex3ui tmp;
-    tmp._0 = i;
-    tmp._1 = Vertices.size() -2;
-    tmp._2 = i+numInitialVertices;
-    caras.push_back(tmp);
-  }
-
-//Tapa superior para el primer punto del ultimo vertice con el primero
-  tmp2._0 = Vertices.size()-3;
-  tmp2._1 = Vertices.size()-1;
-  tmp2._2 = numInitialVertices-1;
+  //Tapa inferior para el ultimo vertice y el primero
+  tmp2._0 = Vertices.size()-2-numInitialVertices;
+  tmp2._1 = Vertices.size()-2;
+  tmp2._2 = 0;
   caras.push_back(tmp2);
 
 
-//Crear las caras para el superior
-  for(int i=numInitialVertices-1;i<Vertices.size()-2;i+=numInitialVertices){
+   //Crear las caras para el punto el inferior
+   for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
+    _vertex3ui tmp;
+    tmp._0 = i;
+    tmp._1 = i+numInitialVertices;
+    tmp._2 = Vertices.size() -2;
+    caras.push_back(tmp);
+  }
+
+
+
+  //Tapa superior para el primer punto del ultimo vertice con el primero
+  tmp2._0 = Vertices.size()-3; //El ultimo punto del ultimo vertice
+  tmp2._1 = Vertices.size()-1; //El punto del centro
+  tmp2._2 = numInitialVertices-1; //El ultimo punto del primer vertice
+  caras.push_back(tmp2);
+
+
+  //Crear las caras para el superior
+  //Vamos hacia Vertices.size() -3 debido a que tenemos 
+  //que considerar la cara que se ha tenido que hacer  
+  //manualmente para la tapa inferior
+  for(int i=numInitialVertices-1;i<Vertices.size()-3;i+=numInitialVertices){
    _vertex3ui tmp;
    tmp._0 = i;
    tmp._1 = Vertices.size()-1;
@@ -140,10 +150,10 @@ void MallaTVT :: initialize(const char * filename)
 
 //Dada una cara triangular con vertices A,B,C
   for (int i = 0; i < caras.size(); i++){
-       _vertex3f tmp1,tmp2;
-       tmp1 = Vertices[caras[i]._1] - Vertices[caras[i]._0];
-       tmp2 = Vertices[caras[i]._2] - Vertices[caras[i]._0];
-       normal_caras.push_back((tmp1.cross_product(tmp2)).normalize());
+   _vertex3f tmp1,tmp2;
+   tmp1 = Vertices[caras[i]._1] - Vertices[caras[i]._0];
+   tmp2 = Vertices[caras[i]._2] - Vertices[caras[i]._0];
+   normal_caras.push_back((tmp1.cross_product(tmp2)).normalize());
  }
 
  //Limpiamos el vector de la basura que puede contener
@@ -162,10 +172,11 @@ void MallaTVT :: initialize(const char * filename)
 
  }
 
+ //Normalizamos el resultado, y obtenemos los normales de vertices
  for(int i=0;i<this->normal_vertices.size();i++)
  {
-    this->normal_vertices[i].normalize();
- }
+  this->normal_vertices[i].normalize();
+}
 
 }
 
@@ -177,30 +188,31 @@ void MallaTVT :: setModel(int model){
 
 void MallaTVT :: draw(){
 
- if(model >= 1 && model <= 5){
+ if(model >= 1 && model <= 4){
    glPointSize(5);
    switch(this->model) {
     case 1:
+     glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+     break;
     case 2:
-    glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
-    break;
+     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+     break;
     case 3:
-    glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-    break;
     case 4:
-    case 5:
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-    break;
+     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+     break;
+    //case 5:
+    //break;
     default:
     glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
     break;
 
   }
-
+  
   glBegin(GL_TRIANGLES);
   for (int i = 0; i < caras.size(); i++)
   {
-    if(model == 5){
+    if(model == 4){
       if(i % 2 == 0)
         glColor3f(0,0,1);
       else
