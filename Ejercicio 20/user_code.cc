@@ -58,7 +58,7 @@ void figura_compleja_rec(int depth)
       figura_compleja_rec(depth-1);
     glPopMatrix();
 
-   figura_compleja_rec(depth-1);
+    figura_simple();
   }
 
 }
