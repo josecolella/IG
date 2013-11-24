@@ -83,6 +83,7 @@ void change_observer()
 
 void draw_axis()
 {
+  glLineWidth(1);
   glBegin(GL_LINES);
 // eje X, color rojo
   glColor3f(1,0,0);

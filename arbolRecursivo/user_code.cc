@@ -9,11 +9,11 @@ void tronco()
 {
 
   glPointSize(4);
-
+  glLineWidth(3);
   glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 
 
-  glBegin(GL_LINES);
+  glBegin(GL_LINE_LOOP);
     glColor3f(0,0,1);
     glVertex2f(0.0,0.0); //0
     glVertex2f(1.0,0.0); //1
@@ -55,7 +55,7 @@ void arbol(int depth)
         tronco();
         arbol(depth - 1);
     glPopMatrix();
-    arbol(depth - 1);
+    arbol(depth-1);
   }
 
 
@@ -66,5 +66,5 @@ void arbol(int depth)
 void draw_cube()
 {
   //Llamada para la creacion del arbol
-  arbol(10);
+  arbol(6);
 }
