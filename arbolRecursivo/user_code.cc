@@ -14,8 +14,6 @@ void tronco()
 
 
   glBegin(GL_LINES);
-  for (int i = 0; i < 9; i++)
-  {
     glColor3f(0,0,1);
     glVertex2f(0.0,0.0); //0
     glVertex2f(1.0,0.0); //1
@@ -26,8 +24,6 @@ void tronco()
     glVertex2f(0.0,3.0); //6
     glVertex2f(-0.5,3.0); //7
     glVertex2f(0.0,1.5); //8
-
-  }
   glEnd();
 
 }
