@@ -55,7 +55,7 @@ void arbol(int depth)
         tronco();
         arbol(depth - 1);
     glPopMatrix();
-    arbol(depth-1);
+    tronco();
   }
 
 
