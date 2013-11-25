@@ -278,7 +278,7 @@ int main(int argc, char **argv)
   // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
   // Si el usuario no mete ningun nombre se pone el ply del coche "big_dodge"
   if(argc != 2)
-    std::cerr << "Error: Numero invalido de argumentos.\nError:./practica1 [nombreDelFicheroPlySinExtension]" << std::endl;
+    std::cerr << "Error: Numero invalido de argumentos.\nError:./practica [nombreDelFicheroPlySinExtension]" << std::endl;
   else {
     //Si mete el nombre se abre ese
     initialize(argv[1]);
