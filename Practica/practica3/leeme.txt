@@ -1,0 +1,52 @@
+Practica 2 de IG
+================
+
+Jose Miguel Colella
+-------------------
+
+1.  Como interactuar con la práctica
+2. Cosas agregadas a la práctica
+
+
+2. Cosas agregadas a la práctica
+
+En la clase "MallaTVT", se ha agregado una variable atributo que sirve para guardar información sobre el número de vertices inicialmente leidos. El metodo para inicializar se ha cambiado para agregar
+código sobre como crear la rotación, caras, y tapas.
+
+1. Para interactuar con la practica, primero ejecutamos make.
+
+    -> make
+
+Para ejectutar la practica, hay una opcion:
+    -> ./practica nombre\_fichero\_ply\_sin_extension
+    ej: ./practica poligono
+
+Si hay un argumento, lee el contenido del fichero ply pasado como parametro.
+Si no hay argumento, devuelve un mensaje de error, indicando como hay que estructurar para ejecutar el programa.
+
+Mensaje de Error:
+* Error: Numero invalido de argumentos.
+* Error:./practica1 [nombredDelFicheroPlySinExtension]
+
+Para moverse usar las flechas del teclado y pg up y pg down para alejarse y acercarse a la imagen.
+
+* Flecha izquierda: Para mover la camara virtual a la derecha
+* Flecha derecha: Para mover la camara virtual a la izquierda
+* Fecha para arriba: Para mover la camara virtual arriba
+* Fecha para abajo: Para mover la camara virtual abajo
+* PgUp: Para alejar la camara virtual
+* PgDown: Para acercarse la camara virtual
+
+Fecha para abajo:
+Ahora para visualizar el modelo ply usamos los numeros 1,2,3,4.
+
+    -> 1: Para visualizar en modo punto.
+    -> 2. Para visualizar en modo linea.
+    -> 3. Para visualizar en modo solido.
+    -> 4. Para visualizar en modo ajedrez.
+
+Si queremos salir de la aplicación podemos usar las siguientes teclas:
+
+    -> q: Para salir del programa.
+    -> esc: Para salir del programa.
+
