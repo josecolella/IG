@@ -201,8 +201,8 @@ void draw_arm()
             //ASK HELP
             glRotatef((GLfloat) retration, 0.0,0.0,1.0);
             glPushMatrix();
-              glTranslatef(0.0,0.0,1.0);
-              glScalef(0.8,1.0,1.0);
+              // glTranslatef(0.0,0.0,1.0);
+              // /glScalef(0.8,1.0,1.0);
               draw_Scube();
             glPopMatrix();
           glPopMatrix();
@@ -233,6 +233,355 @@ void draw_torso()
   draw_trash_door();
 }
 
+void draw_tire_tracks() {
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glBegin(GL_LINE_LOOP);
+
+    glVertex3f(-0.2,-0.5,0.0);
+    glVertex3f(-0.2,-0.5,0.5);
+    glVertex3f(-0.1,-0.5,0.5);
+    glVertex3f(-0.1,-0.5,0.0);
+
+    glVertex3f(0.0,-0.5,0.0);
+    glVertex3f(0.0,-0.5,0.5);
+
+    glVertex3f(0.1,-0.5,0.5);
+    glVertex3f(0.1,-0.5,0.0);
+
+    glVertex3f(0.2,-0.5,0.0);
+    glVertex3f(0.2,-0.5,0.5);
+
+    glVertex3f(0.3,-0.5,0.5);
+    glVertex3f(0.3,-0.5,0.0);
+
+    glVertex3f(0.4,-0.5,0.0);
+    glVertex3f(0.4,-0.5,0.5);
+
+    glVertex3f(0.5,-0.5,0.5);
+    glVertex3f(0.5,-0.5,0.0);
+
+    glVertex3f(0.6,-0.5,0.0);
+    glVertex3f(0.6,-0.5,0.5);
+
+    glVertex3f(0.7,-0.5,0.5);
+    glVertex3f(0.7,-0.5,0.0);
+
+    glVertex3f(0.8,-0.5,0.0);
+    glVertex3f(0.8,-0.5,0.5);
+
+    glVertex3f(0.9,-0.5,0.5);
+    glVertex3f(0.9,-0.5,0.0);
+
+    glVertex3f(1.0,-0.5,0.0);
+    glVertex3f(1.0,-0.5,0.5);
+
+    glVertex3f(1.1,-0.5,0.5);
+    glVertex3f(1.1,-0.5,0.0);
+
+    glVertex3f(1.2,-0.4,0.0);
+    glVertex3f(1.2,-0.4,0.5);
+
+    glVertex3f(1.25,-0.3,0.5);
+    glVertex3f(1.25,-0.3,0.0);
+
+    glVertex3f(1.25,-0.2,0.0);
+    glVertex3f(1.25,-0.2,0.5);
+
+    glVertex3f(1.20,-0.1,0.5);
+    glVertex3f(1.20,-0.1,0.0);
+
+    glVertex3f(1.15,0.0,0.0);
+    glVertex3f(1.15,0.0,0.5);
+
+    glVertex3f(1.1,0.1,0.5);
+    glVertex3f(1.1,0.1,0.0);
+
+    glVertex3f(1.0,0.2,0.0);
+    glVertex3f(1.0,0.2,0.5);
+
+    glVertex3f(0.9,0.3,0.5);
+    glVertex3f(0.9,0.3,0.0);
+
+    glVertex3f(0.8,0.4,0.0);
+    glVertex3f(0.8,0.4,0.5);
+
+    glVertex3f(0.7,0.5,0.5);
+    glVertex3f(0.7,0.5,0.0);
+
+    glVertex3f(0.6,0.6,0.0);
+    glVertex3f(0.6,0.6,0.5);
+
+    glVertex3f(0.5,0.7,0.5);
+    glVertex3f(0.5,0.7,0.0);
+
+    glVertex3f(0.4,0.8,0.0);
+    glVertex3f(0.4,0.8,0.5);
+
+    glVertex3f(0.3,0.9,0.5);
+    glVertex3f(0.3,0.9,0.0);
+
+
+    glVertex3f(0.2,1.0,0.0);
+    glVertex3f(0.2,1.0,0.5);
+
+    glVertex3f(0.1,1.0,0.5);
+    glVertex3f(0.1,1.0,0.0);
+
+
+    glVertex3f(0.0,0.9,0.0);
+    glVertex3f(0.0,0.9,0.5);
+
+    glVertex3f(-0.05,0.8,0.5);
+    glVertex3f(-0.05,0.8,0.0);
+
+
+    glVertex3f(-0.05,0.7,0.0);
+    glVertex3f(-0.05,0.7,0.5);
+
+    glVertex3f(-0.07,0.6,0.5);
+    glVertex3f(-0.07,0.6,0.0);
+
+
+    glVertex3f(-0.1,0.5,0.0);
+    glVertex3f(-0.1,0.5,0.5);
+
+    glVertex3f(-0.17,0.4,0.5);
+    glVertex3f(-0.17,0.4,0.0);
+
+
+    glVertex3f(-0.17,0.3,0.0);
+    glVertex3f(-0.17,0.3,0.5);
+
+    glVertex3f(-0.2,0.2,0.5);
+    glVertex3f(-0.2,0.2,0.0);
+
+
+    glVertex3f(-0.3,0.1,0.0);
+    glVertex3f(-0.3,0.1,0.5);
+
+    glVertex3f(-0.35,0.0,0.5);
+    glVertex3f(-0.35,0.0,0.0);
+
+
+    glVertex3f(-0.35,-0.1,0.0);
+    glVertex3f(-0.35,-0.1,0.5);
+
+    glVertex3f(-0.35,-0.2,0.5);
+    glVertex3f(-0.35,-0.2,0.0);
+
+    glVertex3f(-0.35,-0.3,0.0);
+    glVertex3f(-0.35,-0.3,0.5);
+
+    glVertex3f(-0.3,-0.4,0.5);
+    glVertex3f(-0.3,-0.4,0.0);
+
+
+
+
+
+  glEnd();
+  glBegin(GL_LINE_LOOP);
+    //Bottom part
+    glVertex3f(-0.2,-0.55,0.0);
+    glVertex3f(-0.2,-0.55,0.5);
+    glVertex3f(-0.1,-0.55,0.5);
+    glVertex3f(-0.1,-0.55,0.0);
+
+    glVertex3f(0.0,-0.55,0.0);
+    glVertex3f(0.0,-0.55,0.5);
+
+    glVertex3f(0.1,-0.55,0.5);
+    glVertex3f(0.1,-0.55,0.0);
+
+    glVertex3f(0.2,-0.55,0.0);
+    glVertex3f(0.2,-0.55,0.5);
+
+    glVertex3f(0.3,-0.55,0.5);
+    glVertex3f(0.3,-0.55,0.0);
+
+    glVertex3f(0.4,-0.55,0.0);
+    glVertex3f(0.4,-0.55,0.5);
+
+    glVertex3f(0.5,-0.55,0.5);
+    glVertex3f(0.5,-0.55,0.0);
+
+    glVertex3f(0.6,-0.55,0.0);
+    glVertex3f(0.6,-0.55,0.5);
+
+    glVertex3f(0.7,-0.55,0.5);
+    glVertex3f(0.7,-0.55,0.0);
+
+    glVertex3f(0.8,-0.55,0.0);
+    glVertex3f(0.8,-0.55,0.5);
+
+    glVertex3f(0.9,-0.55,0.5);
+    glVertex3f(0.9,-0.55,0.0);
+
+    glVertex3f(1.0,-0.55,0.0);
+    glVertex3f(1.0,-0.55,0.5);
+
+    glVertex3f(1.1,-0.55,0.5);
+    glVertex3f(1.1,-0.55,0.0);
+
+    glVertex3f(1.2,-0.45,0.0);
+    glVertex3f(1.2,-0.45,0.5);
+
+    glVertex3f(1.25,-0.35,0.5);
+    glVertex3f(1.25,-0.35,0.0);
+
+    glVertex3f(1.25,-0.25,0.0);
+    glVertex3f(1.25,-0.25,0.5);
+
+    glVertex3f(1.20,-0.15,0.5);
+    glVertex3f(1.20,-0.15,0.0);
+
+    glVertex3f(1.15,0.05,0.0);
+    glVertex3f(1.15,0.05,0.5);
+
+    glVertex3f(1.1,0.15,0.5);
+    glVertex3f(1.1,0.15,0.0);
+
+    glVertex3f(1.0,0.25,0.0);
+    glVertex3f(1.0,0.25,0.5);
+
+    glVertex3f(0.9,0.35,0.5);
+    glVertex3f(0.9,0.35,0.0);
+
+    glVertex3f(0.8,0.45,0.0);
+    glVertex3f(0.8,0.45,0.5);
+
+    glVertex3f(0.7,0.55,0.5);
+    glVertex3f(0.7,0.55,0.0);
+
+    glVertex3f(0.6,0.65,0.0);
+    glVertex3f(0.6,0.65,0.5);
+
+    glVertex3f(0.5,0.75,0.5);
+    glVertex3f(0.5,0.75,0.0);
+
+    glVertex3f(0.4,0.85,0.0);
+    glVertex3f(0.4,0.85,0.5);
+
+    glVertex3f(0.3,0.95,0.5);
+    glVertex3f(0.3,0.95,0.0);
+
+
+    glVertex3f(0.2,1.05,0.0);
+    glVertex3f(0.2,1.05,0.5);
+
+    glVertex3f(0.1,1.05,0.5);
+    glVertex3f(0.1,1.05,0.0);
+
+
+    glVertex3f(0.0,0.95,0.0);
+    glVertex3f(0.0,0.95,0.5);
+
+    glVertex3f(-0.05,0.85,0.5);
+    glVertex3f(-0.05,0.85,0.0);
+
+
+    glVertex3f(-0.05,0.75,0.0);
+    glVertex3f(-0.05,0.75,0.5);
+
+    glVertex3f(-0.07,0.65,0.5);
+    glVertex3f(-0.07,0.65,0.0);
+
+
+    glVertex3f(-0.1,0.55,0.0);
+    glVertex3f(-0.1,0.55,0.5);
+
+    glVertex3f(-0.17,0.45,0.5);
+    glVertex3f(-0.17,0.45,0.0);
+
+
+    glVertex3f(-0.17,0.35,0.0);
+    glVertex3f(-0.17,0.35,0.5);
+
+    glVertex3f(-0.2,0.25,0.5);
+    glVertex3f(-0.2,0.25,0.0);
+
+
+    glVertex3f(-0.3,0.15,0.0);
+    glVertex3f(-0.3,0.15,0.5);
+
+    glVertex3f(-0.35,0.05,0.5);
+    glVertex3f(-0.35,0.05,0.0);
+
+
+    glVertex3f(-0.35,-0.15,0.0);
+    glVertex3f(-0.35,-0.15,0.5);
+
+    glVertex3f(-0.35,-0.25,0.5);
+    glVertex3f(-0.35,-0.25,0.0);
+
+    glVertex3f(-0.35,-0.35,0.0);
+    glVertex3f(-0.35,-0.35,0.5);
+
+    glVertex3f(-0.3,-0.45,0.5);
+    glVertex3f(-0.3,-0.45,0.0);
+
+glEnd();
+
+
+}
+
+void draw_feet() {
+  //Walle Feet
+
+  glPushMatrix();
+    draw_cylinder();
+    glPushMatrix();
+      glTranslatef(1.0,-0.07,0.0);
+      glScalef(0.7,0.7,1.0);
+      draw_cylinder();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(0.55,-0.1,0.25);
+      glScalef(0.5,0.4,0.5);
+      draw_Scube();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(0.98,0.22,0.15);
+      glScalef(0.1,0.1,0.1);
+      draw_sphere(20,20);
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.3,0.9,0.15);
+        glRotatef(90.0,0.0,1.0,0.0);
+        glPushMatrix();
+          glRotatef(45.0,1.0,0.0,0.0);
+          glScalef(0.3,0.3,1.8);
+          draw_cylinder();
+       glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(0.16,0.98,0.0);
+      glScalef(0.55,0.55,0.7);
+      draw_cylinder();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(0.125,0.825,0.15);
+      glRotatef(90.0,1.0,0.0,0.0);
+      glPushMatrix();
+       glRotatef(-25.0,0.0,1.0,0.0);
+       glScalef(0.2,0.2,1.0);
+       draw_cylinder();
+      glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(-0.09,0.38,0.15);
+      glScalef(0.1,0.1,0.1);
+      draw_sphere(20,20);
+    glPopMatrix();
+  glPopMatrix();
+
+
+  glPushMatrix();
+    glTranslatef(0.0,0.2,0.0);
+    draw_tire_tracks();
+  glPopMatrix();
+}
 
 
 void draw_objects()
@@ -247,7 +596,8 @@ void draw_objects()
   //draw_arm();
   //
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  //Walle head 1
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   // glTranslatef(0.0,1.0,0.0);
   // glPushMatrix();
   //   glScalef(1.0,0.7,1.5);
@@ -264,34 +614,35 @@ void draw_objects()
   //   glPopMatrix();
   // glPopMatrix();
 
-  glPushMatrix();
-    glScalef(0.5,0.5,0.5);
-    glPushMatrix();
-      glTranslatef(-0.6,0.0,0.0);
-      glScalef(1.0,0.1,1.5);
-      draw_Scube();
-      glPushMatrix();
-        glRotatef(90.0,1.0,0.0,0.0);
-        draw_Scube();
-      glPopMatrix();
-    glPopMatrix();
-    glPushMatrix();
+  // glPushMatrix();
+  //   glScalef(0.5,0.5,0.5);
+  //   glPushMatrix();
+  //     glTranslatef(-0.6,0.0,0.0);
+  //     glScalef(1.0,0.1,1.5);
+  //     draw_Scube();
+  //     glPushMatrix();
+  //       glRotatef(90.0,1.0,0.0,0.0);
+  //       draw_Scube();
+  //     glPopMatrix();
+  //   glPopMatrix();
+  //   glPushMatrix();
 
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(0.6,0.0,0.0);
-      glScalef(1.0,0.1,1.5);
-      draw_Scube();
-    glPopMatrix();
-  glPopMatrix();
+  //   glPopMatrix();
+  //   glPushMatrix();
+  //     glTranslatef(0.6,0.0,0.0);
+  //     glScalef(1.0,0.1,1.5);
+  //     draw_Scube();
+  //   glPopMatrix();
+  // glPopMatrix();
 
 
-  //draw_cylinder();
-  /*
+
+
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
-  draw_torso();
+  glPushMatrix();
+    draw_torso();
 
   glPushMatrix();
     glTranslatef(-0.6,0.2,0.0);
@@ -301,7 +652,7 @@ void draw_objects()
       draw_arm();
     glPopMatrix();
   glPopMatrix();
-   glPushMatrix();
+  glPushMatrix();
     glTranslatef(0.6,0.2,0.0);
     glRotatef((GLfloat) rightarm, 0.0,0.0,1.0);
     glPushMatrix();
@@ -309,8 +660,34 @@ void draw_objects()
       draw_arm();
     glPopMatrix();
   glPopMatrix();
-  */
+    //Left Feet
+    glPushMatrix();
+      glTranslatef(0.8,-0.7,-0.3);
+      glRotatef(-90.0,0.0,1.0,0.0);
+      glScalef(0.6,0.6,0.6);
+      draw_feet();
+    glPopMatrix();
+    //Right Feet
+    glPushMatrix();
+      glTranslatef(-0.5,-0.7,-0.3);
+      glRotatef(-90.0,0.0,1.0,0.0);
+      glScalef(0.6,0.6,0.6);
+      draw_feet();
+    glPopMatrix();
+  glPopMatrix();
+
   //--------------------------------
+  //Wall E Head
+  // glBegin(GL_LINE_STRIP);
+  // glVertex3f(6.0,1.0,0.0);
+  // glVertex3f(5.0,1.0,0.0);
+  // glVertex3f(4.0,1.0,0.0);
+  // glVertex3f(3.0,1.0,0.0);
+  // glVertex3f(2.0,1.0,0.0);
+  // glVertex3f(1.0,1.0,0.0);
+  // for(float j=1.0;j>=0.0;j-=0.1)
+  //   glVertex3f(1.0,(GLfloat) j,0.0);
+  // glEnd();
 
 
 
