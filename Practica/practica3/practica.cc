@@ -22,10 +22,11 @@ const int AXIS_SIZE=5000;
 
 //Variable global que dibuja y termina como se dibuja la figura/
 
-MallaTVT mallaTVT;
+MallaTVT mallaTVT1;
+MallaTVT mallaTVT2;
 
 static int shoulder = 0, elbow = 0, leftarm = 0,rightarm=0,torso = 0;
-static float retration = 2.0;
+static float pupil = 0.8,eye_rotation = 0.0,retration = 2.0, body_y_rotation = 0.0, body_translate = 0.0;
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
 GLfloat Observer_angle_x;
@@ -138,28 +139,28 @@ void draw_hands(GLfloat z_rotation) {
 void draw_arm()
 {
   glPushMatrix();
-  glTranslatef(0.0,0.0,1.0);
-  glPushMatrix();
-      glTranslatef(0.0,0.0,-1.0);
-      glScalef(0.3,0.3,0.3);
-      draw_sphere(20.0,20.0);
-    glPopMatrix();
-  glRotatef(-90.0,0.0,1.0,0.0);
-  glPushMatrix();
-  //Moverse al eje x -1
-    glTranslatef(-1.0,0.0,0.0);
-    glRotatef((GLfloat) shoulder, 0.0,0.0,1.0);
-    glTranslatef(1.0,0.0,0.0);
-    glPushMatrix();
+      glTranslatef(0.0,0.0,1.0);
+      glPushMatrix();
+        glTranslatef(0.0,0.0,-1.0);
+        glScalef(0.3,0.3,0.3);
+        draw_sphere(20.0,20.0);
+      glPopMatrix();
+      glRotatef(-90.0,0.0,1.0,0.0);
+      glPushMatrix();
+      //Moverse al eje x -1
+      glTranslatef(-1.0,0.0,0.0);
+      glRotatef((GLfloat) shoulder, 0.0,0.0,1.0);
+      glTranslatef(1.0,0.0,0.0);
+      glPushMatrix();
         glScalef(2.0,0.3,0.5);
         glutSolidCube(1.0);
-    glPopMatrix();
-    glTranslatef(1.0,0.0,0.0);
-    glPushMatrix();
-      glTranslatef(0.0,0.0,-0.25);
-      glScalef(0.5,0.5,1.0);
-      draw_cylinder();
-    glPopMatrix();
+      glPopMatrix();
+      glTranslatef(1.0,0.0,0.0);
+      glPushMatrix();
+        glTranslatef(0.0,0.0,-0.25);
+        glScalef(0.5,0.5,1.0);
+        draw_cylinder();
+      glPopMatrix();
     glRotatef((GLfloat) elbow, 0.0,0.0,1.0);
     glTranslatef(1.0,0.0,0.0);
     glPushMatrix();
@@ -197,13 +198,11 @@ void draw_arm()
             glRotatef(90.0,0.0,1.0,0.0);
             draw_cylinder();
           glPopMatrix();
-          glPushMatrix();
-            //ASK HELP
             glRotatef((GLfloat) retration, 0.0,0.0,1.0);
-            glPushMatrix();
-              // glTranslatef(0.0,0.0,1.0);
-              // /glScalef(0.8,1.0,1.0);
+          glPushMatrix();
+              glScalef(0.8,1.0,1.0);
               draw_Scube();
+          glPopMatrix();
             glPopMatrix();
           glPopMatrix();
         glPopMatrix();
@@ -235,7 +234,6 @@ void draw_torso()
 
 void draw_tire_tracks() {
 
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glBegin(GL_LINE_LOOP);
 
     glVertex3f(-0.2,-0.5,0.0);
@@ -583,64 +581,155 @@ void draw_feet() {
   glPopMatrix();
 }
 
+void draw_eye_socket() {
 
+  //WallE eye socket
+  for(float i=0;i<=2.0;i+=0.05) {
+  glBegin(GL_LINE_STRIP);
+
+    glVertex3f(-2.0,0.0,(GLfloat) i);
+    glVertex3f(2.0,0.0,(GLfloat) i);
+    glVertex3f(2.1,-0.1,(GLfloat) i);
+    glVertex3f(2.2,-0.2,(GLfloat) i);
+    glVertex3f(2.4,-0.4,(GLfloat) i);
+    glVertex3f(2.5,-0.5,(GLfloat) i);
+    glVertex3f(2.7,-0.7,(GLfloat) i);
+    glVertex3f(2.75,-0.8,(GLfloat) i);
+    glVertex3f(2.80,-0.9,(GLfloat) i);
+    glVertex3f(2.85,-1.0,(GLfloat) i);
+    glVertex3f(2.90,-1.1,(GLfloat) i);
+    glVertex3f(2.95,-1.2,(GLfloat) i);
+    glVertex3f(3.0,-1.3,(GLfloat) i);
+    glVertex3f(3.05,-1.4,(GLfloat) i);
+    glVertex3f(3.1,-1.5,(GLfloat) i);
+    glVertex3f(3.1,-2.5,(GLfloat) i);
+    glVertex3f(3.05,-2.6,(GLfloat) i);
+    glVertex3f(3.0,-2.7,(GLfloat) i);
+    glVertex3f(2.95,-2.8,(GLfloat) i);
+    glVertex3f(2.90,-2.9,(GLfloat) i);
+    glVertex3f(2.85,-3.0,(GLfloat) i);
+    glVertex3f(2.80,-3.1,(GLfloat) i);
+    glVertex3f(2.75,-3.2,(GLfloat) i);
+    glVertex3f(2.7,-3.3,(GLfloat) i);
+    glVertex3f(2.5,-3.4,(GLfloat) i);
+    glVertex3f(2.1,-3.6,(GLfloat) i);
+    glVertex3f(0.5,-3.6,(GLfloat) i);
+    glVertex3f(0.0,-3.5,(GLfloat) i);
+    glVertex3f(-0.5,-3.4,(GLfloat) i);
+    glVertex3f(-1.0,-3.0,(GLfloat) i);
+    glVertex3f(-1.5,-2.5,(GLfloat) i);
+    glVertex3f(-2.0,-1.5,(GLfloat) i);
+    glVertex3f(-2.0,0.0,(GLfloat) i);
+  glEnd();
+}
+
+
+}
+
+void draw_front_face() {
+
+  glPushMatrix();
+    glRotatef((GLfloat) eye_rotation, 0.0,0.0,1.0);
+    glPushMatrix();
+      glTranslatef(2.1,1.0,0.0);
+      draw_eye_socket();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(1.5,-0.5,0.0);
+      glScalef(4.0,4.0,4.0);
+      draw_cylinder();
+      glPushMatrix();
+        glScalef((GLfloat) pupil,(GLfloat) pupil,1.0);
+        draw_cylinder();
+      glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(2.3,-0.5,-2.0);
+      glScalef(3.5,3.0,4.0);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      draw_Scube();
+    glPopMatrix();
+  glPopMatrix();
+
+  glPushMatrix();
+    glRotatef(-(GLfloat) eye_rotation, 0.0,0.0,1.0);
+    glPushMatrix();
+      glRotatef(180.0,0.0,1.0,0.0);
+      glTranslatef(2.1,1.0,-2.0);
+      draw_eye_socket();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(-1.5,-0.5,0.0);
+      glScalef(4.0,4.0,4.0);
+      draw_cylinder();
+      glPushMatrix();
+        glScalef((GLfloat) pupil,(GLfloat) pupil,1.0);
+        draw_cylinder();
+      glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(-2.3,-0.5,-2.0);
+      glScalef(3.5,3.0,4.0);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      draw_Scube();
+    glPopMatrix();
+  glPopMatrix();
+}
+
+void draw_head() {
+  glPushMatrix();
+    glTranslatef(0.0,0.6,0.0);
+    glScalef(0.3,0.3,0.3);
+  glPushMatrix();
+    glScalef(1.0,0.8,0.8);
+    glRotatef(-15.0,1.0,0.0,0.0);
+  glPushMatrix();
+    glRotatef(90.0,0.0,1.0,0.0);
+    glPushMatrix();
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      glScalef(2.0,0.2,0.52);
+      draw_Scube();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(-1.0,0.0,-0.26);
+      glScalef(0.3,0.3,1.05);
+      draw_cylinder();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(1.0,0.0,-0.26);
+      glScalef(0.3,0.3,1.05);
+      draw_cylinder();
+    glPopMatrix();
+    glPushMatrix();
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      glTranslatef(-0.5,0.9,0.0);
+      glRotatef(60.0,0.0,0.0,1.0);
+      glScalef(2.0,0.15,0.52);
+      draw_Scube();
+    glPopMatrix();
+    glPushMatrix();
+      glTranslatef(0.0,1.8,-0.26);
+      glScalef(0.3,0.3,1.05);
+      draw_cylinder();
+    glPopMatrix();
+  glPopMatrix();
+  glPopMatrix();
+  glPushMatrix();
+     glTranslatef(0.0,2.0,0.0);
+     glScalef(0.3,0.3,0.3);
+     draw_front_face();
+  glPopMatrix();
+  glPopMatrix();
+}
 void draw_objects()
 {
-  // if(mallaTVT.getModel() == 1)
-  //   draw_cube();
-  // else
-    //La clase gestiona el dibujo
-  //mallaTVT.draw();
-  //draw_cube();
-  //
-  //draw_arm();
-  //
 
-  //Walle head 1
-  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  // glTranslatef(0.0,1.0,0.0);
-  // glPushMatrix();
-  //   glScalef(1.0,0.7,1.5);
-  //   draw_cylinder();
-  //   glPushMatrix();
-  //     glTranslatef(0.15,0.0,0.0);
-  //     glScalef(0.3,0.3,0.5);
-  //     draw_cylinder();
-  //   glPopMatrix();
-  //   glPushMatrix();
-  //     glTranslatef(-0.15,0.0,0.0);
-  //     glScalef(0.3,0.3,0.5);
-  //     draw_cylinder();
-  //   glPopMatrix();
-  // glPopMatrix();
+  //BODY AND FEET
 
-  // glPushMatrix();
-  //   glScalef(0.5,0.5,0.5);
-  //   glPushMatrix();
-  //     glTranslatef(-0.6,0.0,0.0);
-  //     glScalef(1.0,0.1,1.5);
-  //     draw_Scube();
-  //     glPushMatrix();
-  //       glRotatef(90.0,1.0,0.0,0.0);
-  //       draw_Scube();
-  //     glPopMatrix();
-  //   glPopMatrix();
-  //   glPushMatrix();
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-  //   glPopMatrix();
-  //   glPushMatrix();
-  //     glTranslatef(0.6,0.0,0.0);
-  //     glScalef(1.0,0.1,1.5);
-  //     draw_Scube();
-  //   glPopMatrix();
-  // glPopMatrix();
-
-
-
-
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-
+  glTranslatef(0.0,0.0,(GLfloat) body_translate);
+  glRotatef((GLfloat) body_y_rotation, 0.0,1.0,0.0);
   glPushMatrix();
     draw_torso();
 
@@ -677,54 +766,9 @@ void draw_objects()
   glPopMatrix();
 
   //--------------------------------
-  //Wall E Head
-  // glBegin(GL_LINE_STRIP);
-  // glVertex3f(6.0,1.0,0.0);
-  // glVertex3f(5.0,1.0,0.0);
-  // glVertex3f(4.0,1.0,0.0);
-  // glVertex3f(3.0,1.0,0.0);
-  // glVertex3f(2.0,1.0,0.0);
-  // glVertex3f(1.0,1.0,0.0);
-  // for(float j=1.0;j>=0.0;j-=0.1)
-  //   glVertex3f(1.0,(GLfloat) j,0.0);
-  // glEnd();
 
+  draw_head();
 
-
-  // glScalef(0.5,1.0,0.2);
-  // glutSolidCube(1.0);
-  // glPushMatrix();
-  //   glTranslatef(1.0,0.0,0.0);
-  //   glutSolidCube(1.0);
-  // glPopMatrix();
-  // glRotatef((GLfloat) shoulder,1.0,0.0,0.0);
-  // glPushMatrix();
-  //   glTranslatef(0.0,1.0,0.0);
-  //   glScalef(1.0,1.0,0.4);
-  //   glutSolidCube(1.0);e
-  // glPopMatrix();
-  // glRotatef((GLfloat) elbow,1.0,0.0,0.0);
-  // glPushMatrix();
-  //   glTranslatef(1.0,1.0,0.0);
-  //   glScalef(1.0,1.0,0.4);
-  //   glutSolidCube(1.0);
-  // glPopMatrix();
-    //glTranslatef(1.0,0.0,0.0);
-    //glutSolidCube(1.0);
-
-  // glBegin(GL_LINE_LOOP);
-  //   glVertex3f(0.0,0.0,0.0);
-  //   glVertex3f(0.0,2.0,0.0);
-  //   glVertex3f(2.0,2.0,0.0);
-  //   glVertex3f(2.0,0.0,0.0);
-  // glEnd();
-
-  // glBegin(GL_LINE_LOOP);
-  //   glVertex3f(0.0,0.0,0.2);
-  //   glVertex3f(0.0,2.0,0.2);
-  //   glVertex3f(2.0,2.0,0.2);
-  //   glVertex3f(2.0,0.0,0.2);
-  // glEnd();
 }
 
 
@@ -824,7 +868,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
         glutPostRedisplay();
         break;
     case 't':
-        if(torso < 90)
+        if(torso < 120)
           torso = (torso + 1);
         glutPostRedisplay();
         break;
@@ -833,6 +877,38 @@ void normal_keys(unsigned char Tecla1,int x,int y)
           torso = (torso - 1);
         glutPostRedisplay();
         break;
+    case 'k':
+        if(pupil < 0.9)
+          pupil = (pupil + 0.05);
+        glutPostRedisplay();
+        break;
+    case 'K':
+        if(pupil > 0.1)
+          pupil = (pupil - 0.05);
+        glutPostRedisplay();
+        break;
+    case 'h':
+        if(body_translate < 2.0)
+          body_translate = (body_translate + 0.05);
+        glutPostRedisplay();
+        break;
+    case 'H':
+        if(body_translate > -2.0)
+          body_translate = (body_translate - 0.05);
+        glutPostRedisplay();
+        break;
+    case 'l':
+        if(eye_rotation < 0)
+          eye_rotation = (eye_rotation + 0.5);
+        glutPostRedisplay();
+        break;
+    case 'L':
+        if(eye_rotation > -8.0)
+          eye_rotation = (eye_rotation - 0.5);
+        glutPostRedisplay();
+        break;
+
+
     default: glutPostRedisplay(); break;
 
   }
@@ -868,7 +944,7 @@ void special_keys(int Tecla1,int x,int y)
 // Funcion de incializacion
 //***************************************************************************
 
-void initialize(const char * file)
+void initialize(const char * file1, const char * file2)
 {
 // se inicalizan la ventana y los planos de corte
   Window_width=.5;
@@ -890,9 +966,9 @@ void initialize(const char * file)
   change_projection();
   glViewport(0,0,UI_window_width,UI_window_height);
 
-  //Inicializamos la mallaTVT con el fichero
-  mallaTVT.initialize(file);
-
+  //Inicializamos la mallaTVT1 con el fichero
+  mallaTVT1.initialize(file1);
+  mallaTVT2.initialize(file2);
 }
 
 
@@ -941,11 +1017,11 @@ int main(int argc, char **argv)
   // funcion de inicialización
   // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
   // Si el usuario no mete ningun nombre se pone el ply del coche "big_dodge"
-  if(argc != 2)
+  if(argc != 3)
     std::cerr << "Error: Numero invalido de argumentos.\nError:./practica1 [nombreDelFicheroPlySinExtension]" << std::endl;
   else {
     //Si mete el nombre se abre ese
-    initialize(argv[1]);
+    initialize(argv[1], argv[2]);
     // inicio del bucle de eventos
     glutMainLoop();
   }

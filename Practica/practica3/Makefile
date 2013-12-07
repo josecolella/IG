@@ -29,7 +29,7 @@ default : $(TARGETS)
 #
 $(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o
 	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o $(LDFLAGS)
-	./practica poligono	
+	./practica poligono	beethoven
 #
 #
 clean:
