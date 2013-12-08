@@ -18,7 +18,7 @@
 #include "Robot.h"
 
 
-
+GLint animate = 0; //Para hacer animation o no
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY};
 
 // tamaño de los ejes
@@ -31,7 +31,7 @@ MallaTVT mallaTVT2;
 Robot walle;
 
 state_t state = NONE;
-static int shoulder = 0, elbow = 0, torso = 0;
+static int shoulder = 0, elbow = 0, torso = 0, arm_rotation = 0;
 static float pupil = 0.8,eye_rotation = 0.0, body_y_rotation = 0.0, body_translate = 0.0;
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
@@ -55,6 +55,20 @@ void clear_window()
   glShadeModel(GL_FLAT);
 }
 
+void animation() {
+  if(elbow < 90)
+    elbow += 1;
+  if(elbow == 90) {
+    if(eye_rotation > -8.0)
+      eye_rotation = (eye_rotation - 0.1);
+
+
+    arm_rotation = arm_rotation + 5;
+    arm_rotation = arm_rotation - 5;
+
+  }
+  glutPostRedisplay();
+}
 
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
@@ -217,75 +231,95 @@ void normal_keys(unsigned char Tecla1,int x,int y)
         walle.setModel(4);
         break;
     case 'Z':
+        animate = 0;
         if(shoulder < 75)
           shoulder = (shoulder + 1);
         glutPostRedisplay();
         break;
     case 'z':
+      animate = 0;
       if(shoulder > -45)
         shoulder = (shoulder - 1);
       glutPostRedisplay();
       break;
     case 'X':
+        animate = 0;
         if(body_y_rotation <= 180)
           body_y_rotation = (body_y_rotation + 1);
         glutPostRedisplay();
         break;
     case 'x':
+        animate = 0;
         if(body_y_rotation >= -180)
           body_y_rotation = (body_y_rotation - 1);
         glutPostRedisplay();
         break;
      case 'C':
+        animate = 0;
         if(body_translate < 2.0)
           body_translate = (body_translate + 0.05);
         glutPostRedisplay();
         break;
     case 'c':
+        animate = 0;
         if(body_translate > -2.0)
           body_translate = (body_translate - 0.05);
         glutPostRedisplay();
         break;
     case 'V':
+        animate = 0;
         if(elbow < 90)
           elbow = (elbow + 1);
         glutPostRedisplay();
         break;
     case 'v':
+        animate = 0;
         if(elbow > 0)
           elbow = (elbow - 1);
         glutPostRedisplay();
         break;
     case 'D':
+        animate = 0;
         if(torso < 120)
           torso = (torso + 1);
         glutPostRedisplay();
         break;
     case 'd':
+        animate = 0;
         if(torso > 0)
           torso = (torso - 1);
         glutPostRedisplay();
         break;
     case 'F':
+        animate = 0;
         if(eye_rotation < 0)
           eye_rotation = (eye_rotation + 0.5);
         glutPostRedisplay();
         break;
     case 'f':
+        animate = 0;
         if(eye_rotation > -8.0)
           eye_rotation = (eye_rotation - 0.5);
         glutPostRedisplay();
         break;
     case 'G':
+        animate = 0;
         if(pupil < 0.9)
           pupil = (pupil + 0.05);
         glutPostRedisplay();
         break;
     case 'g':
+        animate = 0;
         if(pupil > 0.1)
           pupil = (pupil - 0.05);
         glutPostRedisplay();
         break;
+    case 'j':
+        animate = !animate;
+        if(animate) glutIdleFunc(animation);
+        else glutIdleFunc(NULL);
+        break;
+
 
 
 
