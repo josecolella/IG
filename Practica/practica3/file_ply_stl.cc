@@ -39,40 +39,21 @@ namespace ply
 using namespace std ;
 
 //**********************************************************************
-// funciones auxiliares:
+// constantes y funciones auxiliares:
 
-void abrir_archivo() ;
-void leer_cabecera() ;
+const streamsize tam_buffer = streamsize(10L)*streamsize(1024L) ;
+
+void abrir_archivo( string & nombre_archivo, ifstream & src ) ;
+void leer_cabecera( ifstream & src, unsigned & num_vertices, unsigned & num_caras, const bool lee_num_caras ) ;
 void error( const char *msg_error ) ;
-int leer_vertices( vector<float> & vertices ) ;
-int leer_caras( vector<int> & caras ) ;
-
-//**********************************************************************
-// variables usadas por todas las funciones:
-
-
-const streamsize
-      tam_buffer = streamsize(10)*streamsize(1024) ;
-char
-      buffer[unsigned(tam_buffer)];
-string
-      token,
-      nombre_archivo ;
-long long int
-      num_vertices = 0,
-      num_caras   = 0 ;
-unsigned
-      state    = 0; // 0 antes de leer 'element vertex' (o 'element face'), 1 antes de leer 'element face', 2 después
-bool
-      en_cabecera = true ;
-ifstream
-      src ;
+void leer_vertices(  unsigned num_vertices, vector<float> & vertices, ifstream & src  ) ;
+void leer_caras( unsigned num_vertices, unsigned num_caras, vector<int> & caras, ifstream & src  ) ;
 
 //**********************************************************************
 // funcion principal de lectura
 
 void read
-(  const char *    nombre_archivo_se,
+(  const char *    nombre_archivo_pse,
    vector<float> & vertices,
    vector<int> &   caras
 )
@@ -82,22 +63,62 @@ void read
    // http://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
    // univ stanford ?
 
-   nombre_archivo = nombre_archivo_se ;
-   nombre_archivo += ".ply" ;
+   unsigned
+      num_vertices = 0,
+      num_caras   = 0 ;
+   ifstream
+      src ;
+   string
+      na = nombre_archivo_pse ;
 
-   abrir_archivo() ;
-   leer_cabecera() ;
-   leer_vertices(vertices) ;
-   leer_caras(caras) ;
+
+   if ( na.substr( na.find_last_of(".")+1 ) != "ply" )
+      na += ".ply" ;
+
+   abrir_archivo( na, src ) ;
+   leer_cabecera( src, num_vertices, num_caras, true ) ;
+   leer_vertices( num_vertices, vertices, src ) ;
+   leer_caras( num_vertices, num_caras, caras, src ) ;
 
    cout << "archivo ply leido." << endl << flush ;
+}
+
+//**********************************************************************
+
+void read_vertices
+(  const char *    nombre_archivo_pse,
+   vector<float> & vertices
+)
+{
+
+   unsigned
+      num_vertices = 0,
+      num_caras   = 0 ;
+   ifstream
+      src ;
+   string
+      na = nombre_archivo_pse ;
+
+   if ( na.substr( na.find_last_of(".")+1 ) != "ply" )
+      na += ".ply" ;
+
+   abrir_archivo( na, src ) ;
+   leer_cabecera( src, num_vertices, num_caras, false ) ;
+   leer_vertices( num_vertices, vertices, src ) ;
+
+   cout << "archivo ply leido (únicamente vértices)" << endl << flush ;
 }
 
 
 //**********************************************************************
 
-int leer_vertices( vector<float> & vertices )
+void leer_vertices( unsigned num_vertices, vector<float> & vertices, ifstream & src )
 {
+   char
+      buffer[unsigned(tam_buffer)];
+   string
+      token ;
+
    // leer vértices:
 
    vertices.resize( num_vertices*3 );
@@ -121,17 +142,19 @@ int leer_vertices( vector<float> & vertices )
       vertices[base+0] = x ;
       vertices[base+1] = y ;
       vertices[base+2] = z ;
-
    }
    cout << "  fin de la lista de vértices" << endl << flush ;
-
-   return num_vertices;
 }
 
 //**********************************************************************
 
-int leer_caras(  vector<int> & caras )
+void leer_caras( unsigned num_vertices, unsigned num_caras, vector<int> & caras, ifstream & src  )
 {
+   char
+      buffer[unsigned(tam_buffer)];
+   string
+      token ;
+
    cout << "  leyendo " << num_caras << " caras ...." << endl << flush ;
 
    caras.resize( num_caras*3 );
@@ -164,14 +187,24 @@ int leer_caras(  vector<int> & caras )
       caras[base+2] = iv2 ;
    }
    cout << "  fin de la lista de caras." << endl ;
-
-   return num_caras;
 }
 
 //**********************************************************************
 
-void leer_cabecera()
+void leer_cabecera( ifstream &src, unsigned & num_vertices, unsigned & num_caras, const bool lee_num_caras )
 {
+   char
+      buffer[unsigned(tam_buffer)];
+   string
+      token ;
+   unsigned
+      state = 0; // 0 antes de leer 'element vertex' (o 'element face'), 1 antes de leer 'element face', 2 después
+   bool
+      en_cabecera = true ;
+   long long int
+      nv = 0,
+      nc = 0 ;
+
    // leer cabecera:
 
    while( en_cabecera )
@@ -204,15 +237,15 @@ void leer_cabecera()
         if ( token == "vertex" )
         {  if ( state != 0 )
               error("la línea 'element vertex' va después de 'element face'");
-           src >> num_vertices ;
-           cout << "  numero de vértices == " << num_vertices << endl ;
-           state = 1 ;
+           src >> nv ;
+           cout << "  numero de vértices == " << nv << endl ;
+           state = lee_num_caras ? 1 : 2 ;
         }
-        else if ( token == "face" )
+        else if ( lee_num_caras && token == "face" )
         {  if ( state != 1 )
-              error("advertencia 'element vertex' va después de 'element face'");
-           src >> num_caras ;
-           cout << "  número de caras == " << num_caras << endl ;
+              error("'element vertex' va después de 'element face'");
+           src >> nc ;
+           cout << "  número de caras == " << nc << endl ;
            state = 2 ;
         }
         else
@@ -225,23 +258,32 @@ void leer_cabecera()
      }
    } // end of while( en_cabecera )
 
-   if ( num_vertices == 0 || num_caras == 0 )
-      error("no se ha encontrado el número de vértices o caras, o bien alguno de los dos es 0.");
+   if ( nv <= 0 )
+      error("no se ha encontrado el número de vértices, o bien es 0 o negativo");
 
-   if ( num_vertices > numeric_limits<unsigned>::max() )
+
+   if ( lee_num_caras ) if ( nc <= 0 )
+      error("no se ha encontrado el número de caras, o bien es 0 o negativo");
+
+   if ( nv > numeric_limits<int>::max() )
       error("el número de vértices es superior al valor 'int' más grande posible.");
 
-
-   if ( num_caras > numeric_limits<unsigned>::max() )
+   if ( lee_num_caras )
+   if ( nc > numeric_limits<int>::max() )
       error("el número de caras es superior al valor 'int' más grande posible.");
+
+   num_vertices = unsigned(nv) ;
+   num_caras    = unsigned(nc) ;
 }
 
 //**********************************************************************
 
 
-void abrir_archivo()
+void abrir_archivo( string & nombre_archivo, ifstream & src )
 {
    using namespace std ;
+   char buffer[unsigned(tam_buffer)];
+   string token ;
 
    src.open( nombre_archivo.c_str() ) ; // abrir (¿en modo lectura?)
 
