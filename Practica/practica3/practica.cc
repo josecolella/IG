@@ -19,16 +19,16 @@
 
 
 GLint animate = 0; //Para hacer animation o no
+//enum que denota los diferentes estados
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY};
 
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
-//Variable global que dibuja y termina como se dibuja la figura/
 
 MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
-Robot walle;
+Robot robot;
 
 state_t state = NONE;
 static int shoulder = 0, elbow = 0, torso = 0, arm_rotation = 0;
@@ -55,21 +55,73 @@ void clear_window()
   glShadeModel(GL_FLAT);
 }
 
-void animation() {
+void animation_1() {
   if(elbow < 90)
     elbow += 1;
   if(elbow == 90) {
     if(eye_rotation > -8.0)
       eye_rotation = (eye_rotation - 0.1);
+    if(pupil > 0.1)
+          pupil = (pupil - 0.01);
+    if(arm_rotation <= 45)
+      arm_rotation = arm_rotation + 1;
+
+  }
+
+  glutPostRedisplay();
+}
+
+void animation_2() {
+
+  if(elbow == 90) {
+    if(eye_rotation < 0)
+      eye_rotation = (eye_rotation + 0.1);
+    if(pupil < 0.9)
+          pupil = (pupil + 0.01);
+    if(arm_rotation >= -45)
+      arm_rotation = arm_rotation - 1;
+
+  }
+
+  glutPostRedisplay();
+}
 
 
-    arm_rotation = arm_rotation + 5;
-    arm_rotation = arm_rotation - 5;
+
+void animation_6() {
+
+  glutPostRedisplay();
+
+}
+
+void animation_3() {
+  if(body_y_rotation < 90)
+    body_y_rotation = (body_y_rotation + 1.0);
+  if(body_y_rotation == 90) {
+    if(body_translate < 1.0) {
+            body_translate = (body_translate + 0.05);
+    }
+    if(torso < 120)
+        torso += 1;
 
   }
   glutPostRedisplay();
 }
 
+
+
+void animation_4() {
+
+  if(torso > 0)
+     torso -= 1;
+  if(body_y_rotation > 0)
+      body_y_rotation = (body_y_rotation - 1.0);
+
+  if(body_translate > 0.0)
+    body_translate = (body_translate - 0.05);
+
+ glutPostRedisplay();
+}
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
 //***************************************************************************
@@ -138,7 +190,7 @@ void draw_objects()
         mallaTVT2.draw();
         break;
     case HIERARCHY:
-        walle.draw(body_y_rotation,body_translate, torso, shoulder, elbow, eye_rotation, pupil);
+        robot.draw(body_y_rotation,body_translate, torso, shoulder, elbow, eye_rotation, pupil, arm_rotation);
         break;
   }
 
@@ -212,113 +264,171 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'p':
         mallaTVT1.setModel(1);
         mallaTVT2.setModel(1);
-        walle.setModel(1);
+        robot.setModel(1);
         glutPostRedisplay();
         break;
     case 'l':
         mallaTVT1.setModel(2);
         mallaTVT2.setModel(2);
-        walle.setModel(2);
+        robot.setModel(2);
         break;
     case 's':
         mallaTVT1.setModel(3);
         mallaTVT2.setModel(3);
-        walle.setModel(3);
+        robot.setModel(3);
         break;
     case 'a':
         mallaTVT1.setModel(4);
         mallaTVT2.setModel(4);
-        walle.setModel(4);
+        robot.setModel(4);
         break;
     case 'Z':
+      if(state == HIERARCHY) {
         animate = 0;
         if(shoulder < 75)
           shoulder = (shoulder + 1);
         glutPostRedisplay();
-        break;
+
+      }
+      break;
     case 'z':
-      animate = 0;
-      if(shoulder > -45)
-        shoulder = (shoulder - 1);
-      glutPostRedisplay();
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(shoulder > -45)
+          shoulder = (shoulder - 1);
+        glutPostRedisplay();
+      }
       break;
     case 'X':
+        if(state == HIERARCHY) {
         animate = 0;
         if(body_y_rotation <= 180)
           body_y_rotation = (body_y_rotation + 1);
         glutPostRedisplay();
+      }
         break;
+
     case 'x':
+        if(state == HIERARCHY) {
         animate = 0;
         if(body_y_rotation >= -180)
           body_y_rotation = (body_y_rotation - 1);
         glutPostRedisplay();
+        }
         break;
      case 'C':
+    if(state == HIERARCHY) {
         animate = 0;
         if(body_translate < 2.0)
           body_translate = (body_translate + 0.05);
         glutPostRedisplay();
+      }
         break;
     case 'c':
+    if(state == HIERARCHY) {
         animate = 0;
         if(body_translate > -2.0)
           body_translate = (body_translate - 0.05);
         glutPostRedisplay();
+      }
         break;
     case 'V':
+    if(state == HIERARCHY) {
         animate = 0;
         if(elbow < 90)
           elbow = (elbow + 1);
         glutPostRedisplay();
+      }
         break;
+
     case 'v':
+    if(state == HIERARCHY) {
         animate = 0;
         if(elbow > 0)
           elbow = (elbow - 1);
         glutPostRedisplay();
+      }
         break;
     case 'D':
+    if(state == HIERARCHY) {
         animate = 0;
         if(torso < 120)
           torso = (torso + 1);
         glutPostRedisplay();
         break;
+      }
+
     case 'd':
+    if(state == HIERARCHY) {
         animate = 0;
         if(torso > 0)
           torso = (torso - 1);
         glutPostRedisplay();
-        break;
+      }
+       break;
     case 'F':
+    if(state == HIERARCHY) {
         animate = 0;
         if(eye_rotation < 0)
           eye_rotation = (eye_rotation + 0.5);
         glutPostRedisplay();
+      }
         break;
     case 'f':
+    if(state == HIERARCHY) {
         animate = 0;
         if(eye_rotation > -8.0)
           eye_rotation = (eye_rotation - 0.5);
         glutPostRedisplay();
+      }
         break;
     case 'G':
+    if(state == HIERARCHY) {
         animate = 0;
         if(pupil < 0.9)
           pupil = (pupil + 0.05);
         glutPostRedisplay();
+      }
         break;
     case 'g':
+    if(state == HIERARCHY) {
         animate = 0;
         if(pupil > 0.1)
           pupil = (pupil - 0.05);
         glutPostRedisplay();
+      }
         break;
-    case 'j':
-        animate = !animate;
-        if(animate) glutIdleFunc(animation);
+    case 'n':
+    if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_1);
         else glutIdleFunc(NULL);
+    }
+     break;
+    case 'N':
+    if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_2);
+        else glutIdleFunc(NULL);
+      }
+      break;
+    case 'm':
+    if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_3);
+        else glutIdleFunc(NULL);
+      }
         break;
+    case 'M':
+    if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_4);
+        else glutIdleFunc(NULL);
+      }
+        break;
+
+
+
 
 
 
