@@ -235,6 +235,41 @@ void change_window_size(int Ancho1,int Alto1)
   glutPostRedisplay();
 }
 
+/**
+ * Menu de ayuda donde se denotan las teclas posibles
+ */
+void printHelp() {
+  cout << "Posibles comandos: " << endl;
+  cout << "?: Repetir este menu de ayuda" << endl;
+  cout << "p: Visualizar en modo punto" << endl;
+  cout << "l: Visualizar en modo linea" << endl;
+  cout << "s: Visualizar en modo solido" << endl;
+  cout << "a: Visualizar en modo ajedrez" << endl;
+  cout << "1: Activar objeto PLY" << endl;
+  cout << "2: Activar objeto por revolucion" << endl;
+  cout << "3: Activar objeto jerarquico" << endl;
+  cout << "Z: Rotacion Hombro positiva" << endl;
+  cout << "z: Rotacion Hombro negativa" << endl;
+  cout << "X: Rotacion Cuerpo positiva" << endl;
+  cout << "x: Rotacion Cuerpo negativa" << endl;
+  cout << "C: Translacion Cuerpo positiva" << endl;
+  cout << "c: Translacion Cuerpo negativa" << endl;
+  cout << "V: Rotacion Codo positiva" << endl;
+  cout << "v: Rotacion Codo negativa" << endl;
+  cout << "D: Rotacion Puerta Basura positiva" << endl;
+  cout << "d: Rotacion Puerta Basura negativa" << endl;
+  cout << "F: Rotacion Ojo positiva" << endl;
+  cout << "f: Rotacion Ojo Basura negativa" << endl;
+  cout << "G: Escalado Pupilas positiva" << endl;
+  cout << "g: Escalado Pupilas negativa" << endl;
+  cout << "n: Animacion 1 positiva (ESPERAR QUE TERMINE)" << endl;
+  cout << "N: Animacion 1 negativa (ESPERAR QUE TERMINE)" << endl;
+  cout << "m: Animacion 2 positiva (ESPERAR QUE TERMINE)" << endl;
+  cout << "M: Animacion 2 negativa (ESPERAR QUE TERMINE)" << endl;
+
+
+
+}
 
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla normal
@@ -252,6 +287,9 @@ void normal_keys(unsigned char Tecla1,int x,int y)
 
     case 'Q': exit(0); break;
     case 27: exit(0); break;
+    case '?':
+        printHelp();
+        break;
     case '1':
         state = PLY;
         break;
@@ -464,6 +502,7 @@ void special_keys(int Tecla1,int x,int y)
 
 
 
+
 //***************************************************************************
 // Funcion de incializacion
 //***************************************************************************
@@ -493,7 +532,10 @@ void initialize(const char * file1)
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject("poligono");
+
+  printHelp();
 }
+
 
 
 //***************************************************************************
