@@ -7,49 +7,60 @@
 
 using namespace std;
 
-//Variable estatica
-int Robot ::model = 1;
+Robot :: Robot() {
+  this->model = 1;
+}
 
 void Robot :: draw_sphere(GLint slices, GLint stacks) {
-
   switch(this->model) {
-      case '1':
+      case 1:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        glutSolidSphere(1.0,slices, stacks);
         break;
-      case '2':
+      case 2:
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glutWireSphere(1.0,slices, stacks);
         break;
-      case '3':
-      case '4':
+      case 3:
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glutSolidSphere(1.0,slices, stacks);
         break;
-      default:
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+      case 4:
+        glColor3f(0.0,0.0,0.0); //black
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glutSolidSphere(1.0,slices, stacks);
+        glColor3f(0.0,0.0,1.0); //Blue
         break;
 
     }
-  glutSolidSphere(1.0,slices, stacks);
+
 }
 
 void Robot :: draw_cube() {
   switch(this->model) {
-      case '1':
+      case 1:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        glutSolidCube(1.0);
         break;
-      case '2':
+      case 2:
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        glutWireCube(1.0);
         break;
-      case '3':
-      case '4':
+      case 3:
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glutSolidCube(1.0);
         break;
-      default:
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        break;
+      case 4:
+        glColor3f(1.0,0.6,0.0); //yellow
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glutSolidCube(1.0);
+        glColor3f(0.0,0.0,1.0); //Blue
 
+        break;
     }
-  glutSolidCube(1.0);
 }
+
+
 
 void Robot :: draw_cylinder(){
   static GLUquadricObj * qobj = NULL;
@@ -64,13 +75,16 @@ void Robot :: draw_cylinder(){
       gluQuadricDrawStyle(qobj, GLU_LINE);
       break;
     case 3:
+      gluQuadricDrawStyle(qobj, GLU_FILL);
+      break;
     case 4:
+      glColor3f(0.6,0.6,0.6); //Gray
       gluQuadricDrawStyle(qobj, GLU_FILL);
       break;
 
   }
   gluCylinder(qobj,0.3,0.3,0.5,25,25);
-
+  glColor3f(0.0,0.0,1.0); //Blue
 }
 
 void Robot :: setModel(int model) {
@@ -153,10 +167,9 @@ void Robot :: draw_arm(float shoulder_rotation, float elbow_rotation)
           glPopMatrix();
           glPushMatrix();
             //ASK HELP
-            glRotatef(2.0, 0.0,0.0,1.0);
+            //glRotatef((GLfloat) arm_rotation, 0.0,0.0,1.0);
             glPushMatrix();
-              // glTranslatef(0.0,0.0,1.0);
-              // /glScalef(0.8,1.0,1.0);
+              glScalef(0.8,1.0,1.0);
               draw_cube();
             glPopMatrix();
           glPopMatrix();
@@ -696,7 +709,7 @@ void Robot :: draw_head(float eye_rotation, float pupil_scale) {
   glPopMatrix();
 }
 
-void Robot :: draw_body_and_feet(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation) {
+void Robot :: draw_body_and_feet(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float arm_rotation) {
 
 
   glTranslatef(0.0,0.0,(GLfloat) body_translate);
@@ -706,7 +719,7 @@ void Robot :: draw_body_and_feet(float body_y_rotation, float body_translate, fl
 
   glPushMatrix();
     glTranslatef(-0.6,0.2,0.0);
-    //glRotatef((GLfloat) leftarm, 0.0,0.0,1.0);
+    glRotatef((GLfloat) arm_rotation, 0.0,0.0,1.0);
     glPushMatrix();
       glScalef(0.3,0.3,0.3);
       draw_arm(shoulder_rotation, elbow_rotation);
@@ -714,7 +727,7 @@ void Robot :: draw_body_and_feet(float body_y_rotation, float body_translate, fl
   glPopMatrix();
   glPushMatrix();
     glTranslatef(0.6,0.2,0.0);
-    //glRotatef((GLfloat) rightarm, 0.0,0.0,1.0);
+    glRotatef((GLfloat) arm_rotation, 0.0,0.0,1.0);
     glPushMatrix();
       glScalef(0.3,0.3,0.3);
       draw_arm(shoulder_rotation, elbow_rotation);
@@ -739,27 +752,27 @@ void Robot :: draw_body_and_feet(float body_y_rotation, float body_translate, fl
 }
 
 
-void Robot :: draw(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float eye_rotation, float pupil_scale) {
+void Robot :: draw(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float eye_rotation, float pupil_scale, float arm_rotation) {
     glPointSize(2.0);
-    switch(this->model) {
-      case '1':
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        break;
-      case '2':
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        break;
-      case '3':
-      case '4':
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        break;
-      default:
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        break;
+    // switch(this->model) {
+    //   case '1':
+    //     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    //     break;
+    //   case '2':
+    //     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //     break;
+    //   case '3':
+    //   case '4':
+    //     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    //     break;
+    //   default:
+    //     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    //     break;
 
-    }
+    // }
     glRotatef((GLfloat) body_y_rotation, 0.0,1.0,0.0);
     glPushMatrix();
-    draw_body_and_feet(body_y_rotation, body_translate, torso_rotation, shoulder_rotation, elbow_rotation);
+    draw_body_and_feet(body_y_rotation, body_translate, torso_rotation, shoulder_rotation, elbow_rotation, arm_rotation);
     draw_head(eye_rotation, pupil_scale);
     glPopMatrix();
 }

@@ -13,11 +13,12 @@ class Robot
 {
 
   private:
-    static int model;
+    int model;
     void draw_cylinder();
     void draw_sphere(GLint slices, GLint stacks);
     void draw_cube();
   public:
+    Robot();
     void setModel(int model);
     int getModel() const;
     void draw_hands(float z_rotation);
@@ -29,8 +30,8 @@ class Robot
     void draw_eye_socket();
     void draw_front_face(float eye_rotation, float pupil_scale);
     void draw_head(float eye_rotation, float pupil_scale);
-    void draw_body_and_feet(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation);
-    void draw(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float eye_rotation, float pupil_scale);
+    void draw_body_and_feet(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float arm_rotation);
+    void draw(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float eye_rotation, float pupil_scale, float arm_rotation);
 };
 
 
