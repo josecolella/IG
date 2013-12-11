@@ -21,17 +21,17 @@ class Robot
     Robot();
     void setModel(int model);
     int getModel() const;
-    void draw_hands(float z_rotation);
-    void draw_arm(float shoulder_rotation, float elbow_rotation);
+    void draw_aux_arm_object(float parent_rotation, float child_rotation);
+    void draw_arm(float * arm_rotations);
     void draw_trash_door(float torso_rotation);
     void draw_torso(float torso_rotation);
     void draw_tire_tracks();
     void draw_feet();
     void draw_eye_socket();
-    void draw_front_face(float eye_rotation, float pupil_scale);
-    void draw_head(float eye_rotation, float pupil_scale);
-    void draw_body_and_feet(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float arm_rotation);
-    void draw(float body_y_rotation, float body_translate, float torso_rotation, float shoulder_rotation, float elbow_rotation, float eye_rotation, float pupil_scale, float arm_rotation);
+    void draw_front_face(float eye_rotation);
+    void draw_head(float eye_rotation);
+    void draw_body_and_feet(float * body_rotations,float * arm_rotations);
+    void draw(float *body_rotations, float *arm_rotations, float eye_rotation);
 };
 
 

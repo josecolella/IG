@@ -30,9 +30,18 @@ MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
 Robot robot;
 
+//Variable que destaca el estado de dibujo. PLY, ROTACIONAL, HIERARCHY
 state_t state = NONE;
-static int shoulder = 0, elbow = 0, torso = 0, arm_rotation = 0;
-static float pupil = 0.8,eye_rotation = 0.0, body_y_rotation = 0.0, body_translate = 0.0;
+//Variables que se cambian en base a las teclas usadas
+static float shoulder = 0, elbow = 0, left_index_rotation = 0, right_finger_rotation = 0, left_top = 0, right_top = 0;
+static float torso = 0, arm_rotation = 0;
+static float eye_rotation = 0.0, body_y_rotation = 0.0, body_translate = 0.0;
+
+
+float arm_rotations[6] = {shoulder, elbow, left_index_rotation, left_top, right_finger_rotation, right_top};
+float eye_rotations = eye_rotation;
+float body_rotations[4] = {body_translate, body_y_rotation, torso, arm_rotation};
+
 // variables que definen la posicion de la camara en coordenadas polares
 GLfloat Observer_distance;
 GLfloat Observer_angle_x;
@@ -61,8 +70,6 @@ void animation_1() {
   if(elbow == 90) {
     if(eye_rotation > -8.0)
       eye_rotation = (eye_rotation - 0.1);
-    if(pupil > 0.1)
-          pupil = (pupil - 0.01);
     if(arm_rotation <= 45)
       arm_rotation = arm_rotation + 1;
 
@@ -76,8 +83,6 @@ void animation_2() {
   if(elbow == 90) {
     if(eye_rotation < 0)
       eye_rotation = (eye_rotation + 0.1);
-    if(pupil < 0.9)
-          pupil = (pupil + 0.01);
     if(arm_rotation >= -45)
       arm_rotation = arm_rotation - 1;
 
@@ -99,10 +104,10 @@ void animation_3() {
     body_y_rotation = (body_y_rotation + 1.0);
   if(body_y_rotation == 90) {
     if(body_translate < 1.0) {
-            body_translate = (body_translate + 0.05);
+      body_translate = (body_translate + 0.05);
     }
     if(torso < 120)
-        torso += 1;
+      torso += 1;
 
   }
   glutPostRedisplay();
@@ -113,14 +118,14 @@ void animation_3() {
 void animation_4() {
 
   if(torso > 0)
-     torso -= 1;
-  if(body_y_rotation > 0)
-      body_y_rotation = (body_y_rotation - 1.0);
+   torso -= 1;
+ if(body_y_rotation > 0)
+  body_y_rotation = (body_y_rotation - 1.0);
 
-  if(body_translate > 0.0)
-    body_translate = (body_translate - 0.05);
+if(body_translate > 0.0)
+  body_translate = (body_translate - 0.05);
 
- glutPostRedisplay();
+glutPostRedisplay();
 }
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
@@ -184,14 +189,14 @@ void draw_objects()
 
   switch(state) {
     case PLY:
-        mallaTVT1.draw();
-        break;
+    mallaTVT1.draw();
+    break;
     case ROTATION:
-        mallaTVT2.draw();
-        break;
+    mallaTVT2.draw();
+    break;
     case HIERARCHY:
-        robot.draw(body_y_rotation,body_translate, torso, shoulder, elbow, eye_rotation, pupil, arm_rotation);
-        break;
+    robot.draw(body_rotations, arm_rotations, eye_rotations);
+    break;
   }
 
 }
@@ -238,7 +243,7 @@ void change_window_size(int Ancho1,int Alto1)
 /**
  * Menu de ayuda donde se denotan las teclas posibles
  */
-void printHelp() {
+ void printHelp() {
   cout << "Posibles comandos: " << endl;
   cout << "?: Repetir este menu de ayuda" << endl;
   cout << "p: Visualizar en modo punto" << endl;
@@ -250,18 +255,25 @@ void printHelp() {
   cout << "3: Activar objeto jerarquico" << endl;
   cout << "Z: Rotacion Hombro positiva" << endl;
   cout << "z: Rotacion Hombro negativa" << endl;
-  cout << "X: Rotacion Cuerpo positiva" << endl;
-  cout << "x: Rotacion Cuerpo negativa" << endl;
-  cout << "C: Translacion Cuerpo positiva" << endl;
-  cout << "c: Translacion Cuerpo negativa" << endl;
-  cout << "V: Rotacion Codo positiva" << endl;
-  cout << "v: Rotacion Codo negativa" << endl;
-  cout << "D: Rotacion Puerta Basura positiva" << endl;
-  cout << "d: Rotacion Puerta Basura negativa" << endl;
-  cout << "F: Rotacion Ojo positiva" << endl;
-  cout << "f: Rotacion Ojo Basura negativa" << endl;
-  cout << "G: Escalado Pupilas positiva" << endl;
-  cout << "g: Escalado Pupilas negativa" << endl;
+  cout << "X: Rotacion Codo positiva" << endl;
+  cout << "x: Rotacion Codo negativa" << endl;
+  cout << "C: Rotacion Dedo izquierdo inferior positiva" << endl;
+  cout << "c: Rotacion Dedo izquierdo inferior negativa" << endl;
+  cout << "V: Rotacion Dedo izquierdo superior positiva" << endl;
+  cout << "v: Rotacion Dedo izquierdo superior negativa" << endl;
+  cout << "D: Rotacion Dedo derecho inferior positiva" << endl;
+  cout << "d: Rotacion Dedo derecho inferior negativa" << endl;
+  cout << "F: Rotacion Dedo derecho superior positiva" << endl;
+  cout << "f: Rotacion Dedo derecho superior negativa" << endl;
+  cout << "G: Rotacion Ojos positiva" << endl;
+  cout << "g: Rotacion Ojo negativa" << endl;
+  cout << "H: Rotacion Cuerpo positiva" << endl;
+  cout << "h: Rotacion Cuerpo negativa" << endl;
+  cout << "T: Translacion Cuerpo positiva" << endl;
+  cout << "t: Translacion Cuerpo negativa" << endl;
+  cout << "J: Rotacion Torso positiva" << endl;
+  cout << "j: Rotacion Torso negativa" << endl;
+
   cout << "n: Animacion 1 positiva (ESPERAR QUE TERMINE)" << endl;
   cout << "N: Animacion 1 negativa (ESPERAR QUE TERMINE)" << endl;
   cout << "m: Animacion 2 positiva (ESPERAR QUE TERMINE)" << endl;
@@ -288,182 +300,228 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'Q': exit(0); break;
     case 27: exit(0); break;
     case '?':
-        printHelp();
-        break;
+    printHelp();
+    break;
     case '1':
-        state = PLY;
-        break;
+    state = PLY;
+    break;
     case '2':
-        state = ROTATION;
-        break;
+    state = ROTATION;
+    break;
     case '3':
-        state = HIERARCHY;
-        break;
+    state = HIERARCHY;
+    break;
     case 'p':
-        mallaTVT1.setModel(1);
-        mallaTVT2.setModel(1);
-        robot.setModel(1);
-        glutPostRedisplay();
-        break;
+    mallaTVT1.setModel(1);
+    mallaTVT2.setModel(1);
+    robot.setModel(1);
+    glutPostRedisplay();
+    break;
     case 'l':
-        mallaTVT1.setModel(2);
-        mallaTVT2.setModel(2);
-        robot.setModel(2);
-        break;
+    mallaTVT1.setModel(2);
+    mallaTVT2.setModel(2);
+    robot.setModel(2);
+    break;
     case 's':
-        mallaTVT1.setModel(3);
-        mallaTVT2.setModel(3);
-        robot.setModel(3);
-        break;
+    mallaTVT1.setModel(3);
+    mallaTVT2.setModel(3);
+    robot.setModel(3);
+    break;
     case 'a':
-        mallaTVT1.setModel(4);
-        mallaTVT2.setModel(4);
-        robot.setModel(4);
-        break;
+    mallaTVT1.setModel(4);
+    mallaTVT2.setModel(4);
+    robot.setModel(4);
+    break;
     case 'Z':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(shoulder < 75)
-          shoulder = (shoulder + 1);
-        glutPostRedisplay();
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[0] < 75)
+        arm_rotations[0] = (arm_rotations[0] + 1);
+      glutPostRedisplay();
 
-      }
-      break;
+    }
+    break;
     case 'z':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(shoulder > -45)
-          shoulder = (shoulder - 1);
-        glutPostRedisplay();
-      }
-      break;
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[0] > -45)
+        arm_rotations[0] = (arm_rotations[0] - 1);
+      glutPostRedisplay();
+    }
+    break;
     case 'X':
-        if(state == HIERARCHY) {
-        animate = 0;
-        if(body_y_rotation <= 180)
-          body_y_rotation = (body_y_rotation + 1);
-        glutPostRedisplay();
-      }
-        break;
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[1] < 90)
+        arm_rotations[1] = (arm_rotations[1] + 1);
+      glutPostRedisplay();
+    }
+    break;
 
     case 'x':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[1] > 0)
+        arm_rotations[1] = (arm_rotations[1] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'c':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[2] < 45)
+        arm_rotations[2] = arm_rotations[2] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'C':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[2] > 0)
+        arm_rotations[2] = arm_rotations[2] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'v':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[3] < 45)
+        arm_rotations[3] = arm_rotations[3] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'V':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[3] > 0)
+        arm_rotations[3] = arm_rotations[3] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'D':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[4] < 45)
+        arm_rotations[4] = arm_rotations[4] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'd':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[4] > 0)
+        arm_rotations[4] = arm_rotations[4] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'F':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[5] < 45)
+        arm_rotations[5] = arm_rotations[5] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'f':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[5] > 0)
+        arm_rotations[5] = arm_rotations[5] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'G':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(eye_rotations < 0)
+        eye_rotations = (eye_rotations + 0.5);
+      glutPostRedisplay();
+    }
+    break;
+    case 'g':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(eye_rotations > -8.0)
+        eye_rotations = (eye_rotations - 0.5);
+      glutPostRedisplay();
+    }
+    break;
+    case 'H':
         if(state == HIERARCHY) {
         animate = 0;
-        if(body_y_rotation >= -180)
-          body_y_rotation = (body_y_rotation - 1);
+        if(body_rotations[1] <= 180)
+          body_rotations[1] = (body_rotations[1] + 1);
+        glutPostRedisplay();
+      }
+        break;
+    case 'h':
+        if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[1] >= -180)
+          body_rotations[1] = (body_rotations[1] - 1);
         glutPostRedisplay();
         }
         break;
-     case 'C':
+     case 'T':
     if(state == HIERARCHY) {
         animate = 0;
-        if(body_translate < 2.0)
-          body_translate = (body_translate + 0.05);
+        if(body_rotations[0] < 2.0)
+          body_rotations[0] = (body_rotations[0] + 0.05);
         glutPostRedisplay();
       }
         break;
-    case 'c':
+    case 't':
     if(state == HIERARCHY) {
         animate = 0;
-        if(body_translate > -2.0)
-          body_translate = (body_translate - 0.05);
+        if(body_rotations[0] > -2.0)
+          body_rotations[0] = (body_rotations[0] - 0.05);
         glutPostRedisplay();
       }
         break;
-    case 'V':
+    case 'J':
     if(state == HIERARCHY) {
         animate = 0;
-        if(elbow < 90)
-          elbow = (elbow + 1);
-        glutPostRedisplay();
-      }
-        break;
-
-    case 'v':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(elbow > 0)
-          elbow = (elbow - 1);
-        glutPostRedisplay();
-      }
-        break;
-    case 'D':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(torso < 120)
-          torso = (torso + 1);
+        if(body_rotations[2] < 120)
+          body_rotations[2] = (body_rotations[2] + 1);
         glutPostRedisplay();
         break;
       }
-
-    case 'd':
+    case 'j':
     if(state == HIERARCHY) {
         animate = 0;
-        if(torso > 0)
-          torso = (torso - 1);
+        if(body_rotations[2] > 0)
+          body_rotations[2] = (body_rotations[2] - 1);
         glutPostRedisplay();
       }
        break;
-    case 'F':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(eye_rotation < 0)
-          eye_rotation = (eye_rotation + 0.5);
-        glutPostRedisplay();
-      }
-        break;
-    case 'f':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(eye_rotation > -8.0)
-          eye_rotation = (eye_rotation - 0.5);
-        glutPostRedisplay();
-      }
-        break;
-    case 'G':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(pupil < 0.9)
-          pupil = (pupil + 0.05);
-        glutPostRedisplay();
-      }
-        break;
-    case 'g':
-    if(state == HIERARCHY) {
-        animate = 0;
-        if(pupil > 0.1)
-          pupil = (pupil - 0.05);
-        glutPostRedisplay();
-      }
-        break;
-    case 'n':
-    if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_1);
-        else glutIdleFunc(NULL);
-    }
-     break;
-    case 'N':
-    if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_2);
-        else glutIdleFunc(NULL);
-      }
-      break;
-    case 'm':
-    if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_3);
-        else glutIdleFunc(NULL);
-      }
-        break;
-    case 'M':
-    if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_4);
-        else glutIdleFunc(NULL);
-      }
-        break;
+    // case 'n':
+    // if(state == HIERARCHY) {
+    //     animate = 1;
+    //     if(animate) glutIdleFunc(animation_1);
+    //     else glutIdleFunc(NULL);
+    // }
+    //  break;
+    // case 'N':
+    // if(state == HIERARCHY) {
+    //     animate = 1;
+    //     if(animate) glutIdleFunc(animation_2);
+    //     else glutIdleFunc(NULL);
+    //   }
+    //   break;
+    // case 'm':
+    // if(state == HIERARCHY) {
+    //     animate = 1;
+    //     if(animate) glutIdleFunc(animation_3);
+    //     else glutIdleFunc(NULL);
+    //   }
+    //     break;
+    // case 'M':
+    // if(state == HIERARCHY) {
+    //     animate = 1;
+    //     if(animate) glutIdleFunc(animation_4);
+    //     else glutIdleFunc(NULL);
+    //   }
+    //     break;
 
 
 
