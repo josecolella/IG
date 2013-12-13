@@ -8,7 +8,7 @@
 using namespace std;
 
 Robot :: Robot() {
-  this->model = 2;
+  this->model = 1;
 }
 
 void Robot :: draw_sphere(GLint slices, GLint stacks) {
@@ -597,94 +597,94 @@ void Robot :: draw_eye_socket() {
 
 void Robot :: draw_front_face(float eye_rotation) {
     glPushMatrix();
-    glRotatef((GLfloat) eye_rotation, 0.0,0.0,1.0);
-    glPushMatrix();
-      glTranslatef(2.1,1.0,0.0);
-      draw_eye_socket();
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(1.5,-0.5,0.0);
-      glScalef(4.0,4.0,4.0);
-      draw_cylinder();
+      glRotatef((GLfloat) eye_rotation, 0.0,0.0,1.0);
       glPushMatrix();
-        glScalef(0.8,0.8,1.0);
+        glTranslatef(2.1,1.0,0.0);
+        draw_eye_socket();
+      glPopMatrix();
+      glPushMatrix();
+        glTranslatef(1.5,-0.5,0.0);
+        glScalef(4.0,4.0,4.0);
         draw_cylinder();
+        glPushMatrix();
+          glScalef(0.8,0.8,1.0);
+          draw_cylinder();
+        glPopMatrix();
+      glPopMatrix();
+      glPushMatrix();
+        glTranslatef(2.3,-0.5,-2.0);
+        glScalef(3.5,3.0,4.0);
+        draw_cube();
       glPopMatrix();
     glPopMatrix();
-    glPushMatrix();
-      glTranslatef(2.3,-0.5,-2.0);
-      glScalef(3.5,3.0,4.0);
-      draw_cube();
-    glPopMatrix();
-  glPopMatrix();
 
-  glPushMatrix();
-    glRotatef(-(GLfloat) eye_rotation, 0.0,0.0,1.0);
     glPushMatrix();
-      glRotatef(180.0,0.0,1.0,0.0);
-      glTranslatef(2.1,1.0,-2.0);
-      draw_eye_socket();
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(-1.5,-0.5,0.0);
-      glScalef(4.0,4.0,4.0);
-      draw_cylinder();
+      glRotatef(-(GLfloat) eye_rotation, 0.0,0.0,1.0);
       glPushMatrix();
-        glScalef(0.8,0.8,1.0);
+        glRotatef(180.0,0.0,1.0,0.0);
+        glTranslatef(2.1,1.0,-2.0);
+        draw_eye_socket();
+      glPopMatrix();
+      glPushMatrix();
+        glTranslatef(-1.5,-0.5,0.0);
+        glScalef(4.0,4.0,4.0);
         draw_cylinder();
+        glPushMatrix();
+          glScalef(0.8,0.8,1.0);
+          draw_cylinder();
+        glPopMatrix();
+      glPopMatrix();
+      glPushMatrix();
+        glTranslatef(-2.3,-0.5,-2.0);
+        glScalef(3.5,3.0,4.0);
+        draw_cube();
       glPopMatrix();
     glPopMatrix();
-    glPushMatrix();
-      glTranslatef(-2.3,-0.5,-2.0);
-      glScalef(3.5,3.0,4.0);
-      draw_cube();
-    glPopMatrix();
-  glPopMatrix();
 }
 
 
 void Robot :: draw_head(float eye_rotation) {
     glPushMatrix();
-    glTranslatef(0.0,0.6,0.0);
-    glScalef(0.3,0.3,0.3);
-  glPushMatrix();
-    glScalef(1.0,0.8,0.8);
-    glRotatef(-15.0,1.0,0.0,0.0);
-  glPushMatrix();
-    glRotatef(90.0,0.0,1.0,0.0);
-    glPushMatrix();
-      glScalef(2.0,0.2,0.52);
-      draw_cube();
+      glTranslatef(0.0,0.6,0.0);
+      glScalef(0.3,0.3,0.3);
+        glPushMatrix();
+          glScalef(1.0,0.8,0.8);
+          glRotatef(-15.0,1.0,0.0,0.0);
+            glPushMatrix();
+              glRotatef(90.0,0.0,1.0,0.0);
+              glPushMatrix();
+                glScalef(2.0,0.2,0.52);
+                draw_cube();
+              glPopMatrix();
+              glPushMatrix();
+                glTranslatef(-1.0,0.0,-0.26);
+                glScalef(0.3,0.3,1.05);
+                draw_cylinder();
+              glPopMatrix();
+              glPushMatrix();
+                glTranslatef(1.0,0.0,-0.26);
+                glScalef(0.3,0.3,1.05);
+                draw_cylinder();
+              glPopMatrix();
+              glPushMatrix();
+                glTranslatef(-0.5,0.9,0.0);
+                glRotatef(60.0,0.0,0.0,1.0);
+                glScalef(2.0,0.15,0.52);
+                draw_cube();
+              glPopMatrix();
+              glPushMatrix();
+                glTranslatef(0.0,1.8,-0.26);
+                glScalef(0.3,0.3,1.05);
+                draw_cylinder();
+              glPopMatrix();
+            glPopMatrix();
+        glPopMatrix();
+        glPushMatrix();
+          glTranslatef(0.0,2.0,0.0);
+          glScalef(0.3,0.3,0.3);
+          draw_front_face(eye_rotation);
+        glPopMatrix();
     glPopMatrix();
-    glPushMatrix();
-      glTranslatef(-1.0,0.0,-0.26);
-      glScalef(0.3,0.3,1.05);
-      draw_cylinder();
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(1.0,0.0,-0.26);
-      glScalef(0.3,0.3,1.05);
-      draw_cylinder();
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(-0.5,0.9,0.0);
-      glRotatef(60.0,0.0,0.0,1.0);
-      glScalef(2.0,0.15,0.52);
-      draw_cube();
-    glPopMatrix();
-    glPushMatrix();
-      glTranslatef(0.0,1.8,-0.26);
-      glScalef(0.3,0.3,1.05);
-      draw_cylinder();
-    glPopMatrix();
-  glPopMatrix();
-  glPopMatrix();
-  glPushMatrix();
-     glTranslatef(0.0,2.0,0.0);
-     glScalef(0.3,0.3,0.3);
-     draw_front_face(eye_rotation);
-  glPopMatrix();
-  glPopMatrix();
 }
 
 void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
@@ -694,23 +694,22 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
 
   glPushMatrix();
     draw_torso(body_rotations[2]);
-
-  glPushMatrix();
-    glTranslatef(-0.6,0.2,0.0);
-    glRotatef((GLfloat) body_rotations[3], 0.0,0.0,1.0);
     glPushMatrix();
-      glScalef(0.3,0.3,0.3);
-      draw_arm(arm_rotations);
+	    glTranslatef(-0.6,0.2,0.0);
+	    glRotatef((GLfloat) body_rotations[3], 0.0,0.0,1.0);
+	    //glPushMatrix();
+        glScalef(0.3,0.3,0.3);
+        draw_arm(arm_rotations);
+      //glPopMatrix();
     glPopMatrix();
-  glPopMatrix();
-  glPushMatrix();
-    glTranslatef(0.6,0.2,0.0);
-    glRotatef((GLfloat) body_rotations[3], 0.0,0.0,1.0);
     glPushMatrix();
-      glScalef(0.3,0.3,0.3);
-      draw_arm(arm_rotations);
+      glTranslatef(0.6,0.2,0.0);
+      glRotatef(-(GLfloat) body_rotations[3], 0.0,0.0,1.0);
+      //glPushMatrix();
+        glScalef(0.3,0.3,0.3);
+        draw_arm(arm_rotations);
+      //glPopMatrix();
     glPopMatrix();
-  glPopMatrix();
     //Left Feet
     glPushMatrix();
       glTranslatef(0.8,-0.7,-0.3);
@@ -731,6 +730,7 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
 
 
 void Robot :: draw(float *body_rotations, float *arm_rotations, float eye_rotation) {
+
     glPointSize(2.0);
     switch(this->model) {
       case '1':

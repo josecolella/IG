@@ -45,14 +45,12 @@ void arbol(int depth)
         glTranslatef(1.5,2.5,0.0);
         glScalef(0.7,0.7,0.7);
         glRotatef(-45.0,0.0,0.0,1.0);
-        tronco();
         arbol(depth - 1);
     glPopMatrix();
     glPushMatrix();
         //Insertamos a la izquierda
         glTranslatef(-0.5,3.0,0.0);
         glScalef(0.5,0.5,0.5);
-        tronco();
         arbol(depth - 1);
     glPopMatrix();
     tronco();
@@ -66,5 +64,5 @@ void arbol(int depth)
 void draw_cube()
 {
   //Llamada para la creacion del arbol
-  arbol(6);
+  arbol(20);
 }

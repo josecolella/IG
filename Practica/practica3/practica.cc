@@ -25,6 +25,16 @@ enum state_t {NONE=0,PLY, ROTATION, HIERARCHY};
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
+int animation1 = -1;
+int max_range = 45;
+int min_range = -45;
+float eye_top = -8.0;
+float eye_min = 0.0;
+float animation2 = -0.1;
+
+
+int animation6 = 1;
+
 
 MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
@@ -65,49 +75,44 @@ void clear_window()
 }
 
 void animation_1() {
-  if(elbow < 90)
-    elbow += 1;
-  if(elbow == 90) {
-    if(eye_rotation > -8.0)
-      eye_rotation = (eye_rotation - 0.1);
-    if(arm_rotation <= 45)
-      arm_rotation = arm_rotation + 1;
-
+  if(arm_rotations[1] < 90)
+    arm_rotations[1] += 1;
+  if(arm_rotations[1] == 90) {
+    eye_rotations = (eye_rotations + animation2);
+    if(eye_rotations < eye_top)
+    {
+      eye_rotations = eye_top;
+      animation2 = -animation2;
+    }
+    else if(eye_rotations > eye_min)
+    {
+      eye_rotations = eye_min;
+      animation2 = -animation2;
+    }
+    body_rotations[3] = body_rotations[3] + animation1;
+    if(body_rotations[3] > max_range) {
+      body_rotations[3] = max_range;
+      animation1 = -animation1;
+    }
+    else if(body_rotations[3] < min_range)
+    {
+      body_rotations[3] = min_range;
+      animation1 = -animation1;
+    }
   }
 
   glutPostRedisplay();
-}
-
-void animation_2() {
-
-  if(elbow == 90) {
-    if(eye_rotation < 0)
-      eye_rotation = (eye_rotation + 0.1);
-    if(arm_rotation >= -45)
-      arm_rotation = arm_rotation - 1;
-
-  }
-
-  glutPostRedisplay();
-}
-
-
-
-void animation_6() {
-
-  glutPostRedisplay();
-
 }
 
 void animation_3() {
-  if(body_y_rotation < 90)
-    body_y_rotation = (body_y_rotation + 1.0);
-  if(body_y_rotation == 90) {
-    if(body_translate < 1.0) {
-      body_translate = (body_translate + 0.05);
+  if(body_rotations[1] < 90)
+    body_rotations[1] = (body_rotations[1] + 1.0);
+  if(body_rotations[1] == 90) {
+    if(body_rotations[0] < 1.0) {
+      body_rotations[0] = (body_rotations[0] + 0.05);
     }
-    if(torso < 120)
-      torso += 1;
+    if(body_rotations[2] < 120)
+      body_rotations[2]+= 1;
 
   }
   glutPostRedisplay();
@@ -117,15 +122,59 @@ void animation_3() {
 
 void animation_4() {
 
-  if(torso > 0)
-   torso -= 1;
- if(body_y_rotation > 0)
-  body_y_rotation = (body_y_rotation - 1.0);
-
-if(body_translate > 0.0)
-  body_translate = (body_translate - 0.05);
+  if(body_rotations[2] > 0)
+     body_rotations[2] -= 1;
+  if(body_rotations[1] > 0)
+    body_rotations[1] = (body_rotations[1] - 1.0);
+  if(body_rotations[0] > 0.0)
+    body_rotations[0] = (body_rotations[0] - 0.05);
 
 glutPostRedisplay();
+}
+
+
+void animation_5() {
+
+if(body_rotations[2] < 120)
+      body_rotations[2]+= 1;
+if(body_rotations[3] < 90)
+  body_rotations[3] = body_rotations[3] + animation6;
+  if(body_rotations[3] == 90){
+    if(arm_rotations[1] > -35)
+      arm_rotations[1] -= 1;
+    if(arm_rotations[1] == -35)
+      if(arm_rotations[2] > -20 && arm_rotations[4] > -20) {
+        arm_rotations[2] -= 1;
+        arm_rotations[4] -= 1;
+      }
+      if(arm_rotations[2] == -20 && arm_rotations[4] == -20) {
+        if(arm_rotations[3] > -15 && arm_rotations[5] > -20)
+        {
+          arm_rotations[3] -= 1;
+          arm_rotations[5] -= 1;
+        }
+      }
+
+
+  }
+  if(arm_rotations[3] == -15 && arm_rotations[4] == -20) {
+          if(arm_rotations[1] > -38)
+            arm_rotations[1] -= 0.5;
+          if(arm_rotations[1] == -38) {
+            if(arm_rotations[0] < 10)
+              arm_rotations[0] += 1;
+            if(arm_rotations[0] == 10){
+              if(arm_rotations[1] > -43)
+                  arm_rotations[1] -= 1;
+            }
+          }
+  }
+
+
+
+
+glutPostRedisplay();
+
 }
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
@@ -273,12 +322,10 @@ void change_window_size(int Ancho1,int Alto1)
   cout << "t: Translacion Cuerpo negativa" << endl;
   cout << "J: Rotacion Torso positiva" << endl;
   cout << "j: Rotacion Torso negativa" << endl;
-
-  cout << "n: Animacion 1 positiva (ESPERAR QUE TERMINE)" << endl;
-  cout << "N: Animacion 1 negativa (ESPERAR QUE TERMINE)" << endl;
-  cout << "m: Animacion 2 positiva (ESPERAR QUE TERMINE)" << endl;
-  cout << "M: Animacion 2 negativa (ESPERAR QUE TERMINE)" << endl;
-
+  cout << "b: Animacion 1 (ESPERAR QUE TERMINE)" << endl;
+  cout << "n: Animacion 2 positiva (ESPERAR QUE TERMINE)" << endl;
+  cout << "N: Animacion 2 negativa (ESPERAR QUE TERMINE)" << endl;
+  cout << "m: Animacion 3 positiva (ESPERAR QUE TERMINE)" << endl;
 
 
 }
@@ -369,7 +416,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'c':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[2] < 45)
+      if(arm_rotations[2] < 0)
         arm_rotations[2] = arm_rotations[2] + 1;
       glutPostRedisplay();
     }
@@ -377,7 +424,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'C':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[2] > 0)
+      if(arm_rotations[2] > -45)
         arm_rotations[2] = arm_rotations[2] - 1;
       glutPostRedisplay();
     }
@@ -385,7 +432,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'v':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[3] < 45)
+      if(arm_rotations[3] < 0)
         arm_rotations[3] = arm_rotations[3] + 1;
       glutPostRedisplay();
     }
@@ -393,7 +440,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'V':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[3] > 0)
+      if(arm_rotations[3] > -45)
         arm_rotations[3] = arm_rotations[3] - 1;
       glutPostRedisplay();
     }
@@ -401,7 +448,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'D':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[4] < 45)
+      if(arm_rotations[4] < 0)
         arm_rotations[4] = arm_rotations[4] + 1;
       glutPostRedisplay();
     }
@@ -409,7 +456,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'd':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[4] > 0)
+      if(arm_rotations[4] > -45)
         arm_rotations[4] = arm_rotations[4] - 1;
       glutPostRedisplay();
     }
@@ -417,7 +464,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'F':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[5] < 45)
+      if(arm_rotations[5] < 0)
         arm_rotations[5] = arm_rotations[5] + 1;
       glutPostRedisplay();
     }
@@ -425,7 +472,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'f':
     if(state == HIERARCHY) {
       animate = 0;
-      if(arm_rotations[5] > 0)
+      if(arm_rotations[5] > -45)
         arm_rotations[5] = arm_rotations[5] - 1;
       glutPostRedisplay();
     }
@@ -447,83 +494,81 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     }
     break;
     case 'H':
-        if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[1] <= 180)
-          body_rotations[1] = (body_rotations[1] + 1);
-        glutPostRedisplay();
-      }
-        break;
-    case 'h':
-        if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[1] >= -180)
-          body_rotations[1] = (body_rotations[1] - 1);
-        glutPostRedisplay();
-        }
-        break;
-     case 'T':
     if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[0] < 2.0)
-          body_rotations[0] = (body_rotations[0] + 0.05);
-        glutPostRedisplay();
-      }
-        break;
+      animate = 0;
+      if(body_rotations[1] <= 180)
+        body_rotations[1] = (body_rotations[1] + 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'h':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[1] >= -180)
+        body_rotations[1] = (body_rotations[1] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'T':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[0] < 2.0)
+        body_rotations[0] = (body_rotations[0] + 0.05);
+      glutPostRedisplay();
+    }
+    break;
     case 't':
     if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[0] > -2.0)
-          body_rotations[0] = (body_rotations[0] - 0.05);
-        glutPostRedisplay();
-      }
-        break;
+      animate = 0;
+      if(body_rotations[0] > -2.0)
+        body_rotations[0] = (body_rotations[0] - 0.05);
+      glutPostRedisplay();
+    }
+    break;
     case 'J':
     if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[2] < 120)
-          body_rotations[2] = (body_rotations[2] + 1);
-        glutPostRedisplay();
-        break;
-      }
+      animate = 0;
+      if(body_rotations[2] < 120)
+        body_rotations[2] = (body_rotations[2] + 1);
+      glutPostRedisplay();
+      break;
+    }
     case 'j':
     if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[2] > 0)
-          body_rotations[2] = (body_rotations[2] - 1);
-        glutPostRedisplay();
-      }
-       break;
-    // case 'n':
-    // if(state == HIERARCHY) {
-    //     animate = 1;
-    //     if(animate) glutIdleFunc(animation_1);
-    //     else glutIdleFunc(NULL);
-    // }
-    //  break;
-    // case 'N':
-    // if(state == HIERARCHY) {
-    //     animate = 1;
-    //     if(animate) glutIdleFunc(animation_2);
-    //     else glutIdleFunc(NULL);
-    //   }
-    //   break;
-    // case 'm':
-    // if(state == HIERARCHY) {
-    //     animate = 1;
-    //     if(animate) glutIdleFunc(animation_3);
-    //     else glutIdleFunc(NULL);
-    //   }
-    //     break;
-    // case 'M':
-    // if(state == HIERARCHY) {
-    //     animate = 1;
-    //     if(animate) glutIdleFunc(animation_4);
-    //     else glutIdleFunc(NULL);
-    //   }
-    //     break;
-
-
+      animate = 0;
+      if(body_rotations[2] > 0)
+        body_rotations[2] = (body_rotations[2] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'b':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate){ glutIdleFunc(animation_1); }
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'n':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_3);
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'N':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_4);
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'm':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_5);
+      else glutIdleFunc(NULL);
+    }
+    break;
 
 
 

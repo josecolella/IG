@@ -13,7 +13,9 @@ class Robot
 {
 
   private:
+    //Variable que representa el modo de dibujo
     int model;
+    //Metodos privados que dibujan objetos simples de glut
     void draw_cylinder();
     void draw_sphere(GLint slices, GLint stacks);
     void draw_cube();
@@ -21,6 +23,10 @@ class Robot
     Robot();
     void setModel(int model);
     int getModel() const;
+    //Metodo para dibujar el robot
+    void draw(float *body_rotations, float *arm_rotations, float eye_rotation);
+   private:
+    //Metodos privados auxiliares para dibujar en robot entero
     void draw_aux_arm_object(float parent_rotation, float child_rotation);
     void draw_arm(float * arm_rotations);
     void draw_trash_door(float torso_rotation);
@@ -31,7 +37,7 @@ class Robot
     void draw_front_face(float eye_rotation);
     void draw_head(float eye_rotation);
     void draw_body_and_feet(float * body_rotations,float * arm_rotations);
-    void draw(float *body_rotations, float *arm_rotations, float eye_rotation);
+
 };
 
 
