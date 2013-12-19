@@ -1,0 +1,109 @@
+Practica 3 de IG
+================
+
+Jose Miguel Colella
+-------------------
+
+1. Cosas agregadas a la práctica
+2. Como interactuar con la práctica
+
+
+1. Cosas agregadas a la práctica
+
+Se ha creado una clase 'Robot' que contiene el modelo jerarquico que se ha
+modelado para esta practica. Para el dibujo de dicho modelo se han diseñado varias
+funciones auxiliares que ayudan en construir una figura compleja que trata de modelar
+al robot conocido como Wall-E.
+
+En la creación de dicho modelo se han usado primitivas proporcionadas por la libreria
+de freeglut y para objetos más complejos como la cara y las yantas, que estan
+localizadas en los pies del robot, se han creado mallas de puntos. Además se
+ha reutilizado bastante código.
+
+ * Para el ojo del robot, solo se ha tenido que crear un ojo.
+ Para el otro ojo se ha instado el ojo y se ha aplicado una rotación
+ y translado.
+ * Para las ruedas solo he creado una y para la otra se ha instacionado la misma
+ y se ha aplicado una translación.
+ * El brazo con los dedos es una forma creada usadas con las mismas forma usada para
+ la creacion del hombro y el codoSe va usando el mismo objeto pero con distintos
+ escalados y translados. Y para crear dos, solo se han creados dos instacias
+ del mismo objeto pero con diferentes translados.
+
+Se crea un metodo draw() publico que genera el modelo jerarquico.
+
+
+
+Además se ha proporcionado el grafo de escena del modelo creado. El grafo de escena
+se ha hecho a mano.
+
+2. Para interactuar con la practica, primero ejecutamos make.
+
+    -> make
+
+Para ejectutar la practica, hay una opcion:
+    -> ./practica nombre\_fichero\_ply\_sin_extension
+    ej: ./practica beethoven
+
+Si hay un argumento, lee el contenido del fichero ply pasado como parametro.
+Si no hay argumento, devuelve un mensaje de error, indicando como hay que estructurar para ejecutar el programa.
+
+Mensaje de Error:
+* Error: Numero invalido de argumentos.
+* Error:./practica1 [nombredDelFicheroPlySinExtension]
+
+Para moverse usar las flechas del teclado y pg up y pg down para alejarse y acercarse a la imagen.
+
+* Flecha izquierda: Para mover la camara virtual a la derecha
+* Flecha derecha: Para mover la camara virtual a la izquierda
+* Fecha para arriba: Para mover la camara virtual arriba
+* Fecha para abajo: Para mover la camara virtual abajo
+* PgUp: Para alejar la camara virtual
+* PgDown: Para acercarse la camara virtual
+
+
+Para interactuar con el modelo jerarquico se usan las siguientes teclas:
+
+  - p: Visualizar en modo punto
+  - l: Visualizar en modo linea
+  - s: Visualizar en modo solido
+  - a: Visualizar en modo ajedrez
+  - 1: Activar objeto PLY
+  - 2: Activar objeto por revolucion
+  - 3: Activar objeto jerarquico
+  - Z: Rotacion Hombro positiva
+  - z: Rotacion Hombro negativa
+  - X: Rotacion Codo positiva
+  - x: Rotacion Codo negativa
+  - C: Rotacion Dedo izquierdo inferior positiva
+  - c: Rotacion Dedo izquierdo inferior negativa
+  - V: Rotacion Dedo izquierdo superior positiva
+  - v: Rotacion Dedo izquierdo superior negativa
+  - D: Rotacion Dedo derecho inferior positiva
+  - d: Rotacion Dedo derecho inferior negativa
+  - F: Rotacion Dedo derecho superior positiva
+  - f: Rotacion Dedo derecho superior negativa
+  - G: Rotacion Ojos positiva
+  - g: Rotacion Ojo negativa
+  - H: Rotacion Cuerpo positiva
+  - h: Rotacion Cuerpo negativa
+  - T: Translacion Cuerpo positiva
+  - t: Translacion Cuerpo negativa
+  - J: Rotacion Torso positiva
+  - j: Rotacion Torso negativa
+
+Ademas se ha hecho la extension ofertada y se ha asignado las siguientes teclas
+para animacion. Con la animacion queria ilustrar los diversos grados de libertada que dispone el modelo
+jerarquico. Y debido a esto, cuando se toca una de las siguientes teclas, el robot hace una animacion
+en la cual usa varios grados de libertada.
+
+  - b: Animacion 1 (ESPERAR QUE TERMINE)
+  - n: Animacion 2 positiva (ESPERAR QUE TERMINE)
+  - N: Animacion 2 negativa (ESPERAR QUE TERMINE)
+  - m: Animacion 3 positiva (ESPERAR QUE TERMINE)
+
+Si queremos salir de la aplicación podemos usar las siguientes teclas:
+
+    -> q: Para salir del programa.
+    -> esc: Para salir del programa.
+
