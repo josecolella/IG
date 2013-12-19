@@ -25,17 +25,17 @@ enum state_t {NONE=0,PLY, ROTATION, HIERARCHY};
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
 
+
+//Variable utilizadas para las animaciones
 int animation1 = -1;
-int max_range = 45;
-int min_range = -45;
+int max_range = 40;
+int min_range = -40;
 float eye_top = -8.0;
 float eye_min = 0.0;
 float animation2 = -0.1;
-
-
 int animation6 = 1;
 
-
+//Variables usadas para contener el modelo PLY, ROTACIONAL, Y JERARQUICO
 MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
 Robot robot;
@@ -47,7 +47,7 @@ static float shoulder = 0, elbow = 0, left_index_rotation = 0, right_finger_rota
 static float torso = 0, arm_rotation = 0;
 static float eye_rotation = 0.0, body_y_rotation = 0.0, body_translate = 0.0;
 
-
+//Vector de Rotaciones
 float arm_rotations[6] = {shoulder, elbow, left_index_rotation, left_top, right_finger_rotation, right_top};
 float eye_rotations = eye_rotation;
 float body_rotations[4] = {body_translate, body_y_rotation, torso, arm_rotation};

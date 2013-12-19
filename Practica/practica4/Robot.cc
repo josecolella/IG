@@ -7,12 +7,9 @@
 
 using namespace std;
 
-Robot :: Robot() {
-  this->model = 1;
-}
 
 void Robot :: draw_sphere(GLint slices, GLint stacks) {
-  switch(this->model) {
+  switch(this->visualization) {
       case 1:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         glutSolidSphere(1.0,slices, stacks);
@@ -37,7 +34,7 @@ void Robot :: draw_sphere(GLint slices, GLint stacks) {
 }
 
 void Robot :: draw_cube() {
-  switch(this->model) {
+  switch(this->visualization) {
       case 1:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         glutSolidCube(1.0);
@@ -67,7 +64,7 @@ void Robot :: draw_cylinder(){
   if(qobj == NULL) {
     qobj = gluNewQuadric();
   }
-  switch(this->model){
+  switch(this->visualization){
     case 1:
       gluQuadricDrawStyle(qobj, GLU_POINT);
       break;
@@ -86,15 +83,6 @@ void Robot :: draw_cylinder(){
   gluCylinder(qobj,0.3,0.3,0.5,25,25);
   glColor3f(0.0,0.0,1.0); //Blue
 }
-
-void Robot :: setModel(int model) {
-  this->model = model;
-}
-
-int Robot :: getModel() const {
-  return this-> model;
-}
-
 
 void Robot :: draw_aux_arm_object(float parent_rotation, float child_rotation)
 {
@@ -176,7 +164,7 @@ void Robot :: draw_torso(float torso_rotation) {
 }
 
 void Robot :: draw_tire_tracks() {
-    switch(this->model) {
+    switch(this->visualization) {
       case 1:
         glBegin(GL_POINTS);
         break;
@@ -331,7 +319,7 @@ void Robot :: draw_tire_tracks() {
 
 
   glEnd();
-  switch(this->model) {
+  switch(this->visualization) {
       case 1:
         glBegin(GL_POINTS);
         break;
@@ -546,7 +534,7 @@ void Robot :: draw_feet() {
 void Robot :: draw_eye_socket() {
   //WallE eye socket
   for(float i=0;i<=2.0;i+=0.05) {
-    switch(this->model){
+    switch(this->visualization){
       case 1:
           glBegin(GL_POINTS);
           break;
@@ -729,18 +717,19 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
 }
 
 
-void Robot :: draw(float *body_rotations, float *arm_rotations, float eye_rotation) {
+void Robot :: draw(visual_t visualization , float *body_rotations, float *arm_rotations, float eye_rotation) {
 
     glPointSize(2.0);
-    switch(this->model) {
-      case '1':
+    this->visualization = visualization;
+    switch(visualization) {
+      case POINT:
         glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
         break;
-      case '2':
+      case FILL:
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         break;
-      case '3':
-      case '4':
+      case LINE:
+      case CHECKERED:
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         break;
       default:

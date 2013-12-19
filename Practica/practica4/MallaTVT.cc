@@ -10,11 +10,6 @@
 using namespace std;
 
 
-    //Variable estatica
-int MallaTVT ::model = 1;
-
-
-
 void MallaTVT :: initializeObject(const char * filename) {
   ply::read(filename, vertices_ply, caras_ply);
   for (int i = 0; i < vertices_ply.size(); i +=3)
@@ -179,25 +174,19 @@ for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
 
 }
 
+void MallaTVT :: draw(visual_t visualization){
 
-void MallaTVT :: setModel(int model){
-
-  this->model = model;
-}
-
-void MallaTVT :: draw(){
-
- if(model >= 1 && model <= 4){
+ if(visualization >= 1 && visualization <= 4){
    glPointSize(5);
-   switch(this->model) {
-    case 1:
+   switch(visualization) {
+    case POINT:
     glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
     break;
-    case 2:
+    case LINE:
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     break;
-    case 3:
-    case 4:
+    case FILL:
+    case CHECKERED:
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     break;
     //case 5:
@@ -211,7 +200,7 @@ void MallaTVT :: draw(){
   glBegin(GL_TRIANGLES);
   for (int i = 0; i < caras.size(); i++)
   {
-    if(model == 4){
+    if(visualization == 4){
       if(i % 2 == 0)
         glColor3f(0,0,1);
       else
@@ -230,11 +219,6 @@ void MallaTVT :: draw(){
 
 
 
-}
-
-
-int MallaTVT :: getModel() const {
-  return model;
 }
 
 int MallaTVT :: getInitialVerticesNum() const{

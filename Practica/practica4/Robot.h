@@ -1,11 +1,11 @@
 #include <GL/gl.h>
 #include <vector>
 #include "vertex.h"
+#include "visualtype.h" //Enum que denota que denota la visualizacion
 
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
 
-enum visual_t {POINT, LINE, FILL, CHECKERED, ILUM_PLANO, ILUM_SOFT};
 /**
  * La clase Robot representa la representacion
  * grafica de un Robot que en este caso es Wall-E
@@ -14,18 +14,15 @@ class Robot
 {
 
   private:
-    //Variable que representa el modo de dibujo
-    int model;
+    visual_t visualization;
     //Metodos privados que dibujan objetos simples de glut
     void draw_cylinder();
     void draw_sphere(GLint slices, GLint stacks);
     void draw_cube();
   public:
-    Robot();
-    void setModel(int model);
-    int getModel() const;
+    Robot() {visualization = POINT;};
     //Metodo para dibujar el robot
-    void draw(float *body_rotations, float *arm_rotations, float eye_rotation);
+    void draw(visual_t visualization,float *body_rotations, float *arm_rotations, float eye_rotation);
    private:
     //Metodos privados auxiliares para dibujar en robot entero
     void draw_aux_arm_object(float parent_rotation, float child_rotation);

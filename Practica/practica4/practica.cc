@@ -17,6 +17,7 @@
 #include "MallaTVT.h"
 #include "Robot.h"
 #include "BeverageCan.h"
+#include "visualtype.h"
 
 
 GLint animate = 0; //Para hacer animation o no
@@ -47,6 +48,8 @@ BeverageCan can(beverage_can_files[0],beverage_can_files[1],beverage_can_files[2
 
 //Variable que destaca el estado de dibujo. PLY, ROTACIONAL, HIERARCHY
 state_t state = NONE;
+//Variable que destaca el modo de visualizacion
+visual_t visualization = POINT;
 //Variables que se cambian en base a las teclas usadas
 static float shoulder = 0, elbow = 0, left_index_rotation = 0, right_finger_rotation = 0, left_top = 0, right_top = 0;
 static float torso = 0, arm_rotation = 0;
@@ -243,13 +246,13 @@ void draw_objects()
 
   switch(state) {
     case PLY:
-    mallaTVT1.draw();
+    mallaTVT1.draw(visualization);
     break;
     case ROTATION:
-    can.draw();
+    can.draw(visualization);
     break;
     case HIERARCHY:
-    robot.draw(body_rotations, arm_rotations, eye_rotations);
+    robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
     break;
   }
 
@@ -366,25 +369,20 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     state = HIERARCHY;
     break;
     case 'p':
-      mallaTVT1.setModel(1);
-      mallaTVT2.setModel(1);
-      robot.setModel(1);
+      visualization = POINT;
       glutPostRedisplay();
     break;
     case 'l':
-    mallaTVT1.setModel(2);
-    mallaTVT2.setModel(2);
-    robot.setModel(2);
+      visualization = LINE;
+      glutPostRedisplay();
     break;
     case 's':
-    mallaTVT1.setModel(3);
-    mallaTVT2.setModel(3);
-    robot.setModel(3);
+      visualization = FILL;
+      glutPostRedisplay();
     break;
     case 'a':
-    mallaTVT1.setModel(4);
-    mallaTVT2.setModel(4);
-    robot.setModel(4);
+      visualization = CHECKERED;
+      glutPostRedisplay();
     break;
     case 'Z':
     if(state == HIERARCHY) {

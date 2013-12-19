@@ -1,6 +1,7 @@
 #include "vertex.h"
 #include <vector>
 #include <GL/glut.h>
+#include "visualtype.h" //For enum
 
 using namespace std;
 
@@ -19,7 +20,6 @@ private:
       // model = 4 CHECKERED
       // model = 5 ILUM_PLANO
       // model = 6
-  static int model;
   int numInitialVertices;
       //Los vertices del modelo ply
   vector<float> vertices_ply;
@@ -40,9 +40,7 @@ private:
 public:
   void initializeObject(const char * filename);
   void initializeRotationalObject(const char * filename);
-  void setModel(int model);
-  void draw();
-  int getModel() const;
+  void draw(visual_t visualization);
   int getInitialVerticesNum() const;
 
 };
