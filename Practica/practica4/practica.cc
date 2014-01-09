@@ -18,14 +18,15 @@
 #include "Robot.h"
 #include "BeverageCan.h"
 #include "visualtype.h"
+#include "jpg_imagen.hpp"
 
 
 GLint animate = 0; //Para hacer animation o no
+GLint texture = 0;
 //enum que denota los diferentes estados
-enum state_t {NONE=0,PLY, ROTATION, HIERARCHY};
+enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
 bool isP4 = false; //Modo practica 4
 
-const char *beverage_can_files[3] = {"lata-pcue.ply","lata-psup.ply","lata-pinf.ply"};
 const char *rotation_body_file = "poligono.ply";
 // tamaño de los ejes
 const int AXIS_SIZE=5000;
@@ -43,8 +44,13 @@ int animation6 = 1;
 //Variables usadas para contener el modelo PLY, ROTACIONAL, Y JERARQUICO
 MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
+MallaTVT peonMadera;
+MallaTVT peonBlanco;
+MallaTVT peonNegro;
+
+
 Robot robot;
-BeverageCan can(beverage_can_files[0],beverage_can_files[1],beverage_can_files[2]);
+BeverageCan can("text-lata-1.jpg");
 
 //Variable que destaca el estado de dibujo. PLY, ROTACIONAL, HIERARCHY
 state_t state = NONE;
@@ -131,11 +137,11 @@ void animation_3() {
 void animation_4() {
 
   if(body_rotations[2] > 0)
-     body_rotations[2] -= 1;
-  if(body_rotations[1] > 0)
-    body_rotations[1] = (body_rotations[1] - 1.0);
-  if(body_rotations[0] > 0.0)
-    body_rotations[0] = (body_rotations[0] - 0.05);
+   body_rotations[2] -= 1;
+ if(body_rotations[1] > 0)
+  body_rotations[1] = (body_rotations[1] - 1.0);
+if(body_rotations[0] > 0.0)
+  body_rotations[0] = (body_rotations[0] - 0.05);
 
 glutPostRedisplay();
 }
@@ -143,10 +149,10 @@ glutPostRedisplay();
 
 void animation_5() {
 
-if(body_rotations[2] < 120)
-      body_rotations[2]+= 1;
-if(body_rotations[3] < 90)
-  body_rotations[3] = body_rotations[3] + animation6;
+  if(body_rotations[2] < 120)
+    body_rotations[2]+= 1;
+  if(body_rotations[3] < 90)
+    body_rotations[3] = body_rotations[3] + animation6;
   if(body_rotations[3] == 90){
     if(arm_rotations[1] > -35)
       arm_rotations[1] -= 1;
@@ -164,99 +170,118 @@ if(body_rotations[3] < 90)
       }
 
 
+    }
+    if(arm_rotations[3] == -15 && arm_rotations[4] == -20) {
+      if(arm_rotations[1] > -38)
+        arm_rotations[1] -= 0.5;
+      if(arm_rotations[1] == -38) {
+        if(arm_rotations[0] < 10)
+          arm_rotations[0] += 1;
+        if(arm_rotations[0] == 10){
+          if(arm_rotations[1] > -43)
+            arm_rotations[1] -= 1;
+        }
+      }
+    }
+
+
+
+
+    glutPostRedisplay();
+
   }
-  if(arm_rotations[3] == -15 && arm_rotations[4] == -20) {
-          if(arm_rotations[1] > -38)
-            arm_rotations[1] -= 0.5;
-          if(arm_rotations[1] == -38) {
-            if(arm_rotations[0] < 10)
-              arm_rotations[0] += 1;
-            if(arm_rotations[0] == 10){
-              if(arm_rotations[1] > -43)
-                  arm_rotations[1] -= 1;
-            }
-          }
-  }
-
-
-
-
-glutPostRedisplay();
-
-}
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
 //***************************************************************************
 
-void change_projection()
-{
+  void change_projection()
+  {
 
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
   //gluPerspective(65.0,)
 // formato(x_minimo,x_maximo, y_minimo, y_maximo,Front_plane, plano_traser)
 //  Front_plane>0  Back_plane>PlanoDelantero)
-  glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
-}
+    glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+  }
 
 //**************************************************************************
 // Funcion para definir la transformación de vista (posicionar la camara)
 //***************************************************************************
 
-void change_observer()
-{
+  void change_observer()
+  {
 
 // posicion del observador
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef(0,0,-Observer_distance);
-  glRotatef(Observer_angle_x,1,0,0);
-  glRotatef(Observer_angle_y,0,1,0);
-}
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(0,0,-Observer_distance);
+    glRotatef(Observer_angle_x,1,0,0);
+    glRotatef(Observer_angle_y,0,1,0);
+  }
 
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
 
-void draw_axis()
-{
-  glBegin(GL_LINES);
+  void draw_axis()
+  {
+    glBegin(GL_LINES);
 // eje X, color rojo
-  glColor3f(1,0,0);
-  glVertex3f(-AXIS_SIZE,0,0);
-  glVertex3f(AXIS_SIZE,0,0);
+    glColor3f(1,0,0);
+    glVertex3f(-AXIS_SIZE,0,0);
+    glVertex3f(AXIS_SIZE,0,0);
 // eje Y, color verde
-  glColor3f(0,1,0);
-  glVertex3f(0,-AXIS_SIZE,0);
-  glVertex3f(0,AXIS_SIZE,0);
+    glColor3f(0,1,0);
+    glVertex3f(0,-AXIS_SIZE,0);
+    glVertex3f(0,AXIS_SIZE,0);
 // eje Z, color azul
-  glColor3f(0,0,1);
-  glVertex3f(0,0,-AXIS_SIZE);
-  glVertex3f(0,0,AXIS_SIZE);
-  glEnd();
-}
+    glColor3f(0,0,1);
+    glVertex3f(0,0,-AXIS_SIZE);
+    glVertex3f(0,0,AXIS_SIZE);
+    glEnd();
+  }
 
+//Modo practica 4
+  void p4_scene(){
+    can.draw(visualization);
+    glPushMatrix();
+    glScalef(0.2,0.2,0.2);
+    glPushMatrix();
+    glTranslatef(0.0,1.5,4.0);
+    peonMadera.draw2(visualization);
+    glTranslatef(3.0,0.0,0.0);
+    peonBlanco.draw2(visualization);
+    glTranslatef(3.0,0.0,0.0);
+    peonNegro.draw2(visualization);
+    glPopMatrix();
+    glPopMatrix();
+  }
 
 //**************************************************************************
 // Funcion que dibuja los objetos
 //***************************************************************************
 
-void draw_objects()
-{
+  void draw_objects()
+  {
 
-  switch(state) {
-    case PLY:
-    mallaTVT1.draw(visualization);
-    break;
-    case ROTATION:
-    can.draw(visualization);
-    break;
-    case HIERARCHY:
-    robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
-    break;
+    switch(state) {
+      case PLY:
+      mallaTVT1.draw(visualization);
+      break;
+      case ROTATION:
+      mallaTVT2.draw(visualization);
+      break;
+      case HIERARCHY:
+      robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
+      break;
+      case P4:
+      p4_scene();
+      break;
+
+    }
+
   }
-
-}
 
 
 
@@ -264,15 +289,15 @@ void draw_objects()
 //
 //***************************************************************************
 
-void draw_scene(void)
-{
+  void draw_scene(void)
+  {
 
-  clear_window();
-  change_observer();
-  draw_axis();
-  draw_objects();
-  glutSwapBuffers();
-}
+    clear_window();
+    change_observer();
+    draw_axis();
+    draw_objects();
+    glutSwapBuffers();
+  }
 
 
 
@@ -284,23 +309,23 @@ void draw_scene(void)
 // nuevo alto
 //***************************************************************************
 
-void change_window_size(int Ancho1,int Alto1)
-{
+  void change_window_size(int Ancho1,int Alto1)
+  {
   //change_projection();
-  glViewport(0,0,Ancho1,Alto1);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(65.0,Ancho1/Alto1, 1.0,20.0);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef(0.0,0.0,-5.0);
-  glutPostRedisplay();
-}
+    glViewport(0,0,Ancho1,Alto1);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(65.0,Ancho1/Alto1, 1.0,20.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(0.0,0.0,-5.0);
+    glutPostRedisplay();
+  }
 
 /**
  * Menu de ayuda donde se denotan las teclas posibles
  */
- void printHelp() {
+ void printHelpP1ToP3() {
   cout << "Posibles comandos: " << endl;
   cout << "?: Repetir este menu de ayuda" << endl;
   cout << "p: Visualizar en modo punto" << endl;
@@ -310,6 +335,7 @@ void change_window_size(int Ancho1,int Alto1)
   cout << "1: Activar objeto PLY" << endl;
   cout << "2: Activar objeto por revolucion" << endl;
   cout << "3: Activar objeto jerarquico" << endl;
+  cout << "4. Entrar en modo Práctica 4" << endl;
   cout << "Z: Rotacion Hombro positiva" << endl;
   cout << "z: Rotacion Hombro negativa" << endl;
   cout << "X: Rotacion Codo positiva" << endl;
@@ -338,6 +364,46 @@ void change_window_size(int Ancho1,int Alto1)
 
 }
 
+
+void printHelpP4() {
+  cout << "Posibles comandos: " << endl;
+  cout << "?: Repetir este menu de ayuda" << endl;
+  cout << "A: Aumentar el valor de beta" << endl;
+  cout << "Z: Disminuir el valor de beta" << endl;
+  cout << "X: Aumentar el valor de alpha" << endl;
+  cout << "C: Disminuir el valor de alpha" << endl;
+
+}
+
+void p4_keys(unsigned char Tecla)
+{
+  switch(Tecla){
+    case '?':
+    printHelpP4();
+    break;
+    case '4':
+    isP4 = false;
+    break;
+    case 'A':
+              //aumentar el valor de beta
+    glutPostRedisplay();
+    break;
+    case 'Z':
+              //disminunir el valor de beta
+    glutPostRedisplay();
+    break;
+    case 'X':
+              //aumentar el valor de alpha
+    glutPostRedisplay();
+    break;
+    case 'C':
+              //disminuir el valor de alpha
+    glutPostRedisplay();
+    break;
+  }
+
+}
+
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla normal
 //
@@ -350,236 +416,246 @@ void change_window_size(int Ancho1,int Alto1)
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
   //En base a la tecla tocada, se determina que se dibuja y como
-  switch ((Tecla1)) {
+  switch (Tecla1) {
     //if(modo == p4) {tecla_p4(key); return}
     //Esta funcion gestiona todo relevante a la practica4
     //
     case 'Q': exit(0); break;
     case 27: exit(0); break;
-    case '?':
-    printHelp();
-    break;
-    case '1':
-    state = PLY;
-    break;
-    case '2':
-    state = ROTATION;
-    break;
-    case '3':
-    state = HIERARCHY;
-    break;
-    case 'p':
+    if(isP4)
+    {
+      p4_keys(Tecla1);
+    }
+    else {
+      case '?':
+      printHelpP1ToP3();
+      break;
+      case '1':
+      state = PLY;
+      break;
+      case '2':
+      state = ROTATION;
+      break;
+      case '3':
+      state = HIERARCHY;
+      break;
+      case '4':
+      isP4 = !isP4 ;
+      cout << isP4 << endl;
+      state = P4;
+      case 'p':
       visualization = POINT;
       glutPostRedisplay();
-    break;
-    case 'l':
+      break;
+      case 'l':
       visualization = LINE;
       glutPostRedisplay();
-    break;
-    case 's':
+      break;
+      case 's':
       visualization = FILL;
       glutPostRedisplay();
-    break;
-    case 'a':
+      break;
+      case 'a':
       visualization = CHECKERED;
       glutPostRedisplay();
-    break;
-    case 'Z':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[0] < 75)
-        arm_rotations[0] = (arm_rotations[0] + 1);
-      glutPostRedisplay();
-
-    }
-    break;
-    case 'z':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[0] > -45)
-        arm_rotations[0] = (arm_rotations[0] - 1);
-      glutPostRedisplay();
-    }
-    break;
-    case 'X':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[1] < 90)
-        arm_rotations[1] = (arm_rotations[1] + 1);
-      glutPostRedisplay();
-    }
-    break;
-
-    case 'x':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[1] > 0)
-        arm_rotations[1] = (arm_rotations[1] - 1);
-      glutPostRedisplay();
-    }
-    break;
-    case 'c':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[2] < 0)
-        arm_rotations[2] = arm_rotations[2] + 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'C':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[2] > -45)
-        arm_rotations[2] = arm_rotations[2] - 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'v':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[3] < 0)
-        arm_rotations[3] = arm_rotations[3] + 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'V':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[3] > -45)
-        arm_rotations[3] = arm_rotations[3] - 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'D':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[4] < 0)
-        arm_rotations[4] = arm_rotations[4] + 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'd':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[4] > -45)
-        arm_rotations[4] = arm_rotations[4] - 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'F':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[5] < 0)
-        arm_rotations[5] = arm_rotations[5] + 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'f':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(arm_rotations[5] > -45)
-        arm_rotations[5] = arm_rotations[5] - 1;
-      glutPostRedisplay();
-    }
-    break;
-    case 'G':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(eye_rotations < 0)
-        eye_rotations = (eye_rotations + 0.5);
-      glutPostRedisplay();
-    }
-    break;
-    case 'g':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(eye_rotations > -8.0)
-        eye_rotations = (eye_rotations - 0.5);
-      glutPostRedisplay();
-    }
-    break;
-    case 'H':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[1] <= 180)
-        body_rotations[1] = (body_rotations[1] + 1);
-      glutPostRedisplay();
-    }
-    break;
-    case 'h':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[1] >= -180)
-        body_rotations[1] = (body_rotations[1] - 1);
-      glutPostRedisplay();
-    }
-    break;
-    case 'T':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[0] < 2.0)
-        body_rotations[0] = (body_rotations[0] + 0.05);
-      glutPostRedisplay();
-    }
-    break;
-    case 't':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[0] > -2.0)
-        body_rotations[0] = (body_rotations[0] - 0.05);
-      glutPostRedisplay();
-    }
-    break;
-    case 'J':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[2] < 120)
-        body_rotations[2] = (body_rotations[2] + 1);
-      glutPostRedisplay();
       break;
-    }
-    case 'j':
-    if(state == HIERARCHY) {
-      animate = 0;
-      if(body_rotations[2] > 0)
-        body_rotations[2] = (body_rotations[2] - 1);
-      glutPostRedisplay();
-    }
-    break;
-    case 'b':
-    if(state == HIERARCHY) {
-      animate = 1;
-      if(animate){ glutIdleFunc(animation_1); }
-      else glutIdleFunc(NULL);
-    }
-    break;
-    case 'n':
-    if(state == HIERARCHY) {
-      animate = 1;
-      if(animate) glutIdleFunc(animation_3);
-      else glutIdleFunc(NULL);
-    }
-    break;
-    case 'N':
-    if(state == HIERARCHY) {
-      animate = 1;
-      if(animate) glutIdleFunc(animation_4);
-      else glutIdleFunc(NULL);
-    }
-    break;
-    case 'm':
-    if(state == HIERARCHY) {
-      animate = 1;
-      if(animate) glutIdleFunc(animation_5);
-      else glutIdleFunc(NULL);
-    }
-    break;
+      case 'Z':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[0] < 75)
+          arm_rotations[0] = (arm_rotations[0] + 1);
+        glutPostRedisplay();
+
+      }
+      break;
+      case 'z':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[0] > -45)
+          arm_rotations[0] = (arm_rotations[0] - 1);
+        glutPostRedisplay();
+      }
+      break;
+      case 'X':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[1] < 90)
+          arm_rotations[1] = (arm_rotations[1] + 1);
+        glutPostRedisplay();
+      }
+      break;
+
+      case 'x':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[1] > 0)
+          arm_rotations[1] = (arm_rotations[1] - 1);
+        glutPostRedisplay();
+      }
+      break;
+      case 'c':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[2] < 0)
+          arm_rotations[2] = arm_rotations[2] + 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'C':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[2] > -45)
+          arm_rotations[2] = arm_rotations[2] - 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'v':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[3] < 0)
+          arm_rotations[3] = arm_rotations[3] + 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'V':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[3] > -45)
+          arm_rotations[3] = arm_rotations[3] - 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'D':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[4] < 0)
+          arm_rotations[4] = arm_rotations[4] + 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'd':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[4] > -45)
+          arm_rotations[4] = arm_rotations[4] - 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'F':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[5] < 0)
+          arm_rotations[5] = arm_rotations[5] + 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'f':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(arm_rotations[5] > -45)
+          arm_rotations[5] = arm_rotations[5] - 1;
+        glutPostRedisplay();
+      }
+      break;
+      case 'G':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(eye_rotations < 0)
+          eye_rotations = (eye_rotations + 0.5);
+        glutPostRedisplay();
+      }
+      break;
+      case 'g':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(eye_rotations > -8.0)
+          eye_rotations = (eye_rotations - 0.5);
+        glutPostRedisplay();
+      }
+      break;
+      case 'H':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[1] <= 180)
+          body_rotations[1] = (body_rotations[1] + 1);
+        glutPostRedisplay();
+      }
+      break;
+      case 'h':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[1] >= -180)
+          body_rotations[1] = (body_rotations[1] - 1);
+        glutPostRedisplay();
+      }
+      break;
+      case 'T':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[0] < 2.0)
+          body_rotations[0] = (body_rotations[0] + 0.05);
+        glutPostRedisplay();
+      }
+      break;
+      case 't':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[0] > -2.0)
+          body_rotations[0] = (body_rotations[0] - 0.05);
+        glutPostRedisplay();
+      }
+      break;
+      case 'J':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[2] < 120)
+          body_rotations[2] = (body_rotations[2] + 1);
+        glutPostRedisplay();
+        break;
+      }
+      case 'j':
+      if(state == HIERARCHY) {
+        animate = 0;
+        if(body_rotations[2] > 0)
+          body_rotations[2] = (body_rotations[2] - 1);
+        glutPostRedisplay();
+      }
+      break;
+      case 'b':
+      if(state == HIERARCHY) {
+        animate = 1;
+        if(animate){ glutIdleFunc(animation_1); }
+        else glutIdleFunc(NULL);
+      }
+      break;
+      case 'n':
+      if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_3);
+        else glutIdleFunc(NULL);
+      }
+      break;
+      case 'N':
+      if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_4);
+        else glutIdleFunc(NULL);
+      }
+      break;
+      case 'm':
+      if(state == HIERARCHY) {
+        animate = 1;
+        if(animate) glutIdleFunc(animation_5);
+        else glutIdleFunc(NULL);
+      }
+      break;
 
 
-
+    }
 
 
     default: glutPostRedisplay(); break;
+
 
   }
   glutPostRedisplay();
@@ -640,9 +716,14 @@ void initialize(const char * file1)
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
+  peonMadera.initializeRotationalObject(rotation_body_file);
+  peonNegro.initializeRotationalObject(rotation_body_file);
+  peonBlanco.initializeRotationalObject(rotation_body_file);
 
+  glEnable(GL_NORMALIZE);
+  glEnable(GL_TEXTURE_2D); //habilita texturas
 
-  printHelp();
+  printHelpP1ToP3();
 }
 
 

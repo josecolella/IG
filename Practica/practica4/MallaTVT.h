@@ -2,6 +2,7 @@
 #include <vector>
 #include <GL/glut.h>
 #include "visualtype.h" //For enum
+#include <math.h>
 
 using namespace std;
 
@@ -38,9 +39,12 @@ private:
         //Vector de texturas
   vector< pair<GLfloat, GLfloat> > vector_texturas;
 public:
+  MallaTVT();
   void initializeObject(const char * filename);
   void initializeRotationalObject(const char * filename);
+  void initializeRotationalObject2(const char * filename);
   void draw(visual_t visualization);
+  void draw2(visual_t visualization);
   int getInitialVerticesNum() const;
 
 };

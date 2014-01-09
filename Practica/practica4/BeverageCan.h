@@ -3,6 +3,7 @@
 #include <vector>
 #include <GL/glut.h>
 #include "visualtype.h" //For enum
+#include "Texture.h"
 
 using namespace std;
 
@@ -13,12 +14,16 @@ using namespace std;
 class BeverageCan
 {
     private:
+      //OpenGL puede gestionar mas de
+      //una textura a la vez. Para diferenciarlas
+      //usa un valor entero unico para cada una de ellas
       MallaTVT can_body;
       MallaTVT can_bottom;
       MallaTVT can_top;
+      Texture * texturePtr;
     public:
-      BeverageCan(){ };
-      BeverageCan(const char * body_ply,const char * bottom_ply,const char * top_ply);
+      BeverageCan(const char * textureFile);
+      ~BeverageCan();
       void draw(visual_t visualization);
 
 };

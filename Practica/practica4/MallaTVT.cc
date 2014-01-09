@@ -10,6 +10,10 @@
 using namespace std;
 
 
+MallaTVT :: MallaTVT() {
+
+}
+
 void MallaTVT :: initializeObject(const char * filename) {
   ply::read(filename, vertices_ply, caras_ply);
   for (int i = 0; i < vertices_ply.size(); i +=3)
@@ -29,6 +33,7 @@ void MallaTVT :: initializeObject(const char * filename) {
     this->caras.push_back(tmp);
   }
 }
+
 
 
 
@@ -141,7 +146,7 @@ for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
    tmp._2 = i+numInitialVertices;
    caras.push_back(tmp);
  }
-
+//Quitar las tapas de la malla
 //Dada una cara triangular con vertices A,B,C
  for (int i = 0; i < caras.size(); i++){
    _vertex3f tmp1,tmp2;
@@ -172,6 +177,38 @@ for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
   this->normal_vertices[i].normalize();
 }
 
+}
+
+
+void MallaTVT :: initializeRotationalObject2(const char * filename)
+{
+
+ initializeRotationalObject(filename);
+
+ //Rellenar texturas
+ pair<GLfloat, GLfloat> pairValues;
+ vector<GLfloat> v;
+ float sum = 0.0;
+ for(int i=0;i<this->Vertices.size();i++)
+ {
+  pairValues.first = ((i/this->numInitialVertices)/36.0);
+  v.push_back(sum);
+  for(int j = i+1;j <i+this->numInitialVertices;j++)
+  {
+    //x y z
+    sum += sqrt(pow(this->Vertices[j].x - this->Vertices[j-1].x,2) + pow(this->Vertices[j].y - this->Vertices[j-1].y,2) + pow(this->Vertices[j].z - this->Vertices[j-1].z,2));
+    v.push_back(sum);
+  }
+
+  for(int k = 0;k<v.size();k++)
+  {
+    pairValues.second = v[k]/v[v.size()-1];
+    vector_texturas.push_back(pairValues);
+  }
+  v.clear();
+  sum = 0.0;
+
+}
 }
 
 void MallaTVT :: draw(visual_t visualization){
@@ -219,6 +256,28 @@ void MallaTVT :: draw(visual_t visualization){
 
 
 
+}
+
+void MallaTVT :: draw2(visual_t visualization){
+
+
+  glBegin(GL_TRIANGLES);
+  for (int i = 0; i < caras.size(); i++)
+  {
+
+    glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
+    glNormal3f(normal_vertices[caras[i]._0].x,normal_vertices[caras[i]._0].y, normal_vertices[caras[i]._0].z);
+
+    glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
+    glNormal3f(normal_vertices[caras[i]._1].x,normal_vertices[caras[i]._1].y, normal_vertices[caras[i]._1].z);
+
+    glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
+    glNormal3f(normal_vertices[caras[i]._2].x,normal_vertices[caras[i]._2].y, normal_vertices[caras[i]._2].z);
+
+    glTexCoord2f(vector_texturas[i].first, vector_texturas[i].second);
+
+  }
+  glEnd();
 }
 
 int MallaTVT :: getInitialVerticesNum() const{

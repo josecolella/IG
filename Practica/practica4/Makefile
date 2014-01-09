@@ -15,7 +15,7 @@ CXXFLAGS=  -g -DXWINDOWS -DSHM -I/usr/include -I.
 # Se indica directorios donde encontrar las funciontecas con -L. Usando -l seguido del
 # nombre se indica la funcionteca que se desea enlazar.
 #
-LDFLAGS=  -lGLU -lGL -lglut
+LDFLAGS=  -lGLU -lGL -lglut -ljpeg
 
 # definicion del compilador
 #
@@ -27,9 +27,9 @@ default : $(TARGETS)
 
 # regla de ejecucion
 #
-$(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o
-	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o $(LDFLAGS)
-#	./practica beethoven.ply
+$(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o
+	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o $(LDFLAGS)
+	./practica beethoven.ply
 #
 #
 clean:
