@@ -247,6 +247,8 @@ void MallaTVT :: draw(visual_t visualization){
       glColor3f(0,1,0);
 
     glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
+    //added for example
+    glNormal3f(normal_caras[i].x, normal_caras[i].y, normal_caras[i].z);
     glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
     glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
 
@@ -261,23 +263,23 @@ void MallaTVT :: draw(visual_t visualization){
 void MallaTVT :: draw2(visual_t visualization){
 
 
-  glBegin(GL_TRIANGLES);
-  for (int i = 0; i < caras.size(); i++)
-  {
+  // glBegin(GL_TRIANGLES);
+  // for (int i = 0; i < caras.size(); i++)
+  // {
 
-    glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
-    glNormal3f(normal_vertices[caras[i]._0].x,normal_vertices[caras[i]._0].y, normal_vertices[caras[i]._0].z);
+  //   glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
+  //   glNormal3f(normal_vertices[caras[i]._0].x,normal_vertices[caras[i]._0].y, normal_vertices[caras[i]._0].z);
 
-    glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
-    glNormal3f(normal_vertices[caras[i]._1].x,normal_vertices[caras[i]._1].y, normal_vertices[caras[i]._1].z);
+  //   glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
+  //   glNormal3f(normal_vertices[caras[i]._1].x,normal_vertices[caras[i]._1].y, normal_vertices[caras[i]._1].z);
 
-    glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
-    glNormal3f(normal_vertices[caras[i]._2].x,normal_vertices[caras[i]._2].y, normal_vertices[caras[i]._2].z);
+  //   glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
+  //   glNormal3f(normal_vertices[caras[i]._2].x,normal_vertices[caras[i]._2].y, normal_vertices[caras[i]._2].z);
 
-    glTexCoord2f(vector_texturas[i].first, vector_texturas[i].second);
+  //   glTexCoord2f(vector_texturas[i].first, vector_texturas[i].second);
 
-  }
-  glEnd();
+  // }
+  // glEnd();
 }
 
 int MallaTVT :: getInitialVerticesNum() const{

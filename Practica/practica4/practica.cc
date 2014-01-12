@@ -23,6 +23,7 @@
 
 GLint animate = 0; //Para hacer animation o no
 GLint texture = 0;
+GLfloat i = 0.0;
 //enum que denota los diferentes estados
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
 bool isP4 = false; //Modo practica 4
@@ -244,17 +245,21 @@ void animation_5() {
 
 //Modo practica 4
   void p4_scene(){
-    can.draw(visualization);
+    // glPushMatrix();
+    // glutSolidSphere(1.0,20,16); //Para el ejemplo *QUITAR*
+    // glPopMatrix();
+
+    can.draw(visualization); 
     glPushMatrix();
-    glScalef(0.2,0.2,0.2);
-    glPushMatrix();
-    glTranslatef(0.0,1.5,4.0);
-    peonMadera.draw2(visualization);
-    glTranslatef(3.0,0.0,0.0);
-    peonBlanco.draw2(visualization);
-    glTranslatef(3.0,0.0,0.0);
-    peonNegro.draw2(visualization);
-    glPopMatrix();
+      glScalef(0.2,0.2,0.2);
+      glPushMatrix();
+        glTranslatef(0.0,1.5,4.0);
+        peonMadera.draw(visualization);
+        glTranslatef(3.0,0.0,0.0);
+        peonBlanco.draw(visualization);
+        glTranslatef(3.0,0.0,0.0);
+        peonNegro.draw(visualization);
+      glPopMatrix();
     glPopMatrix();
   }
 
@@ -440,8 +445,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       state = HIERARCHY;
       break;
       case '4':
-      isP4 = !isP4 ;
-      cout << isP4 << endl;
+      isP4 = !isP4;
       state = P4;
       case 'p':
       visualization = POINT;
@@ -649,6 +653,10 @@ void normal_keys(unsigned char Tecla1,int x,int y)
         else glutIdleFunc(NULL);
       }
       break;
+      case 'w':
+        i += 0.1;
+        glutPostRedisplay();
+      break;
 
 
     }
@@ -713,6 +721,30 @@ void initialize(const char * file1)
   change_projection();
   glViewport(0,0,UI_window_width,UI_window_height);
 
+  GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
+  GLfloat mat_shininess[] = {50.0};
+  GLfloat white_light[] = {1.0,1.0,1.0,1.0};
+  GLfloat light_position[] = {1.0,1.0,1.0,0.0};
+  GLfloat lmodel_ambient[] = {0.1,0.1,0.1,1.0};
+  GLfloat light_position2[] = {0.0,6.0,0.0,0.0};
+  
+  glShadeModel(GL_SMOOTH);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
+  glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
+  
+  glLightfv(GL_LIGHT1, GL_POSITION, light_position2);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, white_light);
+  glLightfv(GL_LIGHT1, GL_SPECULAR, white_light);
+ 
+  
+  glEnable(GL_LIGHTING);
+  // glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
+  glEnable(GL_DEPTH_TEST);
+  
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
