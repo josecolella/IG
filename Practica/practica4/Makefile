@@ -27,8 +27,8 @@ default : $(TARGETS)
 
 # regla de ejecucion
 #
-$(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o
-	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o $(LDFLAGS)
+$(TARGETS) : user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o LightSource.o Material.o
+	$(CC) -o $@ $(CXXFLAGS) user_code.o practica.o file_ply_stl.o MallaTVT.o Robot.o BeverageCan.o jpg_imagen.o jpg_memsrc.o jpg_readwrite.o Texture.o LightSource.o Material.o $(LDFLAGS)
 	./practica beethoven.ply
 #
 #

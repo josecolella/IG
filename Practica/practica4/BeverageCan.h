@@ -17,12 +17,14 @@ class BeverageCan
       //OpenGL puede gestionar mas de
       //una textura a la vez. Para diferenciarlas
       //usa un valor entero unico para cada una de ellas
+      static const char * textureFile;
+      bool isLight;
       MallaTVT can_body;
       MallaTVT can_bottom;
       MallaTVT can_top;
       Texture * texturePtr;
     public:
-      BeverageCan(const char * textureFile);
+      BeverageCan();
       ~BeverageCan();
       void draw(visual_t visualization);
 

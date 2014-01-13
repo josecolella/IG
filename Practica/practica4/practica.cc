@@ -19,6 +19,7 @@
 #include "BeverageCan.h"
 #include "visualtype.h"
 #include "jpg_imagen.hpp"
+#include "LightSource.h"
 
 
 GLint animate = 0; //Para hacer animation o no
@@ -51,7 +52,11 @@ MallaTVT peonNegro;
 
 
 Robot robot;
-BeverageCan can("text-lata-1.jpg");
+BeverageCan * can = NULL;
+
+//Fuentes de Luz
+LightSource * source1 = NULL;
+LightSource * source2 = NULL;
 
 //Variable que destaca el estado de dibujo. PLY, ROTACIONAL, HIERARCHY
 state_t state = NONE;
@@ -249,7 +254,7 @@ void animation_5() {
     // glutSolidSphere(1.0,20,16); //Para el ejemplo *QUITAR*
     // glPopMatrix();
 
-    can.draw(visualization); 
+    can->draw(visualization); 
     glPushMatrix();
       glScalef(0.2,0.2,0.2);
       glPushMatrix();
@@ -461,6 +466,14 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       break;
       case 'a':
       visualization = CHECKERED;
+      glutPostRedisplay();
+      break;
+      case 'r':
+      visualization = ILUM_PLANO;
+      glutPostRedisplay();
+      break;
+      case 'y':
+      visualization = ILUM_SOFT;
       glutPostRedisplay();
       break;
       case 'Z':
@@ -721,40 +734,23 @@ void initialize(const char * file1)
   change_projection();
   glViewport(0,0,UI_window_width,UI_window_height);
 
-  GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
-  GLfloat mat_shininess[] = {50.0};
-  GLfloat white_light[] = {1.0,1.0,1.0,1.0};
-  GLfloat light_position[] = {1.0,1.0,1.0,0.0};
-  GLfloat lmodel_ambient[] = {0.1,0.1,0.1,1.0};
-  GLfloat light_position2[] = {0.0,6.0,0.0,0.0};
   
-  glShadeModel(GL_SMOOTH);
-  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-  glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);
-  glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);
-  
-  glLightfv(GL_LIGHT1, GL_POSITION, light_position2);
-  glLightfv(GL_LIGHT1, GL_DIFFUSE, white_light);
-  glLightfv(GL_LIGHT1, GL_SPECULAR, white_light);
- 
-  
-  glEnable(GL_LIGHTING);
-  // glEnable(GL_LIGHT0);
-  glEnable(GL_LIGHT1);
-  glEnable(GL_DEPTH_TEST);
-  
+
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
   peonMadera.initializeRotationalObject(rotation_body_file);
   peonNegro.initializeRotationalObject(rotation_body_file);
   peonBlanco.initializeRotationalObject(rotation_body_file);
+  can = new BeverageCan();
 
-  glEnable(GL_NORMALIZE);
-  glEnable(GL_TEXTURE_2D); //habilita texturas
-
+  visualization = ILUM_SOFT;
+  GLfloat ini1[2] = {20.0,50.0};
+  GLfloat ini2[2] = {-100.0,-30.0};
+  source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
+  source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
+  source1->activate();
+  source2->activate();
   printHelpP1ToP3();
 }
 

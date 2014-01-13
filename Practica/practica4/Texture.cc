@@ -5,23 +5,17 @@ Texture :: Texture(const char *textureFile)
 {
   this->centralImg = NULL;
   //cargar la imagen
-  centralImg = new jpg::Imagen(textureFile);
+  this->centralImg = new jpg::Imagen(textureFile);
 
-  tamx = centralImg->tamX(); //num.columnas
-  tamy = centralImg->tamY();
-  texels = centralImg->leerPixels(); //puntero textes
-  imageSize = tamx*tamy*3;
-
+  this->tamx = centralImg->tamX(); //num.columnas
+  this->tamy = centralImg->tamY();
+  this->texels = centralImg->leerPixels(); //puntero textes
+  this->imageSize = tamx*tamy*3;
+  this->gen = NOT_ACTIVE;
   //hace idTex igual a un nuevo identificador
   glGenTextures(1, &idTex);
   glBindTexture(GL_TEXTURE_2D, idTex); //activa textura con identificado 'idTex'
-  //Genera automaticamente versiones a multiples resoluciones
-  glTexImage2D(GL_TEXTURE_2D,0, GL_RGB, tamx, tamy, 0, GL_RGB, GL_UNSIGNED_BYTE, texels);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // Linear Filtering
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // Linear Filtering
-  // glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-  // glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-  glBindTexture(GL_TEXTURE_2D, idTex);
+  gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, this->tamx, this->tamy, GL_RGB, GL_UNSIGNED_BYTE,this->texels);  
 }
 
 Texture :: ~Texture()
@@ -45,4 +39,24 @@ unsigned long Texture :: getY() const
 unsigned char * Texture :: getTexels() const
 {
   return this->texels;
+}
+
+void Texture :: activate() 
+{
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, this->idTex);
+  if(gen == NOT_ACTIVE){
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
+  }
+  else
+  {
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+      
+    glTexGenfv(GL_S, GL_OBJECT_PLANE, s);
+    glTexGenfv(GL_T, GL_OBJECT_PLANE, t);
+  }
+
+    
 }
