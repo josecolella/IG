@@ -34,14 +34,19 @@ const char *rotation_body_file = "poligono.ply";
 const int AXIS_SIZE=5000;
 
 
+static GLfloat spin = 0.5;
+static GLfloat spin2 = 0.5;
 //Variable utilizadas para las animaciones
-int animation1 = -1;
-int max_range = 5;
-int min_range = -5;
-float eye_top = -8.0;
-float eye_min = 0.0;
-float animation2 = -0.1;
-int animation6 = 1;
+int 
+  animation1 = -1,
+  max_range = 5,
+  min_range = -5,
+  animation6 = 1;
+float 
+  eye_top = -8.0,
+  eye_min = 0.0,
+  animation2 = -0.1;
+
 
 //Variables usadas para contener el modelo PLY, ROTACIONAL, Y JERARQUICO
 MallaTVT mallaTVT1;
@@ -290,6 +295,7 @@ void animation_5() {
       break;
 
     }
+    
 
   }
 
@@ -306,6 +312,24 @@ void animation_5() {
     change_observer();
     draw_axis();
     draw_objects();
+    GLfloat pos[] = {0.0,0.0,1.5,1.0};
+
+    glPushMatrix();
+      glTranslatef(0.0,0.0,-5.0);
+      glPushMatrix();
+        glRotatef((GLfloat) spin, 1.0,0.0,0.0);
+        glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
+        glLightfv(GL_LIGHT0, GL_POSITION, pos);
+
+      glTranslatef(0.0,0.0,1.5);
+      glDisable(GL_LIGHTING);
+      glColor3f(0.0,1.0,1.0);
+      glutWireCube(0.1);
+      glEnable(GL_LIGHTING);
+      glPopMatrix();
+      // glutSolidTorus(0.275,0.85,8,15);
+    glPopMatrix();
+
     glutSwapBuffers();
   }
 
@@ -434,6 +458,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 27: exit(0); break;
     if(isP4)
     {
+      cout << "Hello" << endl;
       p4_keys(Tecla1);
     }
     else {
@@ -469,7 +494,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       glutPostRedisplay();
       break;
       case 'r':
-      visualization = ILUM_PLANO;
+      spin += 1;
       glutPostRedisplay();
       break;
       case 'y':
@@ -735,7 +760,9 @@ void initialize(const char * file1)
   glViewport(0,0,UI_window_width,UI_window_height);
 
   
+  glEnable(GL_LIGHTING); //To enable lighting
 
+  glEnable(GL_LIGHT0);
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
@@ -743,17 +770,42 @@ void initialize(const char * file1)
   peonNegro.initializeRotationalObject(rotation_body_file);
   peonBlanco.initializeRotationalObject(rotation_body_file);
   can = new BeverageCan();
+  
 
-  visualization = ILUM_SOFT;
-  GLfloat ini1[2] = {20.0,50.0};
-  GLfloat ini2[2] = {-100.0,-30.0};
-  source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
-  source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
-  source1->activate();
-  source2->activate();
+
+  // visualization = ILUM_SOFT;
+  // GLfloat ini1[2] = {90.0,90.0};
+  // GLfloat ini2[2] = {-100.0,-30.0};
+  // source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
+  // source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
+  // source1->activate();
+  // source2->activate();
   printHelpP1ToP3();
 }
 
+//You have to integrate this into key func
+void mouse(int button, int state, int x, int y)
+{
+  switch(button)
+  {
+    case GLUT_LEFT_BUTTON:
+      if(state == GLUT_DOWN){
+        spin = (spin + 10);
+        glutPostRedisplay(); 
+      }
+      break;
+    case GLUT_RIGHT_BUTTON:
+        spin = (spin - 10);
+        glutPostRedisplay();
+      break;
+    case GLUT_MIDDLE_BUTTON:
+      spin2 += 10;
+      glutPostRedisplay();
+    break;
+    default:
+      break;
+  }
+}
 
 
 //***************************************************************************
@@ -797,6 +849,7 @@ int main(int argc, char **argv)
   glutKeyboardFunc(normal_keys);
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
   glutSpecialFunc(special_keys);
+  glutMouseFunc(mouse);
 
   // funcion de inicialización
   // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
