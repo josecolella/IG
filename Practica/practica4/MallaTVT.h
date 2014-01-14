@@ -38,7 +38,7 @@ private:
       	//Vector de caras de normales
   vector< _vertex3f > normal_caras;
         //Vector de texturas
-  vector< pair<GLfloat, GLfloat> > vector_texturas;
+  vector<_vertex2f> vector_texturas;
   Material * materialPtr;
 public:
   MallaTVT();
@@ -47,6 +47,16 @@ public:
   void initializeRotationalObject2(const char * filename);
   void draw(visual_t visualization);
   int getInitialVerticesNum() const;
+private:
+  void drawPoint();
+  void drawLines();
+  void drawSolid();
+  void drawCheckered();
+  void drawIllumPlano();
+  void drawIllumSoft();
+
+
+  void drawIllumSoft();
 
 };
 

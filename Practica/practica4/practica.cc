@@ -37,12 +37,12 @@ const int AXIS_SIZE=5000;
 static GLfloat spin = 0.5;
 static GLfloat spin2 = 0.5;
 //Variable utilizadas para las animaciones
-int 
+int
   animation1 = -1,
   max_range = 5,
   min_range = -5,
   animation6 = 1;
-float 
+float
   eye_top = -8.0,
   eye_min = 0.0,
   animation2 = -0.1;
@@ -259,7 +259,7 @@ void animation_5() {
     // glutSolidSphere(1.0,20,16); //Para el ejemplo *QUITAR*
     // glPopMatrix();
 
-    can->draw(visualization); 
+    can->draw(visualization);
     glPushMatrix();
       glScalef(0.2,0.2,0.2);
       glPushMatrix();
@@ -295,7 +295,7 @@ void animation_5() {
       break;
 
     }
-    
+
 
   }
 
@@ -759,7 +759,7 @@ void initialize(const char * file1)
   change_projection();
   glViewport(0,0,UI_window_width,UI_window_height);
 
-  
+
   glEnable(GL_LIGHTING); //To enable lighting
 
   glEnable(GL_LIGHT0);
@@ -770,9 +770,12 @@ void initialize(const char * file1)
   peonNegro.initializeRotationalObject(rotation_body_file);
   peonBlanco.initializeRotationalObject(rotation_body_file);
   can = new BeverageCan();
-  
 
-
+  //Add shininess
+  GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
+  GLfloat low_shininess[] = {5.0};
+  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  glMaterialfv(GL_FRONT, GL_SHININESS, low_shininess);
   // visualization = ILUM_SOFT;
   // GLfloat ini1[2] = {90.0,90.0};
   // GLfloat ini2[2] = {-100.0,-30.0};
@@ -791,7 +794,7 @@ void mouse(int button, int state, int x, int y)
     case GLUT_LEFT_BUTTON:
       if(state == GLUT_DOWN){
         spin = (spin + 10);
-        glutPostRedisplay(); 
+        glutPostRedisplay();
       }
       break;
     case GLUT_RIGHT_BUTTON:

@@ -178,7 +178,7 @@ for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
  for(int i=0;i<this->normal_vertices.size();i++)
  {
   this->normal_vertices[i].normalize();
-  }
+}
 
 }
 
@@ -189,12 +189,12 @@ void MallaTVT :: initializeRotationalObject2(const char * filename)
  initializeRotationalObject(filename);
 
  //Rellenar texturas
- pair<GLfloat, GLfloat> pairValues;
+ _vertex2f pairValues;
  vector<GLfloat> v;
  float sum = 0.0;
  for(int i=0;i<this->Vertices.size();i++)
  {
-  pairValues.first = ((i/this->numInitialVertices)/36.0);
+  pairValues._0 = ((i/this->numInitialVertices)/36.0);
   v.push_back(sum);
   for(int j = i+1;j <i+this->numInitialVertices;j++)
   {
@@ -205,7 +205,7 @@ void MallaTVT :: initializeRotationalObject2(const char * filename)
 
   for(int k = 0;k<v.size();k++)
   {
-    pairValues.second = v[k]/v[v.size()-1];
+    pairValues._1 = v[k]/v[v.size()-1];
     vector_texturas.push_back(pairValues);
   }
   v.clear();
@@ -237,30 +237,69 @@ void MallaTVT :: draw(visual_t visualization){
 
   if(visualization ==  ILUM_PLANO)
   {
-    glDisable(GL_LIGHTING);
+    glShadeModel(GL_FLAT);
+
+    //Aqui va un material
+
+    glBegin(GL_TRIANGLES);
+    for(int i=0;i<normal_caras.size();i++)
+    {
+      glNormal3f(normal_caras[i]._0, normal_caras[i]._1, normal_caras[i]._2);
+      glVertex3f(Vertices[normal_caras[i]._0].x,Vertices[normal_caras[i]._0].y,Vertices[normal_caras[i]._0].z);
+      glVertex3f(Vertices[normal_caras[i]._1].x,Vertices[normal_caras[i]._1].y,Vertices[normal_caras[i]._1].z);
+      glVertex3f(Vertices[normal_caras[i]._2].x,Vertices[normal_caras[i]._2].y,Vertices[normal_caras[i]._2].z);
+
+    }
+    glEnd();
   }
   else if(visualization == ILUM_SOFT)
   {
     glShadeModel(GL_SMOOTH);
-  }
-  glBegin(GL_TRIANGLES);
-  for (int i = 0; i < caras.size(); i++)
-  {
-    if(visualization == 4){
-      if(i % 2 == 0)
-        glColor3f(0,0,1);
-      else
-        glColor3f(1,0,0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+    //Aqui va un material
+    glBegin(GL_TRIANGLES);
+    for(int i=0;i<normal_caras.size();i++)
+    {
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ normal_caras[i]._0 ]._0 , vector_texturas[ normal_caras[i]._0 ]._1);
+      glNormal3f(normal_vertices[ normal_caras[i]._0 ].x, normal_vertices[ normal_caras[i]._0 ].y, normal_vertices[ Faces_vertices[i]._0 ].z);
+      glVertex3f(Vertices[normal_caras[i]._0].x,Vertices[normal_caras[i]._0].y,Vertices[normal_caras[i]._0].z);
+
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ normal_caras[i]._1 ]._0 , vector_texturas[ normal_caras[i]._1 ]._1);
+      glNormal3f(normal_vertices[ normal_caras[i]._1 ].x, normal_vertices[ normal_caras[i]._1 ].y, normal_vertices[ Faces_vertices[i]._1 ].z);
+      glVertex3f(Vertices[normal_caras[i]._1].x,Vertices[normal_caras[i]._1].y,Vertices[normal_caras[i]._1].z);
+
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ normal_caras[i]._2 ]._0 , vector_texturas[ normal_caras[i]._2 ]._1);
+      glNormal3f(normal_vertices[ normal_caras[i]._2 ].x, normal_vertices[ normal_caras[i]._2 ].y, normal_vertices[ Faces_vertices[i]._2 ].z);
+      glVertex3f(Vertices[normal_caras[i]._2].x,Vertices[normal_caras[i]._2].y,Vertices[normal_caras[i]._2].z);
+
     }
-    else
-      glColor3f(0,1,0);
-
-    glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
-    glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
-    glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
-
+    glEnd();
   }
-  glEnd();
+  else {
+    glBegin(GL_TRIANGLES);
+    for (int i = 0; i < caras.size(); i++)
+    {
+      if(visualization == CHECKERED){
+        if(i % 2 == 0)
+          glColor3f(0,0,1);
+        else
+          glColor3f(1,0,0);
+      }
+      else
+        glColor3f(0,1,0);
+
+      glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
+      glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
+      glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
+
+    }
+    glEnd();
+  }
 }
 
 
