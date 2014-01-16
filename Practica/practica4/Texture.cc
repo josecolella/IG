@@ -1,5 +1,5 @@
 #include "Texture.h"
-
+#include <cassert>
 
 Texture :: Texture(const char *textureFile)
 {
@@ -12,15 +12,23 @@ Texture :: Texture(const char *textureFile)
   this->texels = centralImg->leerPixels(); //puntero textes
   this->imageSize = tamx*tamy*3;
   this->gen = NOT_ACTIVE;
+
+  for(int i=0;i<ARRAY_SIZE;i++)
+  {
+    s[i] = t[i] = 0.0f;
+  }
+  assert(glGetError() == GL_NO_ERROR);
   //hace idTex igual a un nuevo identificador
   glGenTextures(1, &idTex);
   glBindTexture(GL_TEXTURE_2D, idTex); //activa textura con identificado 'idTex'
-  gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, this->tamx, this->tamy, GL_RGB, GL_UNSIGNED_BYTE,this->texels);  
+  gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, this->tamx, this->tamy, GL_RGB, GL_UNSIGNED_BYTE,this->texels);
+  assert(glGetError() == GL_NO_ERROR);
 }
 
 Texture :: ~Texture()
 {
   delete this->centralImg;
+  glDisable(GL_TEXTURE_2D);
 }
 
 
@@ -41,8 +49,10 @@ unsigned char * Texture :: getTexels() const
   return this->texels;
 }
 
-void Texture :: activate() 
+void Texture :: activate()
 {
+
+  assert(glGetError() == GL_NO_ERROR);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, this->idTex);
   if(gen == NOT_ACTIVE){
@@ -51,12 +61,12 @@ void Texture :: activate()
   }
   else
   {
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-      
-    glTexGenfv(GL_S, GL_OBJECT_PLANE, s);
-    glTexGenfv(GL_T, GL_OBJECT_PLANE, t);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    glTexGenfv(GL_S, GL_EYE_PLANE, s);
+    glTexGenfv(GL_T, GL_EYE_PLANE, t);
   }
+  assert(glGetError() == GL_NO_ERROR);
 
-    
+
 }

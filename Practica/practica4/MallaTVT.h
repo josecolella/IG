@@ -12,7 +12,7 @@ using namespace std;
 
 class MallaTVT {
 
-private:
+protected:
       //Variable estatica de clase que determina
       //como se dibuja el modelo. Se comparte con todas las
       //clases
@@ -47,16 +47,7 @@ public:
   void initializeRotationalObject2(const char * filename);
   void draw(visual_t visualization);
   int getInitialVerticesNum() const;
-private:
-  void drawPoint();
-  void drawLines();
-  void drawSolid();
-  void drawCheckered();
-  void drawIllumPlano();
-  void drawIllumSoft();
 
-
-  void drawIllumSoft();
 
 };
 

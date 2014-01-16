@@ -20,6 +20,7 @@
 #include "visualtype.h"
 #include "jpg_imagen.hpp"
 #include "LightSource.h"
+#include "SpecializedMallaTVT.h"
 
 
 GLint animate = 0; //Para hacer animation o no
@@ -59,6 +60,8 @@ MallaTVT peonNegro;
 Robot robot;
 BeverageCan * can = NULL;
 
+GLfloat ini1[2] = {2.0,0.0};
+GLfloat ini2[2] = {-1.0,-1.0};
 //Fuentes de Luz
 LightSource * source1 = NULL;
 LightSource * source2 = NULL;
@@ -258,16 +261,18 @@ void animation_5() {
     // glPushMatrix();
     // glutSolidSphere(1.0,20,16); //Para el ejemplo *QUITAR*
     // glPopMatrix();
-
-    can->draw(visualization);
     glPushMatrix();
-      glScalef(0.2,0.2,0.2);
+    glScalef(3.0,3.0,3.0);
+    can->draw(visualization);
+    glPopMatrix();
+    glPushMatrix();
+      glScalef(0.5,0.5,0.5);
       glPushMatrix();
         glTranslatef(0.0,1.5,4.0);
         peonMadera.draw(visualization);
-        glTranslatef(3.0,0.0,0.0);
+        glTranslatef(3.5,0.0,0.0);
         peonBlanco.draw(visualization);
-        glTranslatef(3.0,0.0,0.0);
+        glTranslatef(3.5,0.0,0.0);
         peonNegro.draw(visualization);
       glPopMatrix();
     glPopMatrix();
@@ -312,24 +317,28 @@ void animation_5() {
     change_observer();
     draw_axis();
     draw_objects();
-    GLfloat pos[] = {0.0,0.0,1.5,1.0};
+    // GLfloat pos[] = {0.0,0.0,1.5,1.0};
 
-    glPushMatrix();
-      glTranslatef(0.0,0.0,-5.0);
-      glPushMatrix();
-        glRotatef((GLfloat) spin, 1.0,0.0,0.0);
-        glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
-        glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    // glPushMatrix();
+    //   glTranslatef(0.0,0.0,-5.0);
+    //   glPushMatrix();
+    //     glRotatef((GLfloat) spin, 1.0,0.0,0.0);
+    //     glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
+    //     glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-      glTranslatef(0.0,0.0,1.5);
-      glDisable(GL_LIGHTING);
-      glColor3f(0.0,1.0,1.0);
-      glutWireCube(0.1);
-      glEnable(GL_LIGHTING);
-      glPopMatrix();
-      // glutSolidTorus(0.275,0.85,8,15);
-    glPopMatrix();
+    //   glTranslatef(0.0,0.0,1.5);
+    //   glDisable(GL_LIGHTING);
+    //   glColor3f(0.0,1.0,1.0);
+    //   glutWireCube(0.1);
+    //   glEnable(GL_LIGHTING);
+    //   glPopMatrix();
+    //   // glutSolidTorus(0.275,0.85,8,15);
+    // glPopMatrix();
 
+    source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
+    source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
+    source1->activate();
+    source2->activate();
     glutSwapBuffers();
   }
 
@@ -760,9 +769,9 @@ void initialize(const char * file1)
   glViewport(0,0,UI_window_width,UI_window_height);
 
 
-  glEnable(GL_LIGHTING); //To enable lighting
+  // glEnable(GL_LIGHTING); //To enable lighting
 
-  glEnable(GL_LIGHT0);
+  // glEnable(GL_LIGHT0);
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
@@ -772,10 +781,10 @@ void initialize(const char * file1)
   can = new BeverageCan();
 
   //Add shininess
-  GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
-  GLfloat low_shininess[] = {5.0};
-  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-  glMaterialfv(GL_FRONT, GL_SHININESS, low_shininess);
+  // GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
+  // GLfloat low_shininess[] = {5.0};
+  // glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+  // glMaterialfv(GL_FRONT, GL_SHININESS, low_shininess);
   // visualization = ILUM_SOFT;
   // GLfloat ini1[2] = {90.0,90.0};
   // GLfloat ini2[2] = {-100.0,-30.0};

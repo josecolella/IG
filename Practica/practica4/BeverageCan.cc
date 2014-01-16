@@ -1,16 +1,19 @@
 #include "BeverageCan.h"
+#include <iostream>
+
+using namespace std;
 
 const char * BeverageCan :: textureFile = "text-lata-1.jpg";
 
 BeverageCan :: BeverageCan()
 {
   isLight = true;
-  this->can_body.initializeRotationalObject2("lata-pcue.ply");
-  this->can_bottom.initializeRotationalObject2("lata-psup.ply");
-  this->can_bottom.initializeRotationalObject2("lata-pinf.ply");
+  this->can_body.initializeRotationalObject("lata-pcue.ply");
+  this->can_bottom.initializeRotationalObject("lata-psup.ply");
+  this->can_bottom.initializeRotationalObject("lata-pinf.ply");
 
   texturePtr = new Texture(textureFile);
-  texturePtr->activate();
+
 
 }
 
@@ -21,6 +24,7 @@ BeverageCan :: ~BeverageCan()
 
 void BeverageCan :: draw(visual_t visualization) {
 
+  texturePtr->activate();
   this->can_body.draw(visualization);
   this->can_bottom.draw(visualization);
   this->can_top.draw(visualization);
