@@ -10,7 +10,7 @@ BeverageCan :: BeverageCan()
   isLight = true;
   this->can_body.initializeRotationalObject("lata-pcue.ply");
   this->can_bottom.initializeRotationalObject("lata-psup.ply");
-  this->can_bottom.initializeRotationalObject("lata-pinf.ply");
+  this->can_top.initializeRotationalObject("lata-pinf.ply");
 
   texturePtr = new Texture(textureFile);
 

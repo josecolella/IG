@@ -261,9 +261,8 @@ for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+2);i++
 
  float sum = 0.0;
  tmpVector.push_back(sum);
- for(int j = 1;j <this->numInitialVertices;j++)
+ for(int j = 1;j <this->numInitialVertices + 1;j++)
  {
-    //x y z
     sum += sqrt(pow(this->Vertices[j].x - this->Vertices[j-1].x,2) + pow(this->Vertices[j].y - this->Vertices[j-1].y,2) + pow(this->Vertices[j].z - this->Vertices[j-1].z,2));
     tmpVector.push_back(sum);
  }
@@ -276,8 +275,6 @@ for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+2);i++
     pairValues.t = 1.0 - tmpVector[k]/tmpVector[tmpVector.size()-1];
     vector_texturas.push_back(pairValues);
   }
-  //tmpVector.clear();
-  // sum = 0.0;
 }
 }
 
