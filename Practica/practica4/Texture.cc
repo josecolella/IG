@@ -52,7 +52,7 @@ unsigned char * Texture :: getTexels() const
 void Texture :: activate()
 {
 
-  assert(glGetError() == GL_NO_ERROR);
+
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, this->idTex);
   if(gen == NOT_ACTIVE){
@@ -66,7 +66,5 @@ void Texture :: activate()
     glTexGenfv(GL_S, GL_EYE_PLANE, s);
     glTexGenfv(GL_T, GL_EYE_PLANE, t);
   }
-  assert(glGetError() == GL_NO_ERROR);
-
 
 }

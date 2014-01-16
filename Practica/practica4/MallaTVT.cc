@@ -321,6 +321,8 @@ void MallaTVT :: draw(visual_t visualization){
   }
   else if(visualization == ILUM_SOFT)
   {
+    glShadeModel(GL_SMOOTH);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     //Aqui va un material
     glBegin(GL_TRIANGLES);
     // if(!vector_texturas.empty()){
@@ -345,7 +347,6 @@ void MallaTVT :: draw(visual_t visualization){
 
     }
     glEnd();
-    assert(glGetError() == GL_NO_ERROR);
   }
   else {
     glBegin(GL_TRIANGLES);

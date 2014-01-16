@@ -19,6 +19,7 @@ void SpecializedMallaTVT :: initializeRotationalObject(const char * filename)
   }
   angulo += 0.1745;
 }
+
   //Construimos las caras para el modelo
 for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+2);i++){
 
@@ -119,6 +120,7 @@ void SpecializedMallaTVT :: draw(visual_t visualization)
   {
     //Aqui va un material
     glBegin(GL_TRIANGLES);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     for(int i=0;i<caras.size();i++)
     {
@@ -139,7 +141,6 @@ void SpecializedMallaTVT :: draw(visual_t visualization)
 
     }
     glEnd();
-    assert(glGetError() == GL_NO_ERROR);
   }
 }
 }
