@@ -15,8 +15,8 @@ class Material
         GLuint idTex;
         GLfloat amb[MATERIAL_ARRAY_SIZE], //Primeros tres componentes son RGB mas opaco 1
                 dis[MATERIAL_ARRAY_SIZE],
-                spe[MATERIAL_ARRAY_SIZE],
-                brillo[MATERIAL_ARRAY_SIZE];
+                spe[MATERIAL_ARRAY_SIZE];
+        GLfloat brillo;
 
     public:
         Material();
