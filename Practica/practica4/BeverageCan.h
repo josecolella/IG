@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include "visualtype.h" //For enum
 #include "Texture.h"
+#include "CanBody.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ class BeverageCan
       //usa un valor entero unico para cada una de ellas
       static const char * textureFile;
       bool isLight;
-      SpecializedMallaTVT can_body;
+      CanBody * can_body;
       SpecializedMallaTVT can_bottom;
       SpecializedMallaTVT can_top;
       Texture * texturePtr;

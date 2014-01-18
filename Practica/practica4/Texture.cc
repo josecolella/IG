@@ -17,7 +17,6 @@ Texture :: Texture(const char *textureFile)
   {
     s[i] = t[i] = 0.0f;
   }
-  assert(glGetError() == GL_NO_ERROR);
   //hace idTex igual a un nuevo identificador
   glGenTextures(1, &idTex);
   glBindTexture(GL_TEXTURE_2D, idTex); //activa textura con identificado 'idTex'
@@ -61,10 +60,14 @@ void Texture :: activate()
   }
   else
   {
-    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-    glTexGenfv(GL_S, GL_EYE_PLANE, s);
-    glTexGenfv(GL_T, GL_EYE_PLANE, t);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+               
+    glTexGenfv(GL_S, GL_OBJECT_PLANE, s);
+    glTexGenfv(GL_T, GL_OBJECT_PLANE, t);
+
+    glEnable( GL_TEXTURE_GEN_S);
+    glEnable( GL_TEXTURE_GEN_T);
   }
 
 }

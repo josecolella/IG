@@ -11,9 +11,19 @@ using namespace std;
 
 
 MallaTVT :: MallaTVT() {
-
+  materialPtr = NULL;
 }
 
+MallaTVT :: MallaTVT(const char * textureFile)
+{
+  materialPtr = new Material(textureFile);
+}
+
+MallaTVT :: ~MallaTVT()
+{
+  if(materialPtr != NULL)
+    delete materialPtr;
+}
 void MallaTVT :: initializeObject(const char * filename) {
   ply::read(filename, vertices_ply, caras_ply);
   for (int i = 0; i < vertices_ply.size(); i +=3)
@@ -320,11 +330,12 @@ void MallaTVT :: draw(visual_t visualization){
   {
     glShadeModel(GL_SMOOTH);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    //Aqui va un material
+    //GLfloat color[4] = {0.9,0.8,0.8,1};
+    //glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
+
+    // materialPtr->activate();
+
     glBegin(GL_TRIANGLES);
-    // if(!vector_texturas.empty()){
-    //   assert(vector_texturas.size() == Vertices.size());
-    // }
     for(int i=0;i<caras.size();i++)
     {
       if(!vector_texturas.empty())

@@ -23,7 +23,9 @@ class Material
         Material(const char * materialFile);
         ~Material();
         void activate();
-
-     /* data */
+        void setAmbient(GLfloat amb[MATERIAL_ARRAY_SIZE -1]);
+        void setDiffuse(GLfloat dis[MATERIAL_ARRAY_SIZE -1]);
+        void setSpecular(GLfloat spe[MATERIAL_ARRAY_SIZE -1]);
+        void setBrightness(GLfloat brillo);
  };
 #endif

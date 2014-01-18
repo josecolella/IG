@@ -8,6 +8,7 @@ class SpecializedMallaTVT : public MallaTVT
 {
   public:
   void initializeRotationalObject(const char * filename);
+  void setTextureFile(const char * textureFile);
   void draw(visual_t visualization);
 };
 

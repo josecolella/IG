@@ -52,7 +52,7 @@ float
 //Variables usadas para contener el modelo PLY, ROTACIONAL, Y JERARQUICO
 MallaTVT mallaTVT1;
 MallaTVT mallaTVT2;
-MallaTVT peonMadera;
+CanBody * peonMadera;
 MallaTVT peonBlanco;
 MallaTVT peonNegro;
 
@@ -60,8 +60,8 @@ MallaTVT peonNegro;
 Robot robot;
 BeverageCan * can = NULL;
 
-GLfloat ini1[2] = {2.0,0.0};
-GLfloat ini2[2] = {-1.0,-1.0};
+GLfloat ini1[2] = {-45.0,-30.0};
+GLfloat ini2[2] = {-0.0,-0.0};
 //Fuentes de Luz
 LightSource * source1 = NULL;
 LightSource * source2 = NULL;
@@ -269,7 +269,7 @@ void animation_5() {
       glScalef(0.5,0.5,0.5);
       glPushMatrix();
         glTranslatef(0.0,1.5,4.0);
-        peonMadera.draw(visualization);
+        peonMadera->draw(visualization);
         glTranslatef(3.5,0.0,0.0);
         peonBlanco.draw(visualization);
         glTranslatef(3.5,0.0,0.0);
@@ -317,28 +317,28 @@ void animation_5() {
     change_observer();
     draw_axis();
     draw_objects();
-    // GLfloat pos[] = {0.0,0.0,1.5,1.0};
+    GLfloat pos[] = {0.0,0.0,0.0,1.0};
 
-    // glPushMatrix();
-    //   glTranslatef(0.0,0.0,-5.0);
-    //   glPushMatrix();
-    //     glRotatef((GLfloat) spin, 1.0,0.0,0.0);
-    //     glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
-    //     glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    glPushMatrix();
+      glTranslatef(0.0,0.0,-5.0);
+      glPushMatrix();
+        glRotatef((GLfloat) spin, 1.0,0.0,0.0);
+        glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
+        glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-    //   glTranslatef(0.0,0.0,1.5);
-    //   glDisable(GL_LIGHTING);
-    //   glColor3f(0.0,1.0,1.0);
-    //   glutWireCube(0.1);
-    //   glEnable(GL_LIGHTING);
-    //   glPopMatrix();
-    //   // glutSolidTorus(0.275,0.85,8,15);
-    // glPopMatrix();
+      glTranslatef(0.0,0.0,1.5);
+      glDisable(GL_LIGHTING);
+      glColor3f(0.0,1.0,1.0);
+      glutWireCube(0.1);
+      glEnable(GL_LIGHTING);
+      glPopMatrix();
+      // glutSolidTorus(0.275,0.85,8,15);
+    glPopMatrix();
 
-    source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
-    source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
-    source1->activate();
-    source2->activate();
+    // source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
+    // source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
+    // source1->activate();
+    // source2->activate();
     glutSwapBuffers();
   }
 
@@ -507,6 +507,7 @@ void normal_keys(unsigned char Tecla1,int x,int y)
       glutPostRedisplay();
       break;
       case 'y':
+      glEnable(GL_LIGHTING);
       visualization = ILUM_SOFT;
       glutPostRedisplay();
       break;
@@ -775,11 +776,11 @@ void initialize(const char * file1)
   //Inicializamos la mallaTVT1 con el fichero
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
-  peonMadera.initializeRotationalObject(rotation_body_file);
+  //peonMadera.initializeRotationalObject(rotation_body_file);
   peonNegro.initializeRotationalObject(rotation_body_file);
   peonBlanco.initializeRotationalObject(rotation_body_file);
   can = new BeverageCan();
-
+  peonMadera = new CanBody(rotation_body_file, "text-madera.jpg");
   //Add shininess
   // GLfloat mat_specular[] = {1.0,1.0,1.0,1.0};
   // GLfloat low_shininess[] = {5.0};
