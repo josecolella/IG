@@ -11,19 +11,21 @@ using namespace std;
 
 
 MallaTVT :: MallaTVT() {
-  materialPtr = NULL;
+  materialPtr = new Material();
 }
 
-MallaTVT :: MallaTVT(const char * textureFile)
-{
+MallaTVT :: MallaTVT(const char * textureFile) {
   materialPtr = new Material(textureFile);
 }
 
-MallaTVT :: ~MallaTVT()
-{
+MallaTVT :: ~MallaTVT() {
   if(materialPtr != NULL)
+  {
     delete materialPtr;
+  }
 }
+
+
 void MallaTVT :: initializeObject(const char * filename) {
   ply::read(filename, vertices_ply, caras_ply);
   for (int i = 0; i < vertices_ply.size(); i +=3)
@@ -190,6 +192,28 @@ for(int i=0;i<Vertices.size()-2;i+=numInitialVertices){
   this->normal_vertices[i].normalize();
 }
 
+//Calculo de vector de texturas
+_vertex2f pairValues;
+vector<GLfloat> tmpVector;
+
+float sum = 0.0;
+tmpVector.push_back(sum);
+for(int j = 1;j <this->numInitialVertices + 1;j++)
+{
+  sum += sqrt(pow(this->Vertices[j].x - this->Vertices[j-1].x,2) + pow(this->Vertices[j].y - this->Vertices[j-1].y,2) + pow(this->Vertices[j].z - this->Vertices[j-1].z,2));
+  tmpVector.push_back(sum);
+}
+
+for(int i=0;i<int(rotation) + 1;i++)
+{
+  pairValues.s = (float(i)/rotation);
+  for(int k = 0;k<tmpVector.size();k++)
+  {
+    pairValues.t = 1.0 - tmpVector[k]/tmpVector[tmpVector.size()-1];
+    vector_texturas.push_back(pairValues);
+  }
+}
+
 }
 
 
@@ -229,56 +253,57 @@ for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+2);i++
    caras.push_back(tmp);
  }
  else
-    j+=numInitialVertices;
+  j+=numInitialVertices;
 }
 
 
- for (int i = 0; i < caras.size(); i++){
-   _vertex3f tmp1,tmp2;
-   tmp1 = Vertices[caras[i]._1] - Vertices[caras[i]._0];
-   tmp2 = Vertices[caras[i]._2] - Vertices[caras[i]._0];
-   normal_caras.push_back((tmp1.cross_product(tmp2)).normalize());
- }
+for (int i = 0; i < caras.size(); i++){
+ _vertex3f tmp1,tmp2;
+ tmp1 = Vertices[caras[i]._1] - Vertices[caras[i]._0];
+ tmp2 = Vertices[caras[i]._2] - Vertices[caras[i]._0];
+ normal_caras.push_back((tmp1.cross_product(tmp2)).normalize());
+}
 
  //Limpiamos el vector de la basura que puede contener
- this->normal_vertices.clear();
+this->normal_vertices.clear();
  //Lo rellenamos de 0
- this->normal_vertices.resize(Vertices.size(), _vertex3f(0,0,0));
+this->normal_vertices.resize(Vertices.size(), _vertex3f(0,0,0));
 
  //Este bucle calcula en cada iteraccion parte de la normal
  //de cada vertice
- for(int i=0;i<this->normal_caras.size();i++)
- {
+for(int i=0;i<this->normal_caras.size();i++)
+{
   //Para calcular el normal de vertices de cada normal de cara
-   this->normal_vertices[caras[i]._0] += this->normal_caras[i];
-   this->normal_vertices[caras[i]._1] += this->normal_caras[i];
-   this->normal_vertices[caras[i]._2] += this->normal_caras[i];
+ this->normal_vertices[caras[i]._0] += this->normal_caras[i];
+ this->normal_vertices[caras[i]._1] += this->normal_caras[i];
+ this->normal_vertices[caras[i]._2] += this->normal_caras[i];
 
 
- }
+}
 
 
  //Normalizamos el resultado, y obtenemos los normales de vertices
- for(int i=0;i<this->normal_vertices.size();i++)
- {
+for(int i=0;i<this->normal_vertices.size();i++)
+{
   this->normal_vertices[i].normalize();
 }
   ///Coordenadas
  //Rellenar texturas
 
- _vertex2f pairValues;
- vector<GLfloat> tmpVector;
+_vertex2f pairValues;
+vector<GLfloat> tmpVector;
 
- float sum = 0.0;
- tmpVector.push_back(sum);
- for(int j = 1;j <this->numInitialVertices + 1;j++)
- {
-    sum += sqrt(pow(this->Vertices[j].x - this->Vertices[j-1].x,2) + pow(this->Vertices[j].y - this->Vertices[j-1].y,2) + pow(this->Vertices[j].z - this->Vertices[j-1].z,2));
-    tmpVector.push_back(sum);
- }
+float sum = 0.0;
+tmpVector.push_back(sum);
+for(int j = 1;j <this->numInitialVertices;j++)
+{
+    //x y z
+  sum += sqrt(pow(this->Vertices[j].x - this->Vertices[j-1].x,2) + pow(this->Vertices[j].y - this->Vertices[j-1].y,2) + pow(this->Vertices[j].z - this->Vertices[j-1].z,2));
+  tmpVector.push_back(sum);
+}
 
- for(int i=0;i<int(rotation) + 1;i++)
- {
+for(int i=0;i<int(rotation) + 1;i++)
+{
   pairValues.s = (float(i)/rotation);
   for(int k = 0;k<tmpVector.size();k++)
   {
@@ -313,7 +338,7 @@ void MallaTVT :: draw(visual_t visualization){
   {
     glShadeModel(GL_FLAT);
 
-    //Aqui va un material
+    materialPtr->activate();
 
     glBegin(GL_TRIANGLES);
     for(int i=0;i<normal_caras.size();i++)
@@ -330,11 +355,9 @@ void MallaTVT :: draw(visual_t visualization){
   {
     glShadeModel(GL_SMOOTH);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    //GLfloat color[4] = {0.9,0.8,0.8,1};
-    //glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
 
-    // materialPtr->activate();
-
+    //Se activa el material
+    materialPtr->activate();
     glBegin(GL_TRIANGLES);
     for(int i=0;i<caras.size();i++)
     {

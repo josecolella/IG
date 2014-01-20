@@ -43,7 +43,7 @@ protected:
 public:
   MallaTVT();
   MallaTVT(const char * textureFile);
-  ~MallaTVT(); 
+  ~MallaTVT();
   void initializeObject(const char * filename);
   void initializeRotationalObject(const char * filename);
   void initializeRotationalObject2(const char * filename);

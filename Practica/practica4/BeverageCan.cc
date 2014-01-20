@@ -8,27 +8,29 @@ const char * BeverageCan :: textureFile = "text-lata-1.jpg";
 BeverageCan :: BeverageCan()
 {
   isLight = true;
-  can_body = new CanBody(textureFile);
-  this->can_bottom.initializeRotationalObject("lata-psup.ply");
-  this->can_top.initializeRotationalObject("lata-pinf.ply");
-
-  //texturePtr = new Texture(textureFile);
+  can_body = new MallaTVT(textureFile);
+  can_body->initializeRotationalObject2("lata-pcue.ply");
+  can_bottom = new MallaTVT();
+  can_bottom->initializeRotationalObject2("lata-psup.ply");
+  can_top = new MallaTVT();
+  can_top->initializeRotationalObject2("lata-pinf.ply");
 
 
 }
 
 BeverageCan :: ~BeverageCan()
 {
-  delete texturePtr;
   delete can_body;
+  delete can_top;
+  delete can_bottom;
 }
 
 void BeverageCan :: draw(visual_t visualization) {
 
-  //texturePtr->activate();
-  this->can_body->draw(visualization);
-  this->can_bottom.draw(visualization);
-  this->can_top.draw(visualization);
+  
+  can_body->draw(visualization);
+  can_bottom->draw(visualization);
+  can_top->draw(visualization);
 
 
 }

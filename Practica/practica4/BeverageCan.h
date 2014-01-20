@@ -1,10 +1,9 @@
 #include "vertex.h"
-#include "SpecializedMallaTVT.h" //Mallas para crear la lata
 #include <vector>
 #include <GL/glut.h>
 #include "visualtype.h" //For enum
 #include "Texture.h"
-#include "CanBody.h"
+#include "MallaTVT.h"
 
 using namespace std;
 
@@ -20,10 +19,9 @@ class BeverageCan
       //usa un valor entero unico para cada una de ellas
       static const char * textureFile;
       bool isLight;
-      CanBody * can_body;
-      SpecializedMallaTVT can_bottom;
-      SpecializedMallaTVT can_top;
-      Texture * texturePtr;
+      MallaTVT * can_body;
+      MallaTVT * can_bottom;
+      MallaTVT * can_top;
     public:
       BeverageCan();
       ~BeverageCan();

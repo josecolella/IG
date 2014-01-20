@@ -27,5 +27,9 @@ class Material
         void setDiffuse(GLfloat dis[MATERIAL_ARRAY_SIZE -1]);
         void setSpecular(GLfloat spe[MATERIAL_ARRAY_SIZE -1]);
         void setBrightness(GLfloat brillo);
+        GLfloat * getAmbient() const;
+        GLfloat * getDiffuse() const;
+        GLfloat * getSpecular() const;
+        GLfloat getBrillo() const;
  };
 #endif

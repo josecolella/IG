@@ -60,12 +60,13 @@ void Texture :: activate()
   }
   else
   {
+    glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+    
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-               
+
     glTexGenfv(GL_S, GL_OBJECT_PLANE, s);
     glTexGenfv(GL_T, GL_OBJECT_PLANE, t);
-
     glEnable( GL_TEXTURE_GEN_S);
     glEnable( GL_TEXTURE_GEN_T);
   }

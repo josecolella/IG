@@ -26,15 +26,15 @@ void Material :: activate() {
           glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
           glEnable(GL_NORMALIZE);
 
-          glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-          glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+          //glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
+          //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
        
-          // parte delantera
-          glMaterialfv(GL_FRONT,GL_AMBIENT,(GLfloat *) & amb);
-          glMaterialfv(GL_FRONT,GL_DIFFUSE,(GLfloat *) & dis);
-          glMaterialfv(GL_FRONT,GL_SPECULAR,(GLfloat *) & spe);
-          glMaterialf(GL_FRONT,GL_SHININESS,brillo);
-       
+          glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
+          glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,dis);
+          glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spe);
+          glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,brillo);
+          
+
 
     //    } else {
     //       glDisable(GL_LIGHTING);
@@ -43,6 +43,8 @@ void Material :: activate() {
          
        if(texturePtr!=NULL) 
           texturePtr->activate();
+        else
+            glDisable(GL_TEXTURE_2D);
 
 
 }
@@ -67,3 +69,21 @@ void Material :: setSpecular(GLfloat spe[MATERIAL_ARRAY_SIZE -1]) {
 void Material :: setBrightness(GLfloat brillo) {
   this->brillo = brillo;
 }
+
+
+GLfloat * Material :: getAmbient() const{
+  return (GLfloat *)this->amb;
+}
+
+GLfloat * Material :: getDiffuse() const{
+  return (GLfloat *)this->dis;
+}
+
+GLfloat * Material :: getSpecular() const{
+  return (GLfloat *)this->spe;
+}
+
+GLfloat Material :: getBrillo() const {
+  return this->brillo;
+}
+
