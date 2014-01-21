@@ -1,4 +1,3 @@
-
 #include "stdlib.h"
 #include "stdio.h"
 #include <GL/glut.h>
@@ -61,6 +60,7 @@ state_t state = NONE;
 state_t lastState = NONE;
 //Variable que destaca el modo de visualizacion
 visual_t visualization = POINT;
+visual_t last_visualization = POINT;
 //Variables que se cambian en base a las teclas usadas
 static float shoulder = 0, elbow = 0, left_index_rotation = 0, right_finger_rotation = 0, left_top = 0, right_top = 0;
 static float torso = 0, arm_rotation = 0;
@@ -310,23 +310,6 @@ void animation_5() {
     change_observer();
     draw_axis();
     draw_objects();
-
-    // glPushMatrix();
-    //   glTranslatef(0.0,0.0,-5.0);
-    //   glPushMatrix();
-    //     glRotatef((GLfloat) spin, 1.0,0.0,0.0);
-    //     glRotatef((GLfloat) spin2, 0.0,1.0,0.0);
-    //     glLightfv(GL_LIGHT0, GL_POSITION, pos);
-
-    //   glTranslatef(0.0,0.0,1.5);
-    //   glDisable(GL_LIGHTING);
-    //   glColor3f(0.0,1.0,1.0);
-    //   glutWireCube(0.1);
-    //   glEnable(GL_LIGHTING);
-    //   glPopMatrix();
-    //   // glutSolidTorus(0.275,0.85,8,15);
-    // glPopMatrix();
-    // glEnable(GL_LIGHTING);
     GLfloat positional[] = {-3.0,-15.0, 1.0, 1.0};
     GLfloat directional[] = {3.0,15.0,0.0,0.0};
     if(state == P4) {
@@ -339,8 +322,10 @@ void animation_5() {
     }
     else{
       glDisable(GL_LIGHTING);
-      glDisable(GL_LIGHT0);
-      glDisable(GL_LIGHT1);
+      if(source1!= NULL)
+        source1->disactivate();
+      if(source2 != NULL)
+        source2->disactivate();
     }
     glutSwapBuffers();
   }
@@ -417,6 +402,9 @@ void printHelpP4() {
   cout << endl;
   cout << "-----Posibles comandos: ------------" << endl;
   cout << "?: Repetir este menu de ayuda" << endl;
+  cout << "1: Sombreado plano" << endl;
+  cout << "2: Sombreado de suave" << endl;
+  cout << "4: Salir de modo Práctica 4" << endl;
   cout << "A: Aumentar el valor de beta" << endl;
   cout << "Z: Disminuir el valor de beta" << endl;
   cout << "X: Aumentar el valor de alpha" << endl;
@@ -442,25 +430,23 @@ bool p4_keys(unsigned char Tecla)
     case '4':
     isP4 = false;
     state = lastState;
+    visualization = last_visualization;
+    printHelpP1ToP3();
     break;
     case 'A':
     spin = (spin + 3);
-    source1->increaseBeta();
     glutPostRedisplay();
     break;
     case 'Z':
     spin = (spin - 3);
-    source1->decreaseBeta();
     glutPostRedisplay();
     break;
     case 'X':
     spin2 += 3;
-    source1->increaseAlpha();
     glutPostRedisplay();
     break;
     case 'C':
     spin2 -= 3;
-    source1->decreaseAlpha();
     glutPostRedisplay();
     break;
     default:
@@ -493,7 +479,9 @@ bool p1_to_p3_keys(unsigned char Tecla)
     //Guardar el ultimo estado
     lastState = state;
     state = P4;
-    visualization = ILUM_SOFT;
+    last_visualization = visualization;
+    printHelpP4();
+    visualization = ILUM_PLANO;
     break;
     case 'p':
     visualization = POINT;

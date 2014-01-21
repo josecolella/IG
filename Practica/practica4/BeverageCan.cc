@@ -10,8 +10,10 @@ BeverageCan :: BeverageCan()
   isLight = true;
   can_body = new MallaTVT(textureFile);
   can_body->initializeRotationalObject2("lata-pcue.ply");
+
   can_bottom = new MallaTVT();
   can_bottom->initializeRotationalObject2("lata-psup.ply");
+
   can_top = new MallaTVT();
   can_top->initializeRotationalObject2("lata-pinf.ply");
 

@@ -22,10 +22,6 @@ class LightSource
         GLfloat position[4];
     public:
         LightSource(GLenum lightIndex, GLfloat longitud, GLfloat latitud, _vertex3f color, light_t type, GLfloat position[4]);
-        void increaseBeta();
-        void increaseAlpha();
-        void decreaseBeta();
-        void decreaseAlpha();
         void activate();
         void disactivate();
 

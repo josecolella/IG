@@ -43,22 +43,3 @@ void LightSource :: disactivate()
   glPopMatrix();
 }
 
-
-
-void LightSource :: increaseBeta()
-{
- longitud += 3.0;
-}
-
-void LightSource :: increaseAlpha(){
-  latitud += 3.0;
-}
-void LightSource :: decreaseBeta()
-{
-  longitud -= 3.0;
-}
-
-void LightSource :: decreaseAlpha()
-{
-  latitud -= 3.0;
-}

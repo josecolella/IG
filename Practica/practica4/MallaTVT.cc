@@ -359,7 +359,7 @@ void MallaTVT :: draw(visual_t visualization){
 
       if(!vector_texturas.empty())
         glTexCoord2d(vector_texturas[ caras[i]._2 ]._0 , vector_texturas[ caras[i]._2 ]._1);
-      glNormal3f(normal_caras[ caras[i]._1 ].x, normal_caras[ caras[i]._1 ].y, normal_caras[ caras[i]._1 ].z);
+      glNormal3f(normal_caras[ caras[i]._2 ].x, normal_caras[ caras[i]._2 ].y, normal_caras[ caras[i]._2 ].z);
       glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
 
     }
@@ -405,7 +405,8 @@ void MallaTVT :: draw(visual_t visualization){
       }
       else
         glColor3f(0,1,0);
-
+      glDisable(GL_LIGHTING);
+      glDisable(GL_TEXTURE_2D);
       glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
       glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
       glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
