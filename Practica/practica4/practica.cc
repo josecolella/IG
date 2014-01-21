@@ -396,7 +396,7 @@ void animation_5() {
 
 }
 
-
+//Menu de ayuda de la practica 4
 void printHelpP4() {
 
   cout << endl;
@@ -412,6 +412,7 @@ void printHelpP4() {
 
 }
 
+//Funcion que define las teclas de la practica 4
 bool p4_keys(unsigned char Tecla)
 {
   bool actualizar = true;
@@ -457,7 +458,7 @@ bool p4_keys(unsigned char Tecla)
 
 }
 
-
+//Funcion que define las teclas de la practica 1 - 3
 bool p1_to_p3_keys(unsigned char Tecla)
 {
   bool actualizar = true;
@@ -824,31 +825,6 @@ void initialize(const char * file1)
   printHelpP1ToP3();
 }
 
-//You have to integrate this into key func
-void mouse(int button, int state, int x, int y)
-{
-  switch(button)
-  {
-    case GLUT_LEFT_BUTTON:
-    if(state == GLUT_DOWN){
-      spin = (spin + 10);
-      glutPostRedisplay();
-    }
-    break;
-    case GLUT_RIGHT_BUTTON:
-    spin = (spin - 10);
-    glutPostRedisplay();
-    break;
-    case GLUT_MIDDLE_BUTTON:
-    spin2 += 10;
-    glutPostRedisplay();
-    break;
-    default:
-    break;
-  }
-}
-
-
 //***************************************************************************
 // Programa principal
 //
@@ -890,8 +866,6 @@ int main(int argc, char **argv)
   glutKeyboardFunc(normal_keys);
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
   glutSpecialFunc(special_keys);
-  glutMouseFunc(mouse);
-
   // funcion de inicialización
   // Vemos si el usuario ha insertado el nombre del fichero al cual se leera
   // Si el usuario no mete ningun nombre se pone el ply del coche "big_dodge"

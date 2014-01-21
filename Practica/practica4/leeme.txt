@@ -32,9 +32,10 @@ se ha hecho a mano.
 
     -> make
 
-Para ejectutar la practica, hay una opcion:
+Para ejecutar la practica, hay una opcion:
     -> ./practica nombre_fichero_ply_sin_extension
-    ej: ./practica beethoven
+    ejemplo: ./practica beethoven
+    ejemplo: ./practica ant
 
 Si hay un argumento, lee el contenido del fichero ply pasado como parametro.
 Si no hay argumento, devuelve un mensaje de error, indicando como hay que estructurar para ejecutar el programa.
@@ -63,6 +64,10 @@ Para interactuar con el modelo jerarquico se usan las siguientes teclas:
   Z: Disminuir el valor de beta
   X: Aumentar el valor de alpha
   C: Disminuir el valor de alpha
+
+Las teclas de A y Z se usan para aumentar y disminuir el valor de beta de la
+fuente de luz, mientras que las teclas X y C se usa para aumentar el valor
+de alpha de la fuente de luz.
 
 Si queremos salir de la aplicación podemos usar las siguientes teclas:
 
