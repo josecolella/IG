@@ -24,12 +24,10 @@ void LightSource :: activate()
  glMatrixMode(GL_MODELVIEW);
  glLoadIdentity() ;
 
- GLfloat pos[4] = {1.0,1.0,1.0,1.0};
-
  glPushMatrix();
  glRotatef( latitud, 0.0, 1.0, 0.0 ) ;
  glRotatef( longitud, 1.0, 0.0, 0.0 ) ;
- glLightfv(this->lightIndex,GL_POSITION, pos);
+ glLightfv(this->lightIndex,GL_POSITION, this->position);
  glLightfv(this->lightIndex, GL_AMBIENT, (GLfloat *) & color);
  glLightfv(this->lightIndex, GL_SPECULAR, (GLfloat *) &color);
  glLightfv(this->lightIndex, GL_DIFFUSE, (GLfloat *) &color);
@@ -42,19 +40,25 @@ void LightSource :: disactivate()
   glPushMatrix();
   glDisable(GL_LIGHTING);
   glDisable(this->lightIndex);
-  glPopMatrix(); 
+  glPopMatrix();
 }
 
 
 
-void LightSource :: changeBeta(GLfloat value)
+void LightSource :: increaseBeta()
 {
- if (latitud+1.0>=90.0)
-  latitud = 90.0;
-else
-  latitud +=1.0;
+ longitud += 3.0;
 }
-void LightSource :: changeAlpha(GLfloat value)
+
+void LightSource :: increaseAlpha(){
+  latitud += 3.0;
+}
+void LightSource :: decreaseBeta()
 {
-  longitud += 1.0;
+  longitud -= 3.0;
+}
+
+void LightSource :: decreaseAlpha()
+{
+  latitud -= 3.0;
 }

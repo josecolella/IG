@@ -328,6 +328,10 @@ void MallaTVT :: draw(visual_t visualization){
     case CHECKERED:
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     break;
+    case ILUM_PLANO:
+    case ILUM_SOFT:
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      break;
     default:
     // glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
     break;
@@ -337,16 +341,26 @@ void MallaTVT :: draw(visual_t visualization){
   if(visualization ==  ILUM_PLANO)
   {
     glShadeModel(GL_FLAT);
-
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     materialPtr->activate();
 
     glBegin(GL_TRIANGLES);
     for(int i=0;i<normal_caras.size();i++)
     {
-      glNormal3f(normal_caras[i]._0, normal_caras[i]._1, normal_caras[i]._2);
-      glVertex3f(Vertices[normal_caras[i]._0].x,Vertices[normal_caras[i]._0].y,Vertices[normal_caras[i]._0].z);
-      glVertex3f(Vertices[normal_caras[i]._1].x,Vertices[normal_caras[i]._1].y,Vertices[normal_caras[i]._1].z);
-      glVertex3f(Vertices[normal_caras[i]._2].x,Vertices[normal_caras[i]._2].y,Vertices[normal_caras[i]._2].z);
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ caras[i]._0 ]._0 , vector_texturas[ caras[i]._0 ]._1);
+      glNormal3f(normal_caras[ caras[i]._0 ].x, normal_caras[ caras[i]._0 ].y, normal_caras[ caras[i]._0 ].z);
+      glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
+
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ caras[i]._1 ]._0 , vector_texturas[ caras[i]._1 ]._1);
+      glNormal3f(normal_caras[ caras[i]._1 ].x, normal_caras[ caras[i]._1 ].y, normal_caras[ caras[i]._1 ].z);
+      glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
+
+      if(!vector_texturas.empty())
+        glTexCoord2d(vector_texturas[ caras[i]._2 ]._0 , vector_texturas[ caras[i]._2 ]._1);
+      glNormal3f(normal_caras[ caras[i]._1 ].x, normal_caras[ caras[i]._1 ].y, normal_caras[ caras[i]._1 ].z);
+      glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
 
     }
     glEnd();

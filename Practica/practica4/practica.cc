@@ -18,7 +18,6 @@
 
 GLint animate = 0; //Para hacer animation o no
 GLint texture = 0;
-GLfloat i = 0.0;
 //enum que denota los diferentes estados
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
 bool isP4 = false; //Modo practica 4
@@ -28,18 +27,18 @@ const char *rotation_body_file = "poligono.ply";
 const int AXIS_SIZE=5000;
 
 
-static GLfloat spin = 0.5;
-static GLfloat spin2 = 0.5;
+static GLfloat spin = 0.0;
+static GLfloat spin2 = 0.0;
 //Variable utilizadas para las animaciones
 int
-  animation1 = -1,
-  max_range = 5,
-  min_range = -5,
-  animation6 = 1;
+animation1 = -1,
+max_range = 5,
+min_range = -5,
+animation6 = 1;
 float
-  eye_top = -8.0,
-  eye_min = 0.0,
-  animation2 = -0.1;
+eye_top = -8.0,
+eye_min = 0.0,
+animation2 = -0.1;
 
 
 //Variables usadas para contener el modelo PLY, ROTACIONAL, Y JERARQUICO
@@ -59,6 +58,7 @@ LightSource * source2 = NULL;
 
 //Variable que destaca el estado de dibujo. PLY, ROTACIONAL, HIERARCHY
 state_t state = NONE;
+state_t lastState = NONE;
 //Variable que destaca el modo de visualizacion
 visual_t visualization = POINT;
 //Variables que se cambian en base a las teclas usadas
@@ -249,28 +249,25 @@ void animation_5() {
 
 //Modo practica 4
   void p4_scene(){
-    // glPushMatrix();
-    // glutSolidSphere(1.0,20,16); //Para el ejemplo *QUITAR*
-    // glPopMatrix();
     glPushMatrix();
     glScalef(3.0,3.0,3.0);
     can->draw(visualization);
     glPopMatrix();
     glPushMatrix();
-      glScalef(0.5,0.5,0.5);
-      glPushMatrix();
-        glTranslatef(0.0,1.5,4.0);
-        glPushMatrix();
-        GLfloat shiny = 100.0;
-        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
-        peonMadera->draw(visualization);
-        glPopMatrix();
-        glTranslatef(3.5,0.0,0.0);
-        peonBlanco->draw(visualization);
-        glTranslatef(3.5,0.0,0.0);
-        GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
-        peonNegro->draw(visualization);
-      glPopMatrix();
+    glScalef(0.5,0.5,0.5);
+    glPushMatrix();
+    glTranslatef(0.0,1.5,4.0);
+    glPushMatrix();
+    GLfloat shiny = 100.0;
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
+    peonMadera->draw(visualization);
+    glPopMatrix();
+    glTranslatef(3.5,0.0,0.0);
+    peonBlanco->draw(visualization);
+    glTranslatef(3.5,0.0,0.0);
+    GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
+    peonNegro->draw(visualization);
+    glPopMatrix();
     glPopMatrix();
   }
 
@@ -313,7 +310,6 @@ void animation_5() {
     change_observer();
     draw_axis();
     draw_objects();
-    GLfloat pos[] = {0.0,0.0,0.0,1.0};
 
     // glPushMatrix();
     //   glTranslatef(0.0,0.0,-5.0);
@@ -331,18 +327,21 @@ void animation_5() {
     //   // glutSolidTorus(0.275,0.85,8,15);
     // glPopMatrix();
     // glEnable(GL_LIGHTING);
-    GLfloat whiteSpecularLight[] = {1.0, 1.0, 1.0}; 
-    // GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
-    // GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
-    // glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
-    // glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
-    // glEnable(GL_LIGHT0);
-    light_t type = DIRECTIONAL;
-    source1 = new LightSource(GL_LIGHT0, 3.0, 4.0, _vertex3f(0.5,0.5,0.5), type, whiteSpecularLight);
-    source2 = new LightSource(GL_LIGHT1, 0.0, 5.0, _vertex3f(0.5,0.5,0.5), type, whiteSpecularLight);
-    source1->activate();
-    source2->activate();
+    GLfloat positional[] = {-3.0,-15.0, 1.0, 1.0};
+    GLfloat directional[] = {3.0,15.0,0.0,0.0};
+    if(state == P4) {
+      light_t type1 = DIRECTIONAL;
+      light_t type2 = POSITIONAL;
+      source1 = new LightSource(GL_LIGHT0, 0.0, 0.0, _vertex3f(1.0,1.0,1.0), type2, positional);
+      source2 = new LightSource(GL_LIGHT1, spin, spin2, _vertex3f(0.6,0.6,0.6), type1, directional);
+      source1->activate();
+      source2->activate();
+    }
+    else{
+      glDisable(GL_LIGHTING);
+      glDisable(GL_LIGHT0);
+      glDisable(GL_LIGHT1);
+    }
     glutSwapBuffers();
   }
 
@@ -373,6 +372,7 @@ void animation_5() {
  * Menu de ayuda donde se denotan las teclas posibles
  */
  void printHelpP1ToP3() {
+  cout << endl;
   cout << "Posibles comandos: " << endl;
   cout << "?: Repetir este menu de ayuda" << endl;
   cout << "p: Visualizar en modo punto" << endl;
@@ -413,7 +413,9 @@ void animation_5() {
 
 
 void printHelpP4() {
-  cout << "Posibles comandos: " << endl;
+
+  cout << endl;
+  cout << "-----Posibles comandos: ------------" << endl;
   cout << "?: Repetir este menu de ayuda" << endl;
   cout << "A: Aumentar el valor de beta" << endl;
   cout << "Z: Disminuir el valor de beta" << endl;
@@ -422,35 +424,287 @@ void printHelpP4() {
 
 }
 
-void p4_keys(unsigned char Tecla)
+bool p4_keys(unsigned char Tecla)
 {
-  switch(Tecla){
+  bool actualizar = true;
+  switch(toupper(Tecla)) {
     case '?':
     printHelpP4();
     break;
+    case '1':
+    visualization = ILUM_PLANO;
+    glutPostRedisplay();
+    break;
+    case '2':
+    visualization = ILUM_SOFT;
+    glutPostRedisplay();
+    break;
     case '4':
     isP4 = false;
+    state = lastState;
     break;
     case 'A':
-              //aumentar el valor de beta
+    spin = (spin + 3);
+    source1->increaseBeta();
     glutPostRedisplay();
     break;
     case 'Z':
-              //disminunir el valor de beta
+    spin = (spin - 3);
+    source1->decreaseBeta();
     glutPostRedisplay();
     break;
     case 'X':
-              //aumentar el valor de alpha
+    spin2 += 3;
+    source1->increaseAlpha();
     glutPostRedisplay();
     break;
     case 'C':
-              //disminuir el valor de alpha
+    spin2 -= 3;
+    source1->decreaseAlpha();
     glutPostRedisplay();
     break;
+    default:
+      glutPostRedisplay();
+      break;
   }
+  return actualizar;
 
 }
 
+
+bool p1_to_p3_keys(unsigned char Tecla)
+{
+  bool actualizar = true;
+  switch(Tecla) {
+    case '?':
+    printHelpP1ToP3();
+    break;
+    case '1':
+    state = PLY;
+    break;
+    case '2':
+    state = ROTATION;
+    break;
+    case '3':
+    state = HIERARCHY;
+    break;
+    case '4':
+    isP4 = true;
+    //Guardar el ultimo estado
+    lastState = state;
+    state = P4;
+    visualization = ILUM_SOFT;
+    break;
+    case 'p':
+    visualization = POINT;
+    glutPostRedisplay();
+    break;
+    case 'l':
+    visualization = LINE;
+    glutPostRedisplay();
+    break;
+    case 's':
+    visualization = FILL;
+    glutPostRedisplay();
+    break;
+    case 'a':
+    visualization = CHECKERED;
+    glutPostRedisplay();
+    break;
+    case 'Z':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[0] < 75)
+        arm_rotations[0] = (arm_rotations[0] + 1);
+      glutPostRedisplay();
+
+    }
+    break;
+    case 'z':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[0] > -45)
+        arm_rotations[0] = (arm_rotations[0] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'X':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[1] < 90)
+        arm_rotations[1] = (arm_rotations[1] + 1);
+      glutPostRedisplay();
+    }
+    break;
+
+    case 'x':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[1] > 0)
+        arm_rotations[1] = (arm_rotations[1] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'c':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[2] < 0)
+        arm_rotations[2] = arm_rotations[2] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'C':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[2] > -45)
+        arm_rotations[2] = arm_rotations[2] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'v':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[3] < 0)
+        arm_rotations[3] = arm_rotations[3] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'V':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[3] > -45)
+        arm_rotations[3] = arm_rotations[3] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'D':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[4] < 0)
+        arm_rotations[4] = arm_rotations[4] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'd':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[4] > -45)
+        arm_rotations[4] = arm_rotations[4] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'F':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[5] < 0)
+        arm_rotations[5] = arm_rotations[5] + 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'f':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(arm_rotations[5] > -45)
+        arm_rotations[5] = arm_rotations[5] - 1;
+      glutPostRedisplay();
+    }
+    break;
+    case 'G':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(eye_rotations < 0)
+        eye_rotations = (eye_rotations + 0.5);
+      glutPostRedisplay();
+    }
+    break;
+    case 'g':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(eye_rotations > -8.0)
+        eye_rotations = (eye_rotations - 0.5);
+      glutPostRedisplay();
+    }
+    break;
+    case 'H':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[1] <= 180)
+        body_rotations[1] = (body_rotations[1] + 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'h':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[1] >= -180)
+        body_rotations[1] = (body_rotations[1] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'T':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[0] < 2.0)
+        body_rotations[0] = (body_rotations[0] + 0.05);
+      glutPostRedisplay();
+    }
+    break;
+    case 't':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[0] > -2.0)
+        body_rotations[0] = (body_rotations[0] - 0.05);
+      glutPostRedisplay();
+    }
+    break;
+    case 'J':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[2] < 120)
+        body_rotations[2] = (body_rotations[2] + 1);
+      glutPostRedisplay();
+      break;
+    }
+    case 'j':
+    if(state == HIERARCHY) {
+      animate = 0;
+      if(body_rotations[2] > 0)
+        body_rotations[2] = (body_rotations[2] - 1);
+      glutPostRedisplay();
+    }
+    break;
+    case 'b':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate){ glutIdleFunc(animation_1); }
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'n':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_3);
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'N':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_4);
+      else glutIdleFunc(NULL);
+    }
+    break;
+    case 'm':
+    if(state == HIERARCHY) {
+      animate = 1;
+      if(animate) glutIdleFunc(animation_5);
+      else glutIdleFunc(NULL);
+    }
+    break;
+    default: glutPostRedisplay(); break;
+  }
+  return actualizar;
+}
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla normal
 //
@@ -462,263 +716,35 @@ void p4_keys(unsigned char Tecla)
 
 void normal_keys(unsigned char Tecla1,int x,int y)
 {
+
   //En base a la tecla tocada, se determina que se dibuja y como
+  bool actualizar = true;;
   switch (Tecla1) {
-    //if(modo == p4) {tecla_p4(key); return}
-    //Esta funcion gestiona todo relevante a la practica4
-    //
     case 'Q': exit(0); break;
     case 27: exit(0); break;
-    if(isP4)
-    {
-      cout << "Hello" << endl;
-      p4_keys(Tecla1);
-    }
-    else {
-      case '?':
-      printHelpP1ToP3();
-      break;
-      case '1':
-      state = PLY;
-      break;
-      case '2':
-      state = ROTATION;
-      break;
-      case '3':
-      state = HIERARCHY;
-      break;
-      case '4':
-      isP4 = !isP4;
-      state = P4;
-      case 'p':
-      visualization = POINT;
-      glutPostRedisplay();
-      break;
-      case 'l':
-      visualization = LINE;
-      glutPostRedisplay();
-      break;
-      case 's':
-      visualization = FILL;
-      glutPostRedisplay();
-      break;
-      case 'a':
-      visualization = CHECKERED;
-      glutPostRedisplay();
-      break;
-      case 'r':
-      spin += 1;
-      glutPostRedisplay();
-      break;
-      case 'y':
-      glEnable(GL_LIGHTING);
-      visualization = ILUM_SOFT;
-      glutPostRedisplay();
-      break;
-      case 'Z':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[0] < 75)
-          arm_rotations[0] = (arm_rotations[0] + 1);
-        glutPostRedisplay();
+    default:
+      switch(isP4) {
+          case true:
+            printHelpP4();
+            actualizar = p4_keys(Tecla1);
+            glutPostRedisplay();
+            break;
+          case false:
+            printHelpP1ToP3();
+            actualizar = p1_to_p3_keys(Tecla1);
+            glutPostRedisplay();
+            break;
+          default:
+            glutPostRedisplay(); break;
 
       }
-      break;
-      case 'z':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[0] > -45)
-          arm_rotations[0] = (arm_rotations[0] - 1);
-        glutPostRedisplay();
-      }
-      break;
-      case 'X':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[1] < 90)
-          arm_rotations[1] = (arm_rotations[1] + 1);
-        glutPostRedisplay();
-      }
-      break;
-
-      case 'x':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[1] > 0)
-          arm_rotations[1] = (arm_rotations[1] - 1);
-        glutPostRedisplay();
-      }
-      break;
-      case 'c':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[2] < 0)
-          arm_rotations[2] = arm_rotations[2] + 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'C':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[2] > -45)
-          arm_rotations[2] = arm_rotations[2] - 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'v':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[3] < 0)
-          arm_rotations[3] = arm_rotations[3] + 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'V':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[3] > -45)
-          arm_rotations[3] = arm_rotations[3] - 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'D':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[4] < 0)
-          arm_rotations[4] = arm_rotations[4] + 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'd':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[4] > -45)
-          arm_rotations[4] = arm_rotations[4] - 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'F':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[5] < 0)
-          arm_rotations[5] = arm_rotations[5] + 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'f':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(arm_rotations[5] > -45)
-          arm_rotations[5] = arm_rotations[5] - 1;
-        glutPostRedisplay();
-      }
-      break;
-      case 'G':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(eye_rotations < 0)
-          eye_rotations = (eye_rotations + 0.5);
-        glutPostRedisplay();
-      }
-      break;
-      case 'g':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(eye_rotations > -8.0)
-          eye_rotations = (eye_rotations - 0.5);
-        glutPostRedisplay();
-      }
-      break;
-      case 'H':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[1] <= 180)
-          body_rotations[1] = (body_rotations[1] + 1);
-        glutPostRedisplay();
-      }
-      break;
-      case 'h':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[1] >= -180)
-          body_rotations[1] = (body_rotations[1] - 1);
-        glutPostRedisplay();
-      }
-      break;
-      case 'T':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[0] < 2.0)
-          body_rotations[0] = (body_rotations[0] + 0.05);
-        glutPostRedisplay();
-      }
-      break;
-      case 't':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[0] > -2.0)
-          body_rotations[0] = (body_rotations[0] - 0.05);
-        glutPostRedisplay();
-      }
-      break;
-      case 'J':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[2] < 120)
-          body_rotations[2] = (body_rotations[2] + 1);
+      if(actualizar)
         glutPostRedisplay();
         break;
-      }
-      case 'j':
-      if(state == HIERARCHY) {
-        animate = 0;
-        if(body_rotations[2] > 0)
-          body_rotations[2] = (body_rotations[2] - 1);
-        glutPostRedisplay();
-      }
-      break;
-      case 'b':
-      if(state == HIERARCHY) {
-        animate = 1;
-        if(animate){ glutIdleFunc(animation_1); }
-        else glutIdleFunc(NULL);
-      }
-      break;
-      case 'n':
-      if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_3);
-        else glutIdleFunc(NULL);
-      }
-      break;
-      case 'N':
-      if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_4);
-        else glutIdleFunc(NULL);
-      }
-      break;
-      case 'm':
-      if(state == HIERARCHY) {
-        animate = 1;
-        if(animate) glutIdleFunc(animation_5);
-        else glutIdleFunc(NULL);
-      }
-      break;
-      case 'w':
-        i += 0.1;
-        glutPostRedisplay();
-      break;
-
-
-    }
-
-
-    default: glutPostRedisplay(); break;
 
 
   }
-  glutPostRedisplay();
+
 }
 //***************************************************************************
 // Funcion llamada cuando se produce aprieta una tecla especial
@@ -776,36 +802,37 @@ void initialize(const char * file1)
 
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
-  
-  peonMadera = new MallaTVT("text-madera.jpg");
-  peonMadera->initializeRotationalObject(rotation_body_file);\
+
   GLfloat whiteSpecular[] = {1.0, 1.0, 1.0};
   GLfloat blackSpecular[] = {0.0,0.0,0.0};
-  GLfloat someDiffuse[] = {0.4,0.4,0.4};
-  GLfloat someDiffuse1[] = {0.7,0.7,0.7};
-  GLfloat tmp[] = {0.75f, 0.75f, 0.75f};
-  GLfloat tmp1[] = { 0.75f, 0.75f, 0};
-  peonMadera->setDiffuse(tmp);
-  peonMadera->setSpecular(tmp1);
+  GLfloat lowAmbient[] = {0.3, 0.3, 0.3};
+  GLfloat a[] = {0.1,0.1,0.1};
+
+  peonMadera = new MallaTVT("text-madera.jpg");
+  peonMadera->initializeRotationalObject(rotation_body_file);
+
+  peonMadera->setAmbient(a);
+  peonMadera->setDiffuse(whiteSpecular);
+  peonMadera->setSpecular(whiteSpecular);
   peonMadera->setBrightness(30);
-  
+
 
   peonBlanco = new MallaTVT();
   peonBlanco->initializeRotationalObject(rotation_body_file);
-  peonBlanco->setAmbient(someDiffuse1);
+  peonBlanco->setAmbient(lowAmbient);
   peonBlanco->setDiffuse(whiteSpecular);
   peonBlanco->setSpecular(blackSpecular);
   peonBlanco->setBrightness(30);
-  
+
   peonNegro = new MallaTVT();
   peonNegro->initializeRotationalObject(rotation_body_file);
   peonNegro->setAmbient(blackSpecular);
-  peonNegro->setDiffuse(someDiffuse);
+  peonNegro->setDiffuse(lowAmbient);
   peonNegro->setSpecular(whiteSpecular);
   peonNegro->setBrightness(30);
-  
+
   can = new BeverageCan();
-  
+
   printHelpP1ToP3();
 }
 
@@ -815,21 +842,21 @@ void mouse(int button, int state, int x, int y)
   switch(button)
   {
     case GLUT_LEFT_BUTTON:
-      if(state == GLUT_DOWN){
-        spin = (spin + 10);
-        glutPostRedisplay();
-      }
-      break;
-    case GLUT_RIGHT_BUTTON:
-        spin = (spin - 10);
-        glutPostRedisplay();
-      break;
-    case GLUT_MIDDLE_BUTTON:
-      spin2 += 10;
+    if(state == GLUT_DOWN){
+      spin = (spin + 10);
       glutPostRedisplay();
+    }
+    break;
+    case GLUT_RIGHT_BUTTON:
+    spin = (spin - 10);
+    glutPostRedisplay();
+    break;
+    case GLUT_MIDDLE_BUTTON:
+    spin2 += 10;
+    glutPostRedisplay();
     break;
     default:
-      break;
+    break;
   }
 }
 
