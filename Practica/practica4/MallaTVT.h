@@ -9,6 +9,7 @@ using namespace std;
 
 #ifndef _MALLATVT_H_
 #define _MALLATVT_H_
+#define MATERIAL_ARRAY_SIZE 4
 
 class MallaTVT {
 
@@ -49,8 +50,10 @@ public:
   void initializeRotationalObject2(const char * filename);
   void draw(visual_t visualization);
   int getInitialVerticesNum() const;
-
-
+  void setAmbient(GLfloat amb[MATERIAL_ARRAY_SIZE -1]);
+  void setDiffuse(GLfloat dis[MATERIAL_ARRAY_SIZE -1]);
+  void setSpecular(GLfloat spe[MATERIAL_ARRAY_SIZE -1]);
+  void setBrightness(GLfloat brillo);
 };
 
 

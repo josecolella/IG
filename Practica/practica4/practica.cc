@@ -15,6 +15,7 @@
 #include "LightSource.h"
 
 
+
 GLint animate = 0; //Para hacer animation o no
 GLint texture = 0;
 GLfloat i = 0.0;
@@ -48,12 +49,10 @@ MallaTVT * peonMadera;
 MallaTVT * peonBlanco;
 MallaTVT * peonNegro;
 
-
+//Robot de la practica3
 Robot robot;
 BeverageCan * can = NULL;
 
-GLfloat ini1[2] = {-45.0,-30.0};
-GLfloat ini2[2] = {-0.0,-0.0};
 //Fuentes de Luz
 LightSource * source1 = NULL;
 LightSource * source2 = NULL;
@@ -261,7 +260,11 @@ void animation_5() {
       glScalef(0.5,0.5,0.5);
       glPushMatrix();
         glTranslatef(0.0,1.5,4.0);
+        glPushMatrix();
+        GLfloat shiny = 100.0;
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shiny);
         peonMadera->draw(visualization);
+        glPopMatrix();
         glTranslatef(3.5,0.0,0.0);
         peonBlanco->draw(visualization);
         glTranslatef(3.5,0.0,0.0);
@@ -327,18 +330,19 @@ void animation_5() {
     //   glPopMatrix();
     //   // glutSolidTorus(0.275,0.85,8,15);
     // glPopMatrix();
-    glEnable(GL_LIGHTING);
+    // glEnable(GL_LIGHTING);
     GLfloat whiteSpecularLight[] = {1.0, 1.0, 1.0}; 
-    GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
-    GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
-    glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
-    glEnable(GL_LIGHT0);
-    // source1 = new LightSource(GL_LIGHT0, ini1, _vertex3f(1.0,1.0,1.0));
-    // source2 = new LightSource(GL_LIGHT1, ini2, _vertex3f(0.8,0.3,0.2));
-    // source1->activate();
-    // source2->activate();
+    // GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
+    // GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0};
+    // glLightfv(GL_LIGHT0, GL_SPECULAR, whiteSpecularLight);
+    // glLightfv(GL_LIGHT0, GL_AMBIENT, blackAmbientLight);
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, whiteDiffuseLight);
+    // glEnable(GL_LIGHT0);
+    light_t type = DIRECTIONAL;
+    source1 = new LightSource(GL_LIGHT0, 3.0, 4.0, _vertex3f(0.5,0.5,0.5), type, whiteSpecularLight);
+    source2 = new LightSource(GL_LIGHT1, 0.0, 5.0, _vertex3f(0.5,0.5,0.5), type, whiteSpecularLight);
+    source1->activate();
+    source2->activate();
     glutSwapBuffers();
   }
 
@@ -770,19 +774,36 @@ void initialize(const char * file1)
   glViewport(0,0,UI_window_width,UI_window_height);
 
 
-  // glEnable(GL_LIGHTING); //To enable lighting
-
-  // glEnable(GL_LIGHT0);
-  //Inicializamos la mallaTVT1 con el fichero
-  
   mallaTVT1.initializeObject(file1);
   mallaTVT2.initializeRotationalObject(rotation_body_file);
+  
   peonMadera = new MallaTVT("text-madera.jpg");
-  peonMadera->initializeRotationalObject(rotation_body_file);
-  peonNegro = new MallaTVT();
-  peonNegro->initializeRotationalObject(rotation_body_file);
+  peonMadera->initializeRotationalObject(rotation_body_file);\
+  GLfloat whiteSpecular[] = {1.0, 1.0, 1.0};
+  GLfloat blackSpecular[] = {0.0,0.0,0.0};
+  GLfloat someDiffuse[] = {0.4,0.4,0.4};
+  GLfloat someDiffuse1[] = {0.7,0.7,0.7};
+  GLfloat tmp[] = {0.75f, 0.75f, 0.75f};
+  GLfloat tmp1[] = { 0.75f, 0.75f, 0};
+  peonMadera->setDiffuse(tmp);
+  peonMadera->setSpecular(tmp1);
+  peonMadera->setBrightness(30);
+  
+
   peonBlanco = new MallaTVT();
   peonBlanco->initializeRotationalObject(rotation_body_file);
+  peonBlanco->setAmbient(someDiffuse1);
+  peonBlanco->setDiffuse(whiteSpecular);
+  peonBlanco->setSpecular(blackSpecular);
+  peonBlanco->setBrightness(30);
+  
+  peonNegro = new MallaTVT();
+  peonNegro->initializeRotationalObject(rotation_body_file);
+  peonNegro->setAmbient(blackSpecular);
+  peonNegro->setDiffuse(someDiffuse);
+  peonNegro->setSpecular(whiteSpecular);
+  peonNegro->setBrightness(30);
+  
   can = new BeverageCan();
   
   printHelpP1ToP3();

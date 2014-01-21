@@ -406,5 +406,24 @@ void MallaTVT :: draw(visual_t visualization){
 }
 
 int MallaTVT :: getInitialVerticesNum() const{
- return this-> numInitialVertices;
+ return this->numInitialVertices;
+}
+
+
+void MallaTVT :: setAmbient(GLfloat amb[MATERIAL_ARRAY_SIZE -1]){
+  this->materialPtr->setAmbient(amb);
+}
+
+void MallaTVT :: setDiffuse(GLfloat dis[MATERIAL_ARRAY_SIZE -1])
+{
+  materialPtr->setDiffuse(dis);
+}
+
+void MallaTVT :: setSpecular(GLfloat spe[MATERIAL_ARRAY_SIZE -1])
+{
+  materialPtr->setSpecular(spe);
+}
+
+void MallaTVT :: setBrightness(GLfloat brillo){
+  materialPtr->setBrightness(brillo);
 }
