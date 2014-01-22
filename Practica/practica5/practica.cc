@@ -12,7 +12,7 @@
 #include "visualtype.h"
 #include "jpg_imagen.hpp"
 #include "LightSource.h"
-
+#define BUFSIZE 1
 
 
 GLint animate = 0; //Para hacer animation o no
@@ -24,6 +24,9 @@ bool isP4 = false; //Modo practica 4
 mouse_t mouse_state;
 int mouse_x;
 int mouse_y;
+
+int ynew;
+int xn;
 
 const char *rotation_body_file = "poligono.ply";
 // tamaño de los ejes
@@ -229,6 +232,7 @@ void animation_5() {
     glRotatef(Observer_angle_y,0,1,0);
   }
 
+
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
@@ -358,12 +362,27 @@ void animation_5() {
   }
 
 
+/*
 //Seleccionar elementos
-int pick(int x, int y, int * elemento, int * i)
-{
-
-}
-
+  int pick(int x, int y, int * elemento, int * i)
+  {
+    GLuint selectBuf[BUFSIZE];
+    GLint hits, viewport[4];
+    glGetIntegerv (GL_VIEWPORT, viewport);
+    glSelectBuffer (BUFSIZE, selectBuf);
+    glRenderMode (GL_SELECT);
+    glInitNames();
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport[0]);
+    glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    //draw ();
+    hits = glRenderMode (GL_RENDER);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+  }
+*/
 /**
  * Menu de ayuda donde se denotan las teclas posibles
  */
@@ -462,8 +481,8 @@ bool p4_keys(unsigned char Tecla)
     glutPostRedisplay();
     break;
     default:
-      glutPostRedisplay();
-      break;
+    glutPostRedisplay();
+    break;
   }
   return actualizar;
 
@@ -723,24 +742,24 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'Q': exit(0); break;
     case 27: exit(0); break;
     default:
-      switch(isP4) {
-          case true:
-            printHelpP4();
-            actualizar = p4_keys(Tecla1);
-            glutPostRedisplay();
-            break;
-          case false:
-            printHelpP1ToP3();
-            actualizar = p1_to_p3_keys(Tecla1);
-            glutPostRedisplay();
-            break;
-          default:
-            glutPostRedisplay(); break;
+    switch(isP4) {
+      case true:
+      printHelpP4();
+      actualizar = p4_keys(Tecla1);
+      glutPostRedisplay();
+      break;
+      case false:
+      printHelpP1ToP3();
+      actualizar = p1_to_p3_keys(Tecla1);
+      glutPostRedisplay();
+      break;
+      default:
+      glutPostRedisplay(); break;
 
-      }
-      if(actualizar)
-        glutPostRedisplay();
-        break;
+    }
+    if(actualizar)
+      glutPostRedisplay();
+    break;
 
 
   }
@@ -787,7 +806,12 @@ void mouse(int button, int state, int x, int y)
     }
     break;
     case GLUT_LEFT_BUTTON:
-
+    if(state == GLUT_DOWN)
+    {
+      mouse_state = LEFT;
+      mouse_x = x;
+      mouse_y = y;
+    }
     glutPostRedisplay();
     break;
     case GLUT_MIDDLE_BUTTON:
@@ -806,6 +830,15 @@ void RatonMovido(int x, int y)
   if(mouse_state == RIGHT)
   {
     //getCamara()
+    xn = Observer_angle_y - (x - mouse_x);
+    ynew = Observer_angle_x - (y - mouse_y);
+
+    Observer_angle_x = ynew;
+    Observer_angle_y = xn;
+
+    mouse_x = x;
+    mouse_y = y;
+    glutPostRedisplay();
   }
 }
 
