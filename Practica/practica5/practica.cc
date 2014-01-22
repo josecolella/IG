@@ -783,8 +783,8 @@ void special_keys(int Tecla1,int x,int y)
    case GLUT_KEY_RIGHT:Observer_angle_y++;break;
    case GLUT_KEY_UP:Observer_angle_x--;break;
    case GLUT_KEY_DOWN:Observer_angle_x++;break;
-   case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
-   case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+   case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break; //Zoom out
+   case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break; //Zoom in
  }
  glutPostRedisplay();
 }
@@ -814,8 +814,16 @@ void mouse(int button, int state, int x, int y)
     }
     glutPostRedisplay();
     break;
-    case GLUT_MIDDLE_BUTTON:
-
+    
+    case 3: 
+      if (state == GLUT_UP) return;
+    //Zoom in
+    Observer_distance/=1.2;
+    glutPostRedisplay();    
+    break;
+    case 4:
+    //Zoom out
+    Observer_distance*=1.2;
     glutPostRedisplay();
     break;
     default:
@@ -841,6 +849,7 @@ void RatonMovido(int x, int y)
     glutPostRedisplay();
   }
 }
+
 
 //***************************************************************************
 // Funcion de incializacion
