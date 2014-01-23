@@ -814,12 +814,12 @@ void mouse(int button, int state, int x, int y)
     }
     glutPostRedisplay();
     break;
-    
-    case 3: 
+
+    case 3:
       if (state == GLUT_UP) return;
     //Zoom in
     Observer_distance/=1.2;
-    glutPostRedisplay();    
+    glutPostRedisplay();
     break;
     case 4:
     //Zoom out
@@ -837,9 +837,9 @@ void RatonMovido(int x, int y)
 {
   if(mouse_state == RIGHT)
   {
-    //getCamara()
-    xn = Observer_angle_y - (x - mouse_x);
-    ynew = Observer_angle_x - (y - mouse_y);
+    //Posiciones de la camara
+    xn = Observer_angle_y + (x - mouse_x);
+    ynew = Observer_angle_x + (y - mouse_y);
 
     Observer_angle_x = ynew;
     Observer_angle_y = xn;
