@@ -239,7 +239,7 @@ void MallaTVT :: initializeRotationalObject2(const char * filename)
 }
 
   //Construimos las caras para el modelo
-for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+2);i++){
+for(int i=0, j=numInitialVertices-1;i<Vertices.size()-(numInitialVertices+1);i++){
 
   if((i-j) != 0 || i==0){
    _vertex3ui tmp;
