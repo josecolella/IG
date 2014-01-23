@@ -21,12 +21,15 @@ GLint texture = 0;
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
 enum mouse_t {LEFT, RIGHT, MIDDLE};
 bool isP4 = false; //Modo practica 4
-mouse_t mouse_state;
-int mouse_x;
-int mouse_y;
+mouse_t mouse_state; // El estado del raton
+//Variables de gestion de raton
+int mouse_x,
+    mouse_y,
+    ynew,
+    xn;
 
-int ynew;
-int xn;
+int isSelected = 0; // Si un elemento esta seleccionado
+int selectedIndex = -1; //No hay indice de elemento escogido
 
 const char *rotation_body_file = "poligono.ply";
 // tamaño de los ejes
@@ -362,9 +365,9 @@ void animation_5() {
   }
 
 
-/*
+
 //Seleccionar elementos
-  int pick(int x, int y, int * elemento, int * i)
+  int pick(int x, int y, int * selected, int * i)
   {
     GLuint selectBuf[BUFSIZE];
     GLint hits, viewport[4];
@@ -382,7 +385,7 @@ void animation_5() {
     glLoadIdentity();
     glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
   }
-*/
+
 /**
  * Menu de ayuda donde se denotan las teclas posibles
  */
@@ -811,6 +814,7 @@ void mouse(int button, int state, int x, int y)
       mouse_state = LEFT;
       mouse_x = x;
       mouse_y = y;
+
     }
     glutPostRedisplay();
     break;
@@ -847,6 +851,12 @@ void RatonMovido(int x, int y)
     mouse_x = x;
     mouse_y = y;
     glutPostRedisplay();
+  }
+  else if(mouse_state == LEFT)
+  {
+    mouse_x = x;
+    mouse_y = y;
+    pick(x,y, isSelected, selectedIndex);
   }
 }
 
