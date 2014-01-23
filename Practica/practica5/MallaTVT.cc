@@ -58,7 +58,6 @@ void MallaTVT :: initializeRotationalObject(const char * filename)
   float rotation = ((360 / 10) -1);
   //Hacemos las transformaciones
   for(int j=0;j<rotation;j++){
-
    for(int i = 0;i < numInitialVertices;i++) {
     _vertex3f tmp;
     tmp.x = cos(angulo) * Vertices[i].x +  sin(angulo) * Vertices[i].z;

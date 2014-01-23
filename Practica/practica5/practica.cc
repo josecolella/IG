@@ -12,7 +12,7 @@
 #include "visualtype.h"
 #include "jpg_imagen.hpp"
 #include "LightSource.h"
-#define BUFSIZE 1
+#define BUFSIZE 512
 
 
 GLint animate = 0; //Para hacer animation o no
@@ -291,16 +291,17 @@ void animation_5() {
 
     switch(state) {
       case PLY:
-      mallaTVT1.draw(visualization);
+      glutWireCube(1.0);
+      // mallaTVT1.draw(visualization);
       break;
       case ROTATION:
-      mallaTVT2.draw(visualization);
+      // mallaTVT2.draw(visualization);
       break;
       case HIERARCHY:
-      robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
+      // robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
       break;
       case P4:
-      p4_scene();
+      // p4_scene();
       break;
 
     }
@@ -371,19 +372,21 @@ void animation_5() {
   {
     GLuint selectBuf[BUFSIZE];
     GLint hits, viewport[4];
-    glGetIntegerv (GL_VIEWPORT, viewport);
     glSelectBuffer (BUFSIZE, selectBuf);
+    glGetIntegerv (GL_VIEWPORT, viewport);
     glRenderMode (GL_SELECT);
     glInitNames();
+    glPushName(0);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport[0]);
-    glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport);
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
     //draw ();
     hits = glRenderMode (GL_RENDER);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    glutPostRedisplay();
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
   }
 
 /**
@@ -856,7 +859,7 @@ void RatonMovido(int x, int y)
   {
     mouse_x = x;
     mouse_y = y;
-    pick(x,y, isSelected, selectedIndex);
+    pick(x,y, &isSelected, &selectedIndex);
   }
 }
 
