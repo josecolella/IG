@@ -84,7 +84,7 @@ void Robot :: draw_cylinder(){
   glColor3f(0.0,0.0,1.0); //Blue
 }
 
-void Robot :: draw_aux_arm_object(float parent_rotation, float child_rotation)
+void Robot :: draw_aux_arm_object(GLenum mode, float parent_rotation, float child_rotation)
 {
       glRotatef((GLfloat) parent_rotation, 0.0,0.0,1.0);
       glTranslatef(1.0,0.0,0.0);
@@ -114,7 +114,7 @@ void Robot :: draw_aux_arm_object(float parent_rotation, float child_rotation)
       glPopMatrix();
 }
 
-void Robot :: draw_arm(float *arm_rotations)
+void Robot :: draw_arm(GLenum mode, float *arm_rotations)
 {
   glPushMatrix();
   glTranslatef(0.0,0.0,1.0);
@@ -126,17 +126,17 @@ void Robot :: draw_arm(float *arm_rotations)
     glRotatef(-90.0,0.0,1.0,0.0);
     glTranslatef(-1.0,0.0,0.0);
     glPushMatrix();
-      draw_aux_arm_object(arm_rotations[0], arm_rotations[1]);
+      draw_aux_arm_object(mode, arm_rotations[0], arm_rotations[1]);
       //Draw Fingers
       glPushMatrix();
         glScalef(0.2,0.2,0.45);
         glPushMatrix();
           glTranslatef(0.3,0.0,-0.3);
-          draw_aux_arm_object(arm_rotations[2],arm_rotations[3]);
+          draw_aux_arm_object(mode, arm_rotations[2],arm_rotations[3]);
         glPopMatrix();
         glPushMatrix();
           glTranslatef(0.3,0.0,0.3);
-          draw_aux_arm_object(arm_rotations[4],arm_rotations[5]);
+          draw_aux_arm_object(mode, arm_rotations[4],arm_rotations[5]);
         glPopMatrix();
       glPopMatrix();
     glPopMatrix();
@@ -146,7 +146,7 @@ void Robot :: draw_arm(float *arm_rotations)
 }
 
 
-void Robot :: draw_trash_door(float torso_rotation) {
+void Robot :: draw_trash_door(GLenum mode, float torso_rotation) {
   glPushMatrix();
     glTranslatef(0.0,-0.5,0.5);
     glPushMatrix();
@@ -158,9 +158,9 @@ void Robot :: draw_trash_door(float torso_rotation) {
   glPopMatrix();
 }
 
-void Robot :: draw_torso(float torso_rotation) {
+void Robot :: draw_torso(GLenum mode,float torso_rotation) {
   draw_cube();
-  draw_trash_door(torso_rotation);
+  draw_trash_door(mode, torso_rotation);
 }
 
 void Robot :: draw_tire_tracks() {
@@ -583,7 +583,7 @@ void Robot :: draw_eye_socket() {
 }
 
 
-void Robot :: draw_front_face(float eye_rotation) {
+void Robot :: draw_front_face(GLenum mode,float eye_rotation) {
     glPushMatrix();
       glRotatef((GLfloat) eye_rotation, 0.0,0.0,1.0);
       glPushMatrix();
@@ -631,7 +631,7 @@ void Robot :: draw_front_face(float eye_rotation) {
 }
 
 
-void Robot :: draw_head(float eye_rotation) {
+void Robot :: draw_head(GLenum mode, float eye_rotation) {
     glPushMatrix();
       glTranslatef(0.0,0.6,0.0);
       glScalef(0.3,0.3,0.3);
@@ -670,24 +670,25 @@ void Robot :: draw_head(float eye_rotation) {
         glPushMatrix();
           glTranslatef(0.0,2.0,0.0);
           glScalef(0.3,0.3,0.3);
-          draw_front_face(eye_rotation);
+          draw_front_face(mode, eye_rotation);
         glPopMatrix();
     glPopMatrix();
 }
 
-void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
+void Robot :: draw_body_and_feet(GLenum mode,float * body_rotations,float * arm_rotations) {
 
 
   glTranslatef(0.0,0.0,(GLfloat) body_rotations[0]);
 
   glPushMatrix();
-    draw_torso(body_rotations[2]);
+    // glPushNames(0);
+    draw_torso(mode, body_rotations[2]);
     glPushMatrix();
 	    glTranslatef(-0.6,0.2,0.0);
 	    glRotatef((GLfloat) body_rotations[3], 0.0,0.0,1.0);
 	    //glPushMatrix();
         glScalef(0.3,0.3,0.3);
-        draw_arm(arm_rotations);
+        draw_arm(mode, arm_rotations);
       //glPopMatrix();
     glPopMatrix();
     glPushMatrix();
@@ -695,7 +696,7 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
       glRotatef(-(GLfloat) body_rotations[3], 0.0,0.0,1.0);
       //glPushMatrix();
         glScalef(0.3,0.3,0.3);
-        draw_arm(arm_rotations);
+        draw_arm(mode, arm_rotations);
       //glPopMatrix();
     glPopMatrix();
     //Left Feet
@@ -717,7 +718,7 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
 }
 
 
-void Robot :: draw(visual_t visualization , float *body_rotations, float *arm_rotations, float eye_rotation) {
+void Robot :: draw(GLenum mode,visual_t visualization , float *body_rotations, float *arm_rotations, float eye_rotation) {
 
     glPointSize(2.0);
     this->visualization = visualization;
@@ -737,10 +738,14 @@ void Robot :: draw(visual_t visualization , float *body_rotations, float *arm_ro
         break;
 
     }
+
+
     glRotatef((GLfloat) body_rotations[1], 0.0,1.0,0.0);
     glPushMatrix();
-    draw_body_and_feet(body_rotations, arm_rotations);
-    draw_head(eye_rotation);
+    glLoadName(1);
+    draw_body_and_feet(mode, body_rotations, arm_rotations);
+    glLoadName(2);
+    draw_head(mode, eye_rotation);
     glPopMatrix();
 }
 

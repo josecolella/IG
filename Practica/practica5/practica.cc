@@ -22,11 +22,16 @@ enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
 enum mouse_t {LEFT, RIGHT, MIDDLE};
 bool isP4 = false; //Modo practica 4
 mouse_t mouse_state; // El estado del raton
+
+
+
+
+
 //Variables de gestion de raton
 int mouse_x,
-    mouse_y,
-    ynew,
-    xn;
+mouse_y,
+ynew,
+xn;
 
 int isSelected = 0; // Si un elemento esta seleccionado
 int selectedIndex = -1; //No hay indice de elemento escogido
@@ -291,17 +296,17 @@ void animation_5() {
 
     switch(state) {
       case PLY:
-      glutWireCube(1.0);
-      // mallaTVT1.draw(visualization);
+      //glutWireCube(1.0);
+      mallaTVT1.draw(visualization);
       break;
       case ROTATION:
-      // mallaTVT2.draw(visualization);
+      mallaTVT2.draw(visualization);
       break;
       case HIERARCHY:
-      // robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
+      robot.draw(GL_RENDER,visualization ,body_rotations, arm_rotations, eye_rotations);
       break;
       case P4:
-      // p4_scene();
+      p4_scene();
       break;
 
     }
@@ -367,27 +372,6 @@ void animation_5() {
 
 
 
-//Seleccionar elementos
-  int pick(int x, int y, int * selected, int * i)
-  {
-    GLuint selectBuf[BUFSIZE];
-    GLint hits, viewport[4];
-    glSelectBuffer (BUFSIZE, selectBuf);
-    glGetIntegerv (GL_VIEWPORT, viewport);
-    glRenderMode (GL_SELECT);
-    glInitNames();
-    glPushName(0);
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity ();
-    gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport);
-    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
-    //draw ();
-    hits = glRenderMode (GL_RENDER);
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity();
-    glutPostRedisplay();
-    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
-  }
 
 /**
  * Menu de ayuda donde se denotan las teclas posibles
@@ -795,13 +779,50 @@ void special_keys(int Tecla1,int x,int y)
  glutPostRedisplay();
 }
 
+
+void processHits(GLint hits, GLuint *buffer)
+{
+  unsigned int i,j;
+  GLuint names;
+  GLuint *ptr;
+  printf("%d\n", hits);
+  for(int i=0;i<hits;i++)
+  {
+    names = *ptr;
+    printf("number of names for hit = %d\n", names);
+  }
+}
+
+//Seleccionar elementos
+int pick(int x, int y, int * selected, int * i)
+{
+  GLuint selectBuf[BUFSIZE];
+  GLint hits, viewport[4];
+  glSelectBuffer (BUFSIZE, selectBuf);
+  glGetIntegerv (GL_VIEWPORT, viewport);
+  (void) glRenderMode (GL_SELECT);
+  glInitNames();
+  glPushName(0);
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity ();
+  gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport);
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    //draw ();
+  hits = glRenderMode (GL_RENDER);
+  
+  //processHits(hits, selectBuf);
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity();
+  glutPostRedisplay();
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+}
 //Se llama cuando se actue sobre algun boton del raton
-void mouse(int button, int state, int x, int y)
+void mouse(int button, int estado, int x, int y)
 {
   switch(button)
   {
     case GLUT_RIGHT_BUTTON:
-    if(state == GLUT_DOWN){
+    if(estado == GLUT_DOWN){
       mouse_state = RIGHT;
       mouse_x = x; //Posicion x del raton
       mouse_y = y; //Posicion y del raton
@@ -812,18 +833,21 @@ void mouse(int button, int state, int x, int y)
     }
     break;
     case GLUT_LEFT_BUTTON:
-    if(state == GLUT_DOWN)
     {
-      mouse_state = LEFT;
-      mouse_x = x;
-      mouse_y = y;
-
+      if(estado == GLUT_DOWN) {
+        mouse_state = LEFT; 
+        if(state == HIERARCHY){
+          mouse_x = x;
+          mouse_y = y;
+          // pick(mouse_x,mouse_y, &isSelected, &selectedIndex);
+        }
+      }
     }
     glutPostRedisplay();
     break;
 
     case 3:
-      if (state == GLUT_UP) return;
+    if (estado == GLUT_UP) return;
     //Zoom in
     Observer_distance/=1.2;
     glutPostRedisplay();
@@ -857,11 +881,15 @@ void RatonMovido(int x, int y)
   }
   else if(mouse_state == LEFT)
   {
+
     mouse_x = x;
     mouse_y = y;
-    pick(x,y, &isSelected, &selectedIndex);
+    glutPostRedisplay();
   }
 }
+
+
+
 
 
 //***************************************************************************
