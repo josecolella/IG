@@ -10,7 +10,38 @@ Jose Miguel Colella
 
 1. Cosas agregadas a la práctica
 
+Para poder mover la camara con el raton, he creado dos funciones principalmente; clickRaton y RatonMovido
+clickRaton es la que gestiona loas acciones correspondientes al raton, mientras que RatonMovido trata con 
+las acciones a tomar cuando se mueve.
 
+Dentro de aqui he tomado en cuenta que cada vez que hacer click sobre la pantalla se generan nuevas coordenadas y que hay que configurar el angulo del observador con las nuevas coordanadas.
+
+----------------------------------
+
+xn = Observer_angle_y + (x - mouse_x);
+ynew = Observer_angle_x + (y - mouse_y);
+
+Observer_angle_x = ynew;
+Observer_angle_y = xn;
+
+mouse_x = x;
+mouse_y = y;
+
+----------------------------------
+
+Para resolver la seccion de seleccionar y mover la figura jerarquica he creado una funcion pick 
+donde analizo el buffer de seleccion y veo que objetos han sido seleccionados. Ya teniendo esto,
+el movimiento con el raton ha sido simple ya que en la practica 4 habia asignado taclas a las transformaciones.
+
+
+En la estructura jerarquica he modificado unas cosas.
+
+Primero ge asignado nombres (identificadores) para saber que parte del modelo seleccionaba.
+Ademas he agregado codigo para que cuando se hace la seleccion sobre una seccion del modelo 
+jerarquico, se cambie de color, asi el usuario se da cuenta de la selecciona y la correspondiente transformacion.
+
+He creado un metodo `printStructure` que imprime a terminal informacion sobre el objeto seleccionado por el usuario
+para facilitar la interaccion con el modelo jerarquico.
 
 2. Para interactuar con la practica, primero ejecutamos make.
 

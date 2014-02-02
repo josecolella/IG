@@ -86,15 +86,20 @@ void Robot :: draw_sphere(GLint slices, GLint stacks) {
 
 void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, float child_rotation)
 {
+  GLuint id = *id_index;
   //Poner nombre
-  glPushName(*id_index);
+  glPushName(id);
   glRotatef((GLfloat) parent_rotation, 0.0,0.0,1.0);
   glTranslatef(1.0,0.0,0.0);
   glPushMatrix();
           //Parent
     glScalef(2.0,0.3,0.5);
+    if(selectedIndex == id || selectedIndex == id+6){
+      glColor3f(1.0,0.6,0.0); //yellow
+    }else{
+      glColor3f(0.0,0.0,1.0);  
+    }
     draw_cube();
-    draw_cube(); 
   glPopMatrix();
   glPopName();
   glTranslatef(1.0,0.0,0.0);
@@ -106,11 +111,20 @@ void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, floa
     glRotatef((GLfloat) child_rotation, 0.0,0.0,1.0);
     glTranslatef(1.0,0.0,0.0);
  
-  glPushName(*id_index + 1);
+ 
   glPushMatrix();
         //Child
+  id = id + 1;
+  glPushName(id);
   glScalef(2.0,0.3,0.5);
-       draw_cube();
+       if(selectedIndex == id || selectedIndex == id +6){
+         glColor3f(1.0,0.6,0.0); //yellow
+       }else{
+         glColor3f(0.0,0.0,1.0);  
+       }
+      
+      draw_cube();
+      
   glPopMatrix();
   glTranslatef(1.0,0.0,0.0);
   glPushMatrix();
@@ -124,17 +138,19 @@ void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, floa
 
 void Robot :: draw_arm(GLuint * id_index, float *arm_rotations)
 {
+
   glPushMatrix();
   glTranslatef(0.0,0.0,1.0);
   glPushMatrix();
   glTranslatef(0.0,0.0,-1.0);
   glScalef(0.3,0.3,0.3);
+  glColor3f(0.0,0.0,1.0);
   draw_sphere(20.0,20.0);
   glPopMatrix();
   glRotatef(-90.0,0.0,1.0,0.0);
   glTranslatef(-1.0,0.0,0.0);
   glPushMatrix();
-
+  //bottom part of arm
   draw_aux_arm_object(id_index,arm_rotations[0], arm_rotations[1]);
   *id_index = *id_index + 2;
       //Draw Fingers
@@ -159,6 +175,11 @@ void Robot :: draw_arm(GLuint * id_index, float *arm_rotations)
 
 
 void Robot :: draw_trash_door( float torso_rotation) {
+  if(selectedIndex == 3){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0);  
+  }
   glPushMatrix();
   glTranslatef(0.0,-0.5,0.5);
   glPushMatrix();
@@ -602,6 +623,11 @@ void Robot :: draw_eye_socket() {
 
 
 void Robot :: draw_front_face(float eye_rotation) {
+  if(selectedIndex == 2){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0);  
+  }
   glPushMatrix();
   glRotatef((GLfloat) eye_rotation, 0.0,0.0,1.0);
   glPushMatrix();
@@ -623,7 +649,11 @@ void Robot :: draw_front_face(float eye_rotation) {
   draw_cube();
   glPopMatrix();
   glPopMatrix();
-
+  if(selectedIndex == 2){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0);  
+  }
   glPushMatrix();
   glRotatef(-(GLfloat) eye_rotation, 0.0,0.0,1.0);
   glPushMatrix();
@@ -650,6 +680,11 @@ void Robot :: draw_front_face(float eye_rotation) {
 
 
 void Robot :: draw_head( float eye_rotation) {
+  if(selectedIndex == 2){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0);  
+  }
   glPushMatrix();
     glTranslatef(0.0,0.6,0.0);
     glScalef(0.3,0.3,0.3);
@@ -660,6 +695,11 @@ void Robot :: draw_head( float eye_rotation) {
         glRotatef(90.0,0.0,1.0,0.0);
         glPushMatrix();
           glScalef(2.0,0.2,0.52);
+          if(selectedIndex == 2){
+              glColor3f(1.0,0.6,0.0); //yellow
+          }else{
+            glColor3f(0.0,0.0,1.0);  
+          }
           draw_cube();
         glPopMatrix();
         glPushMatrix();
@@ -676,6 +716,11 @@ void Robot :: draw_head( float eye_rotation) {
           glTranslatef(-0.5,0.9,0.0);
           glRotatef(60.0,0.0,0.0,1.0);
           glScalef(2.0,0.15,0.52);
+          if(selectedIndex == 2){
+              glColor3f(1.0,0.6,0.0); //yellow
+          }else{
+            glColor3f(0.0,0.0,1.0);  
+          }
           draw_cube();
         glPopMatrix();
         glPushMatrix();
@@ -690,6 +735,11 @@ void Robot :: draw_head( float eye_rotation) {
       glScalef(0.3,0.3,0.3);
       selected = HEAD_R;
       glLoadName(selected);
+      if(selectedIndex == 2){
+          glColor3f(1.0,0.6,0.0); //yellow
+      }else{
+        glColor3f(0.0,0.0,1.0);  
+      }
       draw_front_face(eye_rotation);
     glPopMatrix();
   glPopMatrix();
@@ -713,8 +763,7 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
   glTranslatef(0.6,0.2,0.0);
   glRotatef(-(GLfloat) body_rotations[3], 0.0,0.0,1.0);
   glScalef(0.3,0.3,0.3);
-        //Left arm
-
+        //Left arm  
   draw_arm(&id_index, arm_rotations);
   glPopMatrix();
     //Left Feet
@@ -731,6 +780,11 @@ void Robot :: draw_body_and_feet(float * body_rotations,float * arm_rotations) {
   glRotatef(-90.0,0.0,1.0,0.0);
   glScalef(0.6,0.6,0.6);
       //Right foot
+  if(selectedIndex == 1 || this->selectedIndex == 16){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0);  
+  }
   draw_feet();
   glPopMatrix();
   glPopMatrix();
@@ -770,11 +824,24 @@ void Robot :: draw(visual_t visualization , float *body_rotations, float *arm_ro
       //Nombre para el cuerpo y los pies
   selected = BODY_T;
   glPushName(selected);
+  if(selectedIndex == 1 || selectedIndex == 16){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0); 
+     
+  }
   draw_body_and_feet(body_rotations, arm_rotations);
   glPopName();
+
       //Nombre para la cabeza
   selected = HEAD_R;
   glPushName(selected);
+  if(selectedIndex == 1 || selectedIndex == 16){
+      glColor3f(1.0,0.6,0.0); //yellow
+  }else{
+    glColor3f(0.0,0.0,1.0); 
+     
+  }
   draw_head(eye_rotation);
   glPopName();
 
@@ -790,4 +857,56 @@ void Robot :: setSelectedIndex(int selectedIndex)
 GLuint Robot :: getSelectedIndex()
 {
   return this->id_index;
+}
+
+
+void Robot :: printStructure()
+{ 
+  cout << "-----------------------------------------------------" << endl;
+  switch(this->selectedIndex)
+  {
+    
+    case 0:
+      cout << "No has seleccionado nada" << endl;
+      break;
+    case 1: 
+      cout << "Has seleccionado la estructura entera. Puedes transladar" << endl;
+      break;
+    case 2:
+      cout << "Has seleccionado la cabeza. Puedes rotar" << endl;
+      break;
+    case 3:
+      cout << "Has seleccionado la puerta de basura. Puedes rotar" << endl;
+      break;
+    case 4:
+    case 10:
+      cout << "Has seleccionado uno de los hombros. Puedes rotarlos" << endl;
+      break;
+    case 5:
+    case 11:
+      cout << "Has seleccionado uno de los codos. Puedes rotarlos" << endl;
+      break;
+    case 6:
+    case 12:
+      cout << "Has seleccionado uno de los indices inferiores izquierdo de los dedos. Puedes rotarlos" << endl;
+      break;
+    case 7:
+    case 13:
+      cout << "Has seleccionado unos de los indices superiores izquierdo de los dedos. Puedes rotarlos" << endl;
+      break;
+    case 8:
+    case 14:
+      cout << "Has seleccionado unos de los indices inferiores derecho de los dedos. Puedes rotarlos" << endl;
+      break;
+    case 9:
+    case 15:
+      cout << "Has seleccionado unos de los indices superiores derecho de los dedos. Puedes rotarlos" << endl;  
+      break;
+    case 16:
+      cout << "Has seleccionado la estructura entera. Puedes rotarla" << endl;
+      break;
+    default: break;
+  }
+  cout << "-----------------------------------------------------" << endl;
+  
 }

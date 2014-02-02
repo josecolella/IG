@@ -806,7 +806,7 @@ void processHits(GLint hits, GLuint buffer[])
   unsigned int i,j;
   GLuint names, *ptr, ii,jj;
 
-  printf("hits = %d\n", hits);
+  // printf("hits = %d\n", hits);
   ptr = (GLuint *) buffer;
 
   for(i = 0;i<hits;i++)
@@ -815,10 +815,10 @@ void processHits(GLint hits, GLuint buffer[])
     //printf("Numero de objetos seleccionados = %d\n", names); ptr++;
     //printf("z1 is %g\n", (float) *ptr/0x7fffffff); ptr++;
     //printf("z2 is %g\n", (float) *ptr/0x7fffffff); ptr++;
-    printf("Los identificadores son:");
+    // printf("Los identificadores son:");
     for(j = 0;j<names;j++)
     {
-      printf("%d\n", *ptr);
+      // printf("%d", *ptr);
       if(*ptr != 0) {
         isSelected = 1;
         selectedIndex = *ptr;
@@ -875,7 +875,7 @@ void pick(int button, int state, int x, int y)
 
   hits = glRenderMode (GL_RENDER);
   processHits (hits, selectBuf);
-
+  robot.printStructure();
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
@@ -960,7 +960,7 @@ void RatonMovido(int x, int y)
       switch(selectedIndex) {
         
         case 1: //body translation
-        if(y < mouse_y ){
+        if(y > mouse_y ){
             if(body_rotations[0] < 2.0)
         body_rotations[0] = (body_rotations[0] + (y * 0.0005));
         }
@@ -1026,11 +1026,11 @@ void RatonMovido(int x, int y)
         case 12:
         if(y < mouse_y){
          if(arm_rotations[2] < 0)
-          arm_rotations[2] = arm_rotations[2] + (y  * 0.005);
+          arm_rotations[2] = arm_rotations[2] + (y  * 0.001);
         }
           else{
            if(arm_rotations[2] > -45)
-            arm_rotations[2] = arm_rotations[2] - (y  * 0.005);
+            arm_rotations[2] = arm_rotations[2] - (y  * 0.001);
         }
         glutPostRedisplay();
         break;
@@ -1038,35 +1038,35 @@ void RatonMovido(int x, int y)
         case 13:
         if(y < mouse_y){
          if(arm_rotations[3] < 0)
-        arm_rotations[3] = arm_rotations[3] + (y  * 0.005);
+        arm_rotations[3] = arm_rotations[3] + (y  * 0.001);
         }
           else{
            if(arm_rotations[3] > -45)
-        arm_rotations[3] = arm_rotations[3] - (y  * 0.005);
+        arm_rotations[3] = arm_rotations[3] - (y  * 0.001);
         }
         glutPostRedisplay();
         break;
         case 8: //Parte inferior derecho
         case 14:
-        if(x < mouse_x && y < mouse_y){
+        if(y < mouse_y){
           if(arm_rotations[4] < 0)
-        arm_rotations[4] = arm_rotations[4] + (y  * 0.005);
+        arm_rotations[4] = arm_rotations[4] + (y  * 0.001);
         }
           else{
            if(arm_rotations[4] > -45)
-        arm_rotations[4] = arm_rotations[4] - (y  * 0.005);
+        arm_rotations[4] = arm_rotations[4] - (y  * 0.001);
         }
         glutPostRedisplay();
         break;
         case 9: //Parte superior derecho
         case 15:
-        if(x < mouse_x && y < mouse_y){
+        if(y < mouse_y){
            if(arm_rotations[5] < 0)
-        arm_rotations[5] = arm_rotations[5] + (y  * 0.005);
+        arm_rotations[5] = arm_rotations[5] + (y  * 0.001);
         }
           else{
            if(arm_rotations[5] > -45)
-        arm_rotations[5] = arm_rotations[5] - (y  * 0.005);
+        arm_rotations[5] = arm_rotations[5] - (y  * 0.001);
         }
         glutPostRedisplay();
         break;  

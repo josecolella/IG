@@ -28,6 +28,7 @@ class Robot
     void draw(visual_t visualization,float *body_rotations, float *arm_rotations, float eye_rotation);
     void setSelectedIndex(int selectedIndex);
     GLuint getSelectedIndex();
+    void printStructure();
    private:
     //Metodos privados auxiliares para dibujar en robot entero
     void draw_aux_arm_object(GLuint * id_index, float parent_rotation, float child_rotation);
