@@ -24,7 +24,7 @@ bool isP4 = false; //Modo practica 4
 mouse_t mouse_state; // El estado del raton
 
 
-
+GLenum mode = GL_RENDER;
 
 
 //Variables de gestion de raton
@@ -287,6 +287,26 @@ void animation_5() {
     glPopMatrix();
   }
 
+
+  int board[3][3];
+
+  void drawSquares(GLenum mode)
+  {
+    GLuint i,j;
+    for(int i=0;i<3;i++) {
+      if(mode == GL_SELECT)
+        glLoadName(i);
+      for(j=0;j<3;j++){
+        if(mode == GL_SELECT)
+          glPushName(j);
+        glColor3f((GLfloat) i/3.0,(GLfloat) j/3.0, (GLfloat) board[i][j]/3.0);
+        glRecti(i,j,i+1, j+1);
+        if(mode == GL_SELECT)
+          glPopName();
+      }
+    }
+  }
+
 //**************************************************************************
 // Funcion que dibuja los objetos
 //***************************************************************************
@@ -303,7 +323,7 @@ void animation_5() {
       mallaTVT2.draw(visualization);
       break;
       case HIERARCHY:
-      robot.draw(GL_RENDER,visualization ,body_rotations, arm_rotations, eye_rotations);
+      robot.draw(visualization ,body_rotations, arm_rotations, eye_rotations);
       break;
       case P4:
       p4_scene();
@@ -359,7 +379,7 @@ void animation_5() {
 
   void change_window_size(int Ancho1,int Alto1)
   {
-  //change_projection();
+    change_projection();
     glViewport(0,0,Ancho1,Alto1);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -368,6 +388,7 @@ void animation_5() {
     glLoadIdentity();
     glTranslatef(0.0,0.0,-5.0);
     glutPostRedisplay();
+
   }
 
 
@@ -780,44 +801,95 @@ void special_keys(int Tecla1,int x,int y)
 }
 
 
-void processHits(GLint hits, GLuint *buffer)
+void processHits(GLint hits, GLuint buffer[])
 {
   unsigned int i,j;
-  GLuint names;
-  GLuint *ptr;
-  printf("%d\n", hits);
-  for(int i=0;i<hits;i++)
+  GLuint names, *ptr, ii,jj;
+
+  printf("hits = %d\n", hits);
+  ptr = (GLuint *) buffer;
+
+  for(i = 0;i<hits;i++)
   {
-    names = *ptr;
-    printf("number of names for hit = %d\n", names);
+    names = *ptr; ptr++; ptr++; ptr++;
+    //printf("Numero de objetos seleccionados = %d\n", names); ptr++;
+    //printf("z1 is %g\n", (float) *ptr/0x7fffffff); ptr++;
+    //printf("z2 is %g\n", (float) *ptr/0x7fffffff); ptr++;
+    printf("Los identificadores son:");
+    for(j = 0;j<names;j++)
+    {
+      printf("%d\n", *ptr);
+      if(*ptr != 0) {
+        isSelected = 1;
+        selectedIndex = *ptr;
+        robot.setSelectedIndex(selectedIndex);
+
+      }
+      else{
+        isSelected = 0;
+        selectedIndex = -1;
+      }
+      ptr++;
+    }
+    printf("\n");
+
   }
 }
 
+
 //Seleccionar elementos
-int pick(int x, int y, int * selected, int * i)
+void pick(int button, int state, int x, int y)
 {
+
   GLuint selectBuf[BUFSIZE];
-  GLint hits, viewport[4];
-  glSelectBuffer (BUFSIZE, selectBuf);
+  GLint hits;
+  GLint viewport[4];
+
+  if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN)
+    return;
+
   glGetIntegerv (GL_VIEWPORT, viewport);
+
+  glSelectBuffer (BUFSIZE, selectBuf);
   (void) glRenderMode (GL_SELECT);
+
   glInitNames();
-  glPushName(0);
+
+
   glMatrixMode (GL_PROJECTION);
+  glPushMatrix ();
   glLoadIdentity ();
-  gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport);
-    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
-    //draw ();
-  hits = glRenderMode (GL_RENDER);
-  
-  //processHits(hits, selectBuf);
-  glMatrixMode (GL_PROJECTION);
+
+  gluPickMatrix ((GLdouble) x, (GLdouble) (viewport[3] - y),
+    5.0, 5.0, viewport);
+  glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+  glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+  glTranslatef( 0.0, 0.0 , -50 );
+  draw_scene();
+
+  glMatrixMode (GL_PROJECTION);
+  glPopMatrix ();
+  glutSwapBuffers ();
+
+
+  hits = glRenderMode (GL_RENDER);
+  processHits (hits, selectBuf);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glFrustum(-Window_width,Window_width,-Window_height,Window_height,Front_plane,Back_plane);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glTranslatef( 0.0, 0.0 , -50 );
+
   glutPostRedisplay();
-    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
 }
+
+
+
 //Se llama cuando se actue sobre algun boton del raton
-void mouse(int button, int estado, int x, int y)
+void clickRaton(int button, int estado, int x, int y)
 {
   switch(button)
   {
@@ -839,13 +911,12 @@ void mouse(int button, int estado, int x, int y)
         if(state == HIERARCHY){
           mouse_x = x;
           mouse_y = y;
-          // pick(mouse_x,mouse_y, &isSelected, &selectedIndex);
+          pick(button, estado, mouse_x,mouse_y);
         }
       }
     }
     glutPostRedisplay();
     break;
-
     case 3:
     if (estado == GLUT_UP) return;
     //Zoom in
@@ -859,6 +930,7 @@ void mouse(int button, int estado, int x, int y)
     break;
     default:
     break;
+
   }
 }
 
@@ -882,14 +954,141 @@ void RatonMovido(int x, int y)
   else if(mouse_state == LEFT)
   {
 
-    mouse_x = x;
-    mouse_y = y;
-    glutPostRedisplay();
-  }
+    if(isSelected == 1)
+    {
+
+      switch(selectedIndex) {
+        
+        case 1: //body translation
+        if(y < mouse_y ){
+            if(body_rotations[0] < 2.0)
+        body_rotations[0] = (body_rotations[0] + (y * 0.0005));
+        }
+          else{
+           if(body_rotations[0] > -2.0)
+        body_rotations[0] = (body_rotations[0] - (y * 0.0005));
+        }
+        glutPostRedisplay();
+        break;  
+        case 2: //head
+        if(state == HIERARCHY) {
+          if(y < mouse_y){
+            if(eye_rotations < 0.0)
+            {
+              eye_rotations = (eye_rotations + ((y + mouse_y) * 0.0007));
+            }
+          }
+          else{
+            if(eye_rotations > -8.0)
+              eye_rotations = (eye_rotations - ((y + mouse_y) * 0.0007));
+          }
+          glutPostRedisplay();
+        }
+        break;
+        case 3: //trash_door 
+        if(state == HIERARCHY) {
+          if(y > mouse_y) {
+            if(body_rotations[2] < 120)
+              body_rotations[2] = (body_rotations[2] + (y * 0.005));
+          }
+          else{
+            if(body_rotations[2] > 0)
+              body_rotations[2] = (body_rotations[2] - (y  * 0.005));
+          }
+          glutPostRedisplay();
+        }
+        case 4: //Hombros
+        case 10:
+        if(y < mouse_y){
+          if(arm_rotations[0] < 75)
+            arm_rotations[0] = (arm_rotations[0] + (y * 0.001));
+
+        }
+        else{
+          if(arm_rotations[0] > -45)
+            arm_rotations[0] = (arm_rotations[0] - (y * 0.001));
+        }
+        glutPostRedisplay();
+        break;
+        case 5: //Elbow
+        case 11:
+        if(y < mouse_y){
+          if(arm_rotations[1] < 90)
+            arm_rotations[1] = (arm_rotations[1] + (y  * 0.001));
+        }
+        else{
+         if(arm_rotations[1] > 0)
+          arm_rotations[1] = (arm_rotations[1] - (y  * 0.001));
+        }
+        glutPostRedisplay();
+        break;
+        case 6: //Parte inferior de los dedos
+        case 12:
+        if(y < mouse_y){
+         if(arm_rotations[2] < 0)
+          arm_rotations[2] = arm_rotations[2] + (y  * 0.005);
+        }
+          else{
+           if(arm_rotations[2] > -45)
+            arm_rotations[2] = arm_rotations[2] - (y  * 0.005);
+        }
+        glutPostRedisplay();
+        break;
+        case 7: //Parte superior de los dedos
+        case 13:
+        if(y < mouse_y){
+         if(arm_rotations[3] < 0)
+        arm_rotations[3] = arm_rotations[3] + (y  * 0.005);
+        }
+          else{
+           if(arm_rotations[3] > -45)
+        arm_rotations[3] = arm_rotations[3] - (y  * 0.005);
+        }
+        glutPostRedisplay();
+        break;
+        case 8: //Parte inferior derecho
+        case 14:
+        if(x < mouse_x && y < mouse_y){
+          if(arm_rotations[4] < 0)
+        arm_rotations[4] = arm_rotations[4] + (y  * 0.005);
+        }
+          else{
+           if(arm_rotations[4] > -45)
+        arm_rotations[4] = arm_rotations[4] - (y  * 0.005);
+        }
+        glutPostRedisplay();
+        break;
+        case 9: //Parte superior derecho
+        case 15:
+        if(x < mouse_x && y < mouse_y){
+           if(arm_rotations[5] < 0)
+        arm_rotations[5] = arm_rotations[5] + (y  * 0.005);
+        }
+          else{
+           if(arm_rotations[5] > -45)
+        arm_rotations[5] = arm_rotations[5] - (y  * 0.005);
+        }
+        glutPostRedisplay();
+        break;  
+        case 16:
+        if(state == HIERARCHY) {
+          if(y > mouse_y){
+            if(body_rotations[1] <= 180)
+              body_rotations[1] = (body_rotations[1] + (y  * 0.005));
+          }
+          else{
+            if(body_rotations[1] >= -180)
+              body_rotations[1] = (body_rotations[1] - (y  * 0.005));
+          }
+          glutPostRedisplay();
+        }
+        break;
+        default: glutPostRedisplay(); break;
+
 }
-
-
-
+}
+}
+}
 
 
 //***************************************************************************
@@ -955,6 +1154,8 @@ void initialize(const char * file1)
   printHelpP1ToP3();
 }
 
+
+
 //***************************************************************************
 // Programa principal
 //
@@ -977,11 +1178,14 @@ int main(int argc, char **argv)
     // GLUT_DEPTH -> memoria de profundidad o z-bufer
     // GLUT_STENCIL -> memoria de estarcido
   glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+  // glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 
     // posicion de la esquina inferior izquierdad de la ventana
   glutInitWindowPosition(UI_window_pos_x,UI_window_pos_y);
+  // glutInitWindowPosition(100,100);
 
     // tamaño de la ventana (ancho y alto)
+  // glutInitWindowSize(100,100);
   glutInitWindowSize(UI_window_width,UI_window_height);
 
     // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
@@ -990,12 +1194,15 @@ int main(int argc, char **argv)
 
     // asignación de la funcion llamada "dibujar" al evento de dibujo
   glutDisplayFunc(draw_scene);
+  // glutDisplayFunc(display);
     // asignación de la funcion llamada "cambiar_tamanio_ventana" al evento correspondiente
   glutReshapeFunc(change_window_size);
+  // glutReshapeFunc(reshape);
     // asignación de la funcion llamada "tecla_normal" al evento correspondiente
   glutKeyboardFunc(normal_keys);
   //Funcion creada para gestionar eventos del raton
-  glutMouseFunc(mouse);
+  //glutMouseFunc(pickSquares);
+  glutMouseFunc (clickRaton);
   glutMotionFunc(RatonMovido);
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
   glutSpecialFunc(special_keys);

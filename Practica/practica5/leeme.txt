@@ -1,4 +1,4 @@
-Practica 4 de IG
+Practica 5 de IG
 ================
 
 Jose Miguel Colella
@@ -10,23 +10,7 @@ Jose Miguel Colella
 
 1. Cosas agregadas a la práctica
 
-Para esta practica se han creado varias cosas en comparacion con la practica 3.
-Se ha creado las siguientes clases:
-  - BeverageCan -> Clase que modela la lata
-  - LightSource -> Clase que modela una fuente de luz
-  - Texture -> Clase que modela una textura
-  - Material -> Clase que modela el material
 
-Ademas que se ha cambiado la clase MallaTVT para reflejar el cambio en
-la inicializacion de la lata. La lata ya no necesita las tapas que se habian
-creado para los modelos rotacionales de la practica 3. Para poder
-gestionar la lata se ha creado un nuevo metodo `initializeRotationalObject2`.
-El metodo draw se ha cambiado para poder reflejar los dos nuevos modos de
-visualizacion; sombreado plano, y sombreado suave.
-
-
-Además se ha proporcionado el grafo de escena del modelo creado. El grafo de escena
-se ha hecho a mano.
 
 2. Para interactuar con la practica, primero ejecutamos make.
 
