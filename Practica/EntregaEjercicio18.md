@@ -12,11 +12,17 @@ solo se diferencia en las transformaciones aplicadas. El cuerpo y la cabeza son 
 ply. Finalmente los ojos son esferas.
 
 
+!["Grafo"](https://raw.github.com/josecolella/IG/master/Practica/GrafoPHIGS.jpg?token=1974588__eyJzY29wZSI6IlJhd0Jsb2I6am9zZWNvbGVsbGEvSUcvbWFzdGVyL1ByYWN0aWNhL0dyYWZvUEhJR1MuanBnIiwiZXhwaXJlcyI6MTM5MjEyNDM5N30%3D--28e8197ee155a4d2c75593106af3d5573be7aa31)
 
 
 
+- El código que visualizar el Android es el siguiente. La construcción del mismo esta compuesta de objectos compuestos. Y esos objetos
+  compuestos estan construidos de objetos basicos; mallas de puntos, cilindros, esferas. La función `draw_robot` llama a `draw_body` y a
+  `draw_head` que gestionan la construcción del cuerpo y de la cabeza, y todos los objetos que pertenecen a ellos. 
+ 
+Primero se declar el fichero que contiene la declaración de la clase. Como podemos ver, el Android contiene dos MallaTVT, para
+contener el cuerpo y la cabeza.
 
-- El código que visualiza  
 ```cpp
 
 #include <GL/gl.h>
@@ -28,10 +34,6 @@ ply. Finalmente los ojos son esferas.
 #ifndef _ANDROID_H_
 #define _ANDROID_H_
 
-/**
- * La clase Android representa la representacion
- * grafica de un Android que en este caso es Wall-E
- */
 class Android
 {
 
@@ -62,6 +64,7 @@ class Android
 #endif
 ```
 
+A continuación podemos ver la declaración de la clase.
 
 ```cpp
 #include "stdlib.h"
@@ -302,3 +305,15 @@ void Android :: draw(visual_t visualization) {
     draw_robot();
 }
 ```
+
+En la siguientes imagenes podemos visualizar el robot.
+
+!["1"](https://raw.github.com/josecolella/IG/master/Practica/androidEjercicio.png?token=1974588__eyJzY29wZSI6IlJhd0Jsb2I6am9zZWNvbGVsbGEvSUcvbWFzdGVyL1ByYWN0aWNhL2FuZHJvaWRFamVyY2ljaW8ucG5nIiwiZXhwaXJlcyI6MTM5MjEyMzc3M30%3D--5552b2339dd997eaa086ed4aae04ede024ca02a4)
+
+
+!["2"](https://raw.github.com/josecolella/IG/master/Practica/androidEjercicio2.png?token=1974588__eyJzY29wZSI6IlJhd0Jsb2I6am9zZWNvbGVsbGEvSUcvbWFzdGVyL1ByYWN0aWNhL2FuZHJvaWRFamVyY2ljaW8yLnBuZyIsImV4cGlyZXMiOjEzOTIxMjM4MjB9--40760514aa111d0c2b4d47d8b5be3da419fa7715)
+
+
+
+!["3"](https://raw.github.com/josecolella/IG/master/Practica/androidEjercicio3.png?token=1974588__eyJzY29wZSI6IlJhd0Jsb2I6am9zZWNvbGVsbGEvSUcvbWFzdGVyL1ByYWN0aWNhL2FuZHJvaWRFamVyY2ljaW8zLnBuZyIsImV4cGlyZXMiOjEzOTIxMjM4NTZ9--ebb5f13370af1e509f10522106a84dd5ae8bc967)
+
