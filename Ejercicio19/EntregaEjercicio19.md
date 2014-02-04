@@ -131,4 +131,4 @@ En la siguientes imagenes podemos visualizar el robot con las correspondinetes r
 
 !["1"](https://raw.github.com/josecolella/IG/master/Ejercicio19/animated.gif?token=1974588__eyJzY29wZSI6IlJhd0Jsb2I6am9zZWNvbGVsbGEvSUcvbWFzdGVyL0VqZXJjaWNpbzE5L2FuaW1hdGVkLmdpZiIsImV4cGlyZXMiOjEzOTIxMzE1NDB9--1b5a581c24614d3155080149274412a846147add)
 
-Si quiere visualizar el video bien, recomiendo 
+Si quiere visualizar el video bien, recomiendo dirigirse a la url, [https://github.com/josecolella/IG/blob/master/Ejercicio19/EntregaEjercicio19.md]
