@@ -21,30 +21,22 @@ Material :: ~Material()
 
 void Material :: activate() {
 
-    // if(isIlluminated){
-          glEnable(GL_LIGHTING);
-          glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-          glEnable(GL_NORMALIZE);
-
-          //glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
-          //glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
-       
-          glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,amb);
-          glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,dis);
-          glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,spe);
-          glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,brillo);
-          
+  glEnable(GL_LIGHTING);
+  glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+  glEnable(GL_NORMALIZE);
 
 
-    //    } else {
-    //       glDisable(GL_LIGHTING);
-    //       //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (GLfloat *) & color);
-    //    }
-         
-       if(texturePtr!=NULL) 
-          texturePtr->activate();
-        else
-            glDisable(GL_TEXTURE_2D);
+  glMaterialfv(GL_FRONT,GL_AMBIENT,amb);
+  glMaterialfv(GL_FRONT,GL_DIFFUSE,dis);
+  glMaterialfv(GL_FRONT,GL_SPECULAR,spe);
+  glMaterialf(GL_FRONT,GL_SHININESS,brillo);
+  GLfloat color[] = {0.1,0.1,0.1};
+  glMaterialfv(GL_FRONT, GL_EMISSION, color);
+
+  if(texturePtr!=NULL) 
+    texturePtr->activate();
+  else
+    glDisable(GL_TEXTURE_2D);
 
 
 }

@@ -818,7 +818,7 @@ void processHits(GLint hits, GLuint buffer[])
     // printf("Los identificadores son:");
     for(j = 0;j<names;j++)
     {
-      // printf("%d", *ptr);
+      printf("%d", *ptr);
       if(*ptr != 0) {
         isSelected = 1;
         selectedIndex = *ptr;

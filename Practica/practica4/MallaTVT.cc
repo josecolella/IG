@@ -58,7 +58,6 @@ void MallaTVT :: initializeRotationalObject(const char * filename)
   float rotation = ((360 / 10) -1);
   //Hacemos las transformaciones
   for(int j=0;j<rotation;j++){
-
    for(int i = 0;i < numInitialVertices;i++) {
     _vertex3f tmp;
     tmp.x = cos(angulo) * Vertices[i].x +  sin(angulo) * Vertices[i].z;
@@ -338,28 +337,33 @@ void MallaTVT :: draw(visual_t visualization){
 
   }
 
+  glEnable(GL_RESCALE_NORMAL);
+  //glEnable(GL_NORMALIZE);
+
   if(visualization ==  ILUM_PLANO)
   {
-    glShadeModel(GL_FLAT);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    materialPtr->activate();
 
+
+    materialPtr->activate();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glShadeModel(GL_FLAT);
     glBegin(GL_TRIANGLES);
-    for(int i=0;i<normal_caras.size();i++)
+
+    for(int i=0;i<caras.size();i++)
     {
       if(!vector_texturas.empty())
         glTexCoord2d(vector_texturas[ caras[i]._0 ]._0 , vector_texturas[ caras[i]._0 ]._1);
-      glNormal3f(normal_caras[ caras[i]._0 ].x, normal_caras[ caras[i]._0 ].y, normal_caras[ caras[i]._0 ].z);
+      glNormal3f(normal_caras[i].x, normal_caras[i].y, normal_caras[i].z);
       glVertex3f(Vertices[caras[i]._0].x,Vertices[caras[i]._0].y,Vertices[caras[i]._0].z);
 
       if(!vector_texturas.empty())
         glTexCoord2d(vector_texturas[ caras[i]._1 ]._0 , vector_texturas[ caras[i]._1 ]._1);
-      glNormal3f(normal_caras[ caras[i]._1 ].x, normal_caras[ caras[i]._1 ].y, normal_caras[ caras[i]._1 ].z);
+      glNormal3f(normal_caras[i].x, normal_caras[i].y, normal_caras[i].z);
       glVertex3f(Vertices[caras[i]._1].x,Vertices[caras[i]._1].y,Vertices[caras[i]._1].z);
 
       if(!vector_texturas.empty())
         glTexCoord2d(vector_texturas[ caras[i]._2 ]._0 , vector_texturas[ caras[i]._2 ]._1);
-      glNormal3f(normal_caras[ caras[i]._2 ].x, normal_caras[ caras[i]._2 ].y, normal_caras[ caras[i]._2 ].z);
+      glNormal3f(normal_caras[i].x, normal_caras[i].y, normal_caras[i].z);
       glVertex3f(Vertices[caras[i]._2].x,Vertices[caras[i]._2].y,Vertices[caras[i]._2].z);
 
     }

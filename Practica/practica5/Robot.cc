@@ -86,7 +86,7 @@ void Robot :: draw_sphere(GLint slices, GLint stacks) {
 
 void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, float child_rotation)
 {
-  GLuint id = *id_index;
+  GLuint id = *id_index; //4 
   //Poner nombre
   glPushName(id);
   glRotatef((GLfloat) parent_rotation, 0.0,0.0,1.0);
@@ -94,7 +94,7 @@ void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, floa
   glPushMatrix();
           //Parent
     glScalef(2.0,0.3,0.5);
-    if(selectedIndex == id || selectedIndex == id+6){
+    if(selectedIndex == id || selectedIndex == *id_index + (id % 6)){
       glColor3f(1.0,0.6,0.0); //yellow
     }else{
       glColor3f(0.0,0.0,1.0);  
@@ -117,7 +117,7 @@ void Robot :: draw_aux_arm_object(GLuint * id_index, float parent_rotation, floa
   id = id + 1;
   glPushName(id);
   glScalef(2.0,0.3,0.5);
-       if(selectedIndex == id || selectedIndex == id +6){
+       if(selectedIndex == id || selectedIndex == *id_index + (id % 6)){
          glColor3f(1.0,0.6,0.0); //yellow
        }else{
          glColor3f(0.0,0.0,1.0);  

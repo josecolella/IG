@@ -12,14 +12,24 @@
 #include "visualtype.h"
 #include "jpg_imagen.hpp"
 #include "LightSource.h"
-
+#define BUFSIZE 512
 
 
 GLint animate = 0; //Para hacer animation o no
 GLint texture = 0;
 //enum que denota los diferentes estados
 enum state_t {NONE=0,PLY, ROTATION, HIERARCHY, P4};
+enum mouse_t {LEFT, RIGHT, MIDDLE};
 bool isP4 = false; //Modo practica 4
+mouse_t mouse_state; // El estado del raton
+//Variables de gestion de raton
+int mouse_x,
+    mouse_y,
+    ynew,
+    xn;
+
+int isSelected = 0; // Si un elemento esta seleccionado
+int selectedIndex = -1; //No hay indice de elemento escogido
 
 const char *rotation_body_file = "poligono.ply";
 // tamaño de los ejes
@@ -225,6 +235,7 @@ void animation_5() {
     glRotatef(Observer_angle_y,0,1,0);
   }
 
+
 //**************************************************************************
 // Funcion que dibuja los ejes utilizando la primitiva grafica de lineas
 //***************************************************************************
@@ -265,7 +276,6 @@ void animation_5() {
     glTranslatef(3.5,0.0,0.0);
     peonBlanco->draw(visualization);
     glTranslatef(3.5,0.0,0.0);
-    GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0};
     peonNegro->draw(visualization);
     glPopMatrix();
     glPopMatrix();
@@ -280,6 +290,7 @@ void animation_5() {
 
     switch(state) {
       case PLY:
+      //glutWireCube(1.0);
       mallaTVT1.draw(visualization);
       break;
       case ROTATION:
@@ -311,7 +322,7 @@ void animation_5() {
     draw_axis();
     draw_objects();
     GLfloat positional[] = {-3.0,-15.0, 1.0, 1.0};
-    GLfloat directional[] = {3.0,15.0,0.0,0.0};
+    GLfloat directional[] = {0.0,0.0,1.0,0.0};
     if(state == P4) {
       light_t type1 = DIRECTIONAL;
       light_t type2 = POSITIONAL;
@@ -351,6 +362,30 @@ void animation_5() {
     glLoadIdentity();
     glTranslatef(0.0,0.0,-5.0);
     glutPostRedisplay();
+  }
+
+
+
+//Seleccionar elementos
+  int pick(int x, int y, int * selected, int * i)
+  {
+    GLuint selectBuf[BUFSIZE];
+    GLint hits, viewport[4];
+    glSelectBuffer (BUFSIZE, selectBuf);
+    glGetIntegerv (GL_VIEWPORT, viewport);
+    glRenderMode (GL_SELECT);
+    glInitNames();
+    glPushName(0);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    gluPickMatrix ( x, viewport[3] - y, 5.0, 5.0, viewport);
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+    //draw ();
+    hits = glRenderMode (GL_RENDER);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity();
+    glutPostRedisplay();
+    // glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
   }
 
 /**
@@ -451,8 +486,8 @@ bool p4_keys(unsigned char Tecla)
     glutPostRedisplay();
     break;
     default:
-      glutPostRedisplay();
-      break;
+    glutPostRedisplay();
+    break;
   }
   return actualizar;
 
@@ -712,24 +747,24 @@ void normal_keys(unsigned char Tecla1,int x,int y)
     case 'Q': exit(0); break;
     case 27: exit(0); break;
     default:
-      switch(isP4) {
-          case true:
-            printHelpP4();
-            actualizar = p4_keys(Tecla1);
-            glutPostRedisplay();
-            break;
-          case false:
-            printHelpP1ToP3();
-            actualizar = p1_to_p3_keys(Tecla1);
-            glutPostRedisplay();
-            break;
-          default:
-            glutPostRedisplay(); break;
+    switch(isP4) {
+      case true:
+      printHelpP4();
+      actualizar = p4_keys(Tecla1);
+      glutPostRedisplay();
+      break;
+      case false:
+      printHelpP1ToP3();
+      actualizar = p1_to_p3_keys(Tecla1);
+      glutPostRedisplay();
+      break;
+      default:
+      glutPostRedisplay(); break;
 
-      }
-      if(actualizar)
-        glutPostRedisplay();
-        break;
+    }
+    if(actualizar)
+      glutPostRedisplay();
+    break;
 
 
   }
@@ -753,13 +788,79 @@ void special_keys(int Tecla1,int x,int y)
    case GLUT_KEY_RIGHT:Observer_angle_y++;break;
    case GLUT_KEY_UP:Observer_angle_x--;break;
    case GLUT_KEY_DOWN:Observer_angle_x++;break;
-   case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
-   case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
+   case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break; //Zoom out
+   case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break; //Zoom in
  }
  glutPostRedisplay();
 }
 
+//Se llama cuando se actue sobre algun boton del raton
+void mouse(int button, int state, int x, int y)
+{
+  switch(button)
+  {
+    case GLUT_RIGHT_BUTTON:
+    if(state == GLUT_DOWN){
+      mouse_state = RIGHT;
+      mouse_x = x; //Posicion x del raton
+      mouse_y = y; //Posicion y del raton
+      glutPostRedisplay();
+    }
+    else{
+      mouse_state = RIGHT;
+    }
+    break;
+    case GLUT_LEFT_BUTTON:
+    if(state == GLUT_DOWN)
+    {
+      mouse_state = LEFT;
+      mouse_x = x;
+      mouse_y = y;
 
+    }
+    glutPostRedisplay();
+    break;
+
+    case 3:
+      if (state == GLUT_UP) return;
+    //Zoom in
+    Observer_distance/=1.2;
+    glutPostRedisplay();
+    break;
+    case 4:
+    //Zoom out
+    Observer_distance*=1.2;
+    glutPostRedisplay();
+    break;
+    default:
+    break;
+  }
+}
+
+//Posicion del cursor, almacenar el estado de los botones del raton
+//Comprueba si el boton derecho esta pulsado
+void RatonMovido(int x, int y)
+{
+  if(mouse_state == RIGHT)
+  {
+    //Posiciones de la camara
+    xn = Observer_angle_y + (x - mouse_x);
+    ynew = Observer_angle_x + (y - mouse_y);
+
+    Observer_angle_x = ynew;
+    Observer_angle_y = xn;
+
+    mouse_x = x;
+    mouse_y = y;
+    glutPostRedisplay();
+  }
+  else if(mouse_state == LEFT)
+  {
+    mouse_x = x;
+    mouse_y = y;
+    pick(x,y, &isSelected, &selectedIndex);
+  }
+}
 
 
 //***************************************************************************
@@ -864,6 +965,9 @@ int main(int argc, char **argv)
   glutReshapeFunc(change_window_size);
     // asignación de la funcion llamada "tecla_normal" al evento correspondiente
   glutKeyboardFunc(normal_keys);
+  //Funcion creada para gestionar eventos del raton
+  glutMouseFunc(mouse);
+  glutMotionFunc(RatonMovido);
     // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
   glutSpecialFunc(special_keys);
   // funcion de inicialización
