@@ -14,5 +14,10 @@ The lab assignments include:
 - Working with lighting and textures
 - Adding interaction to a scene
 
+The exercises carried out include:
+- Creating a fractal with OpenGL
+- Creating a hierachical structure.
+  *This one was one of my favorites, as I modeled the Android droid*
+  !["android"](https://raw.githubusercontent.com/josecolella/IG/master/Ejercicio19/animated.gif)
 
 Prácticas de Informática Gráfica
